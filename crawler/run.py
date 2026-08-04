@@ -13,7 +13,7 @@ from bs4 import BeautifulSoup
 
 
 BRAVE_ENDPOINT = "https://api.search.brave.com/res/v1/web/search"
-USER_AGENT = "DemoPerksBot/0.5 (+https://github.com/robertstyler71/demoperks)"
+USER_AGENT = "DemoPerksBot/0.6 (+https://github.com/robertstyler71/demoperks)"
 TIMEOUT = 20
 
 
@@ -188,6 +188,10 @@ CATEGORY_RULES = (
             "people operations",
             "hiring",
             "candidate assessment",
+            "child care management",
+            "childcare management",
+            "employee management",
+            "workforce management",
         ),
     ),
     (
@@ -199,6 +203,8 @@ CATEGORY_RULES = (
             "compliance",
             "cybersecurity",
             "workplace security",
+            "threat detection",
+            "network security",
         ),
     ),
     (
@@ -213,6 +219,8 @@ CATEGORY_RULES = (
             "finance",
             "payments",
             "billing",
+            "payment platform",
+            "insurance payments",
         ),
     ),
     (
@@ -235,6 +243,7 @@ CATEGORY_RULES = (
             "campaign",
             "advertising",
             "growth",
+            "lead generation",
         ),
     ),
     (
@@ -244,6 +253,7 @@ CATEGORY_RULES = (
             "crm",
             "revenue operations",
             "revops",
+            "customer relationship management",
         ),
     ),
     (
@@ -266,6 +276,46 @@ CATEGORY_RULES = (
         ),
     ),
 )
+
+
+BRAND_OVERRIDES = {
+    "hauntpay.com": "HauntPay",
+    "www.hauntpay.com": "HauntPay",
+    "reachfirst.com": "Reach First",
+    "www.reachfirst.com": "Reach First",
+    "tributetech.com": "Tribute Technology",
+    "www.tributetech.com": "Tribute Technology",
+    "info.jazzhr.com": "JazzHR",
+    "jazzhr.com": "JazzHR",
+    "www.jazzhr.com": "JazzHR",
+    "procaresoftware.com": "Procare",
+    "www.procaresoftware.com": "Procare",
+    "bill.com": "BILL",
+    "www.bill.com": "BILL",
+    "pages.bill.com": "BILL",
+    "taxdome.unstack.website": "TaxDome",
+    "blackpointcyber.com": "Blackpoint Cyber",
+    "www.blackpointcyber.com": "Blackpoint Cyber",
+    "epaypolicy.com": "ePayPolicy",
+    "www.epaypolicy.com": "ePayPolicy",
+    "crave.cards": "Crave",
+    "rise.ai": "Rise",
+    "www.rise.ai": "Rise",
+    "get.nectarhr.com": "Nectar",
+    "trytoolbox.com": "Toolbox",
+    "www.trytoolbox.com": "Toolbox",
+    "gratiflow.com": "Gratiflow",
+    "www.gratiflow.com": "Gratiflow",
+    "go.demandforce.com": "Demandforce",
+    "demandforce.com": "Demandforce",
+    "www.demandforce.com": "Demandforce",
+    "shipinsure.io": "ShipInsure",
+    "www.shipinsure.io": "ShipInsure",
+    "glider.ai": "Glider AI",
+    "www.glider.ai": "Glider AI",
+    "rightsystems.com": "Right! Systems",
+    "www.rightsystems.com": "Right! Systems",
+}
 
 
 @dataclass
@@ -471,41 +521,95 @@ def fetch_page(
     return text, title, response.url
 
 
+def domain_to_brand(domain: str) -> str:
+    normalized = domain.lower().strip()
+
+    if normalized in BRAND_OVERRIDES:
+        return BRAND_OVERRIDES[normalized]
+
+    parts = normalized.removeprefix("www.").split(".")
+
+    ignored_subdomains = {
+        "info",
+        "go",
+        "get",
+        "pages",
+        "lp",
+        "try",
+        "app",
+        "demo",
+        "offers",
+    }
+
+    if len(parts) >= 3 and parts[0] in ignored_subdomains:
+        brand_part = parts[1]
+    else:
+        brand_part = parts[0]
+
+    return brand_part.replace("-", " ").strip().title()
+
+
 def infer_company(
     title: str | None,
     domain: str,
 ) -> str:
-    if title:
-        parts = [
-            part.strip()
-            for part in re.split(
-                r"[|–—]",
-                title,
-            )
-            if part.strip()
-        ]
+    normalized_domain = domain.lower().strip()
 
-        for part in reversed(parts):
-            if (
-                2 <= len(part) <= 45
-                and not re.search(
-                    r"demo|gift card|book|schedule|request",
-                    part,
-                    re.I,
-                )
-            ):
-                return part
+    if normalized_domain in BRAND_OVERRIDES:
+        return BRAND_OVERRIDES[normalized_domain]
 
-        if parts and 2 <= len(parts[0]) <= 60:
-            return parts[0]
-
-    return (
-        domain
-        .removeprefix("www.")
-        .split(".")[0]
-        .replace("-", " ")
-        .title()
+    domain_brand = domain_to_brand(
+        normalized_domain
     )
+
+    if not title:
+        return domain_brand
+
+    title_parts = [
+        part.strip()
+        for part in re.split(
+            r"[|–—]",
+            title,
+        )
+        if part.strip()
+    ]
+
+    blocked_title_phrases = (
+        "book a demo",
+        "request a demo",
+        "schedule a demo",
+        "take a demo",
+        "attend a demo",
+        "complete a demo",
+        "get paid",
+        "gift card",
+        "receive a",
+        "receive an",
+        "leader in",
+        "see ",
+        "demo request",
+        "paid demo",
+        "incentivized demo",
+        "get a $",
+        "get an amazon",
+    )
+
+    for part in reversed(title_parts):
+        lower_part = part.lower()
+
+        if any(
+            phrase in lower_part
+            for phrase in blocked_title_phrases
+        ):
+            continue
+
+        if re.fullmatch(
+            r"[A-Za-z0-9!&.' -]{2,45}",
+            part,
+        ):
+            return part
+
+    return domain_brand
 
 
 def first_match(
@@ -647,14 +751,25 @@ def infer_category(
 ) -> str | None:
     lower = f" {text.lower()} "
 
-    for category, keywords in CATEGORY_RULES:
-        if any(
-            keyword in lower
-            for keyword in keywords
-        ):
-            return category
+    category_scores: dict[str, int] = {}
 
-    return None
+    for category, keywords in CATEGORY_RULES:
+        score = sum(
+            1
+            for keyword in keywords
+            if keyword in lower
+        )
+
+        if score:
+            category_scores[category] = score
+
+    if not category_scores:
+        return None
+
+    return max(
+        category_scores,
+        key=category_scores.get,
+    )
 
 
 def extract_context(
@@ -844,6 +959,7 @@ def extract_candidate(
     confidence += 5 if qualification_language else 0
     confidence += 5 if positive_url else 0
     confidence += 5 if completion_language else 0
+
     confidence = min(
         confidence,
         100,
@@ -891,6 +1007,8 @@ def extract_candidate(
             r"\bHR or TA leader\b",
             r"\baccounting firm\b",
             r"\bwealth management firm\b",
+            r"\bbusiness owner\b",
+            r"\bnew customers only\b",
         ),
     )
 
@@ -1073,6 +1191,7 @@ def main() -> int:
                         f"{candidate.processing_status} "
                         f"candidate "
                         f"({candidate.confidence_score}): "
+                        f"{candidate.company_name} - "
                         f"{candidate.discovered_url}"
                     )
 
