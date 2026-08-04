@@ -351,6 +351,82 @@ def required_env(name: str) -> str:
     return value
 
 
+
+
+def get_search_config() -> tuple[str, str, int, int]:
+    search_mode = os.getenv(
+        "SEARCH_MODE",
+        "daily",
+    ).strip().lower()
+
+    if search_mode not in {"daily", "deep"}:
+        print(
+            f"Unknown SEARCH_MODE '{search_mode}'. "
+            "Falling back to daily mode.",
+            file=sys.stderr,
+        )
+        search_mode = "daily"
+
+    if search_mode == "deep":
+        query_filename = "search_queries_deep.txt"
+        pages = 3
+        count = 20
+    else:
+        query_filename = "search_queries_daily.txt"
+        pages = 2
+        count = 20
+
+    query_path = os.path.join(
+        os.path.dirname(__file__),
+        query_filename,
+    )
+
+    return search_mode, query_path, pages, count
+
+
+def load_queries(query_path: str) -> list[str]:
+    if not os.path.exists(query_path):
+        raise FileNotFoundError(
+            f"Search query file not found: {query_path}"
+        )
+
+    with open(
+        query_path,
+        encoding="utf-8",
+    ) as query_file:
+        queries = [
+            line.strip()
+            for line in query_file
+            if line.strip()
+            and not line.lstrip().startswith("#")
+        ]
+
+    if not queries:
+        raise RuntimeError(
+            f"No search queries found in: {query_path}"
+        )
+
+    return queries
+
+
+def build_search_snippet(result: dict) -> str:
+    snippets: list[str] = []
+
+    description = result.get("description", "")
+    if description:
+        snippets.append(str(description))
+
+    extra_snippets = result.get("extra_snippets", [])
+    if isinstance(extra_snippets, list):
+        snippets.extend(
+            str(item)
+            for item in extra_snippets
+            if item
+        )
+
+    return " ".join(snippets)
+
+
 def supabase_headers(
     service_key: str,
     prefer: str | None = None,
@@ -421,33 +497,68 @@ def finish_run(
 def brave_search(
     api_key: str,
     query: str,
-    count: int = 10,
-) -> list[dict]:
-    response = requests.get(
-        BRAVE_ENDPOINT,
-        headers={
-            "X-Subscription-Token": api_key,
-            "Accept": "application/json",
-        },
-        params={
-            "q": query,
-            "count": count,
-            "safesearch": "strict",
-            "search_lang": "en",
-            "country": "us",
-        },
-        timeout=TIMEOUT,
-    )
+    pages: int = 2,
+    count: int = 20,
+) -> tuple[list[dict], int]:
+    all_results: list[dict] = []
+    seen_urls: set[str] = set()
+    requests_performed = 0
 
-    response.raise_for_status()
+    for offset in range(pages):
+        response = requests.get(
+            BRAVE_ENDPOINT,
+            headers={
+                "X-Subscription-Token": api_key,
+                "Accept": "application/json",
+            },
+            params={
+                "q": query,
+                "count": count,
+                "offset": offset,
+                "safesearch": "strict",
+                "search_lang": "en",
+                "country": "us",
+                "extra_snippets": True,
+            },
+            timeout=TIMEOUT,
+        )
 
-    return response.json().get(
-        "web",
-        {},
-    ).get(
-        "results",
-        [],
-    )
+        requests_performed += 1
+        response.raise_for_status()
+        data = response.json()
+
+        results = data.get(
+            "web",
+            {},
+        ).get(
+            "results",
+            [],
+        )
+
+        for result in results:
+            url = result.get(
+                "url",
+                "",
+            ).strip()
+
+            if not url or url in seen_urls:
+                continue
+
+            seen_urls.add(url)
+            all_results.append(result)
+
+        more_results = data.get(
+            "query",
+            {},
+        ).get(
+            "more_results_available",
+            False,
+        )
+
+        if not more_results:
+            break
+
+    return all_results, requests_performed
 
 
 def clean_page_text(
@@ -1111,21 +1222,30 @@ def main() -> int:
         "BRAVE_SEARCH_API_KEY"
     )
 
-    query_path = os.path.join(
-        os.path.dirname(__file__),
-        "search_queries.txt",
+    (
+        search_mode,
+        query_path,
+        search_pages,
+        results_per_page,
+    ) = get_search_config()
+
+    queries = load_queries(
+        query_path
     )
 
-    with open(
-        query_path,
-        encoding="utf-8",
-    ) as query_file:
-        queries = [
-            line.strip()
-            for line in query_file
-            if line.strip()
-            and not line.startswith("#")
-        ]
+    print(
+        f"Search mode: {search_mode}"
+    )
+    print(
+        f"Query file: {query_path}"
+    )
+    print(
+        f"Queries loaded: {len(queries)}"
+    )
+    print(
+        f"Search depth: {search_pages} page(s) "
+        f"of up to {results_per_page} results"
+    )
 
     stats = {
         "searches_performed": 0,
@@ -1145,14 +1265,31 @@ def main() -> int:
     seen: set[str] = set()
 
     try:
-        for query in queries:
-            results = brave_search(
-                brave_key,
-                query,
-                count=10,
+        for query_number, query in enumerate(
+            queries,
+            start=1,
+        ):
+            print(
+                f"[{query_number}/{len(queries)}] "
+                f"Searching: {query}"
             )
 
-            stats["searches_performed"] += 1
+            try:
+                results, requests_performed = brave_search(
+                    brave_key,
+                    query,
+                    pages=search_pages,
+                    count=results_per_page,
+                )
+            except Exception as exc:
+                stats["errors_count"] += 1
+                print(
+                    f"Search failed for '{query}': {exc}",
+                    file=sys.stderr,
+                )
+                continue
+
+            stats["searches_performed"] += requests_performed
             stats["results_found"] += len(
                 results
             )
@@ -1174,9 +1311,8 @@ def main() -> int:
                     candidate = extract_candidate(
                         url,
                         query,
-                        result.get(
-                            "description",
-                            "",
+                        build_search_snippet(
+                            result
                         ),
                     )
 
