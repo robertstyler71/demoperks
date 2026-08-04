@@ -936,6 +936,72 @@ def contains_expired_year(
     )
 
 
+
+EDITORIAL_TITLE_PATTERNS = (
+    r"\\bhow to\\b",
+    r"\\bcomplete guide\\b",
+    r"\\bguide to\\b",
+    r"\\bplaybook\\b",
+    r"\\bblog\\b",
+    r"\\barticle\\b",
+    r"\\bwebinar\\b",
+    r"\\bebook\\b",
+    r"\\bwhitepaper\\b",
+    r"\\breport\\b",
+    r"\\btemplate\\b",
+    r"\\bbest \\d+\\b",
+    r"\\btop \\d+\\b",
+)
+
+CONTEST_PATTERNS = (
+    r"\\benter(?:ed)? to win\\b",
+    r"\\bchance to win\\b",
+    r"\\bdrawing\\b",
+    r"\\bsweepstakes\\b",
+    r"\\braffle\\b",
+    r"\\bone of \\d+ winners?\\b",
+    r"\\bselected winners?\\b",
+)
+
+EXPLICIT_OFFER_PATTERNS = (
+    r"(?:book|schedule|request|attend|take|complete).{0,90}(?:demo|demonstration|appointment).{0,180}(?:receive|get|earn|claim|be sent|we(?:'|’)ll send|we will send).{0,120}(?:\\$\\s?\\d{2,4}(?:\\.\\d{1,2})?|amazon|visa|mastercard|gift card|prepaid card)",
+    r"(?:receive|get|earn|claim|be sent|we(?:'|’)ll send|we will send).{0,120}(?:\\$\\s?\\d{2,4}(?:\\.\\d{1,2})?|amazon|visa|mastercard|gift card|prepaid card).{0,180}(?:after|upon|following|when|for).{0,100}(?:demo|demonstration|appointment)",
+)
+
+DATE_PATTERNS = (
+    r"(?:must be completed|must attend|complete(?:d)? by|attend(?:ed)? by|valid through|valid until|expires?|offer ends?|promotion ends?)\\s*(?:on\\s*)?([A-Za-z]+\\s+\\d{1,2},?\\s+20\\d{2})",
+    r"(?:must be completed|must attend|complete(?:d)? by|attend(?:ed)? by|valid through|valid until|expires?|offer ends?|promotion ends?)\\s*(?:on\\s*)?(20\\d{2}-\\d{1,2}-\\d{1,2})",
+)
+
+
+def find_offer_window(text: str) -> str | None:
+    for pattern in EXPLICIT_OFFER_PATTERNS:
+        match = re.search(pattern, text, re.I | re.S)
+        if match:
+            start = max(0, match.start() - 220)
+            end = min(len(text), match.end() + 420)
+            return re.sub(r"\\s+", " ", text[start:end]).strip()
+    return None
+
+
+def parse_expiration_date(text: str) -> datetime | None:
+    for pattern in DATE_PATTERNS:
+        match = re.search(pattern, text, re.I | re.S)
+        if not match:
+            continue
+        raw = match.group(1).strip().replace(',', '')
+        for fmt in ("%B %d %Y", "%b %d %Y", "%Y-%m-%d"):
+            try:
+                return datetime.strptime(raw, fmt).replace(tzinfo=timezone.utc)
+            except ValueError:
+                pass
+    return None
+
+
+def is_editorial_page(title: str, url: str) -> bool:
+    combined = f"{title} {url}"
+    return any(re.search(pattern, combined, re.I) for pattern in EDITORIAL_TITLE_PATTERNS)
+
 def extract_candidate(
     url: str,
     query: str,
@@ -950,229 +1016,157 @@ def extract_candidate(
             "Blocked marketplace, directory, social, discussion, media, or gift-card service domain"
         )
 
-    if any(
-        part in normalized_url
-        for part in BAD_URL_PARTS
-    ):
+    if any(part in normalized_url for part in BAD_URL_PARTS):
         raise ValueError(
             "Likely editorial, terms, consumer, or gift-card software page"
         )
 
-    text, title, final_url = fetch_page(
-        url
-    )
-
-    final_domain = urlparse(
-        final_url
-    ).netloc.lower()
+    text, title, final_url = fetch_page(url)
+    final_domain = urlparse(final_url).netloc.lower()
 
     if final_domain in BLOCKED_DOMAINS:
-        raise ValueError(
-            "Redirected to a blocked domain"
-        )
+        raise ValueError("Redirected to a blocked domain")
 
     title_text = title or ""
+    page_text = re.sub(r"\\s+", " ", f"{title_text} {text}").strip()
 
-    if any(
-        re.search(
-            pattern,
-            title_text,
-            re.I,
-        )
-        for pattern in BAD_TITLE_PATTERNS
-    ):
+    if any(re.search(pattern, title_text, re.I) for pattern in BAD_TITLE_PATTERNS):
         raise ValueError(
             "Title indicates a terms page, gift-card seller, or editorial page"
         )
 
-    if contains_expired_year(
-        title_text,
-        final_url,
-    ):
+    if is_editorial_page(title_text, final_url):
+        raise ValueError(
+            "Editorial, educational, guide, playbook, or resource page rather than a live demo offer"
+        )
+
+    if any(re.search(pattern, page_text, re.I | re.S) for pattern in CONTEST_PATTERNS):
+        raise ValueError(
+            "Contest, drawing, sweepstakes, or chance-to-win promotion rather than a guaranteed reward"
+        )
+
+    if contains_expired_year(title_text, final_url):
         raise ValueError(
             "Page appears to be an expired campaign from a previous year"
         )
 
-    haystack = (
-        f"{title_text} {snippet} {text}"
-    )
+    expiration_date = parse_expiration_date(page_text)
+    if expiration_date and expiration_date.date() < datetime.now(timezone.utc).date():
+        raise ValueError(
+            f"Offer expired on {expiration_date.date().isoformat()}"
+        )
 
-    demo_match = first_match(
-        DEMO_PATTERNS,
-        haystack,
-    )
+    offer_window = find_offer_window(page_text)
+    if not offer_window:
+        raise ValueError(
+            "No explicit sentence connects completing a demo with receiving a reward"
+        )
 
-    reward_match = first_match(
-        REWARD_PATTERNS,
-        haystack,
-    )
-
+    demo_match = first_match(DEMO_PATTERNS, offer_window)
+    reward_match = first_match(REWARD_PATTERNS, offer_window)
     close_match = bool(
-        demo_match
-        and reward_match
-        and terms_are_close(
-            haystack
+        demo_match and reward_match and terms_are_close(offer_window, max_distance=650)
+    )
+
+    if not demo_match or not reward_match or not close_match:
+        raise ValueError(
+            "Demo and reward language do not describe the same explicit promotion"
         )
-    )
 
-    amount = extract_amount(
-        haystack
-    )
+    amount = extract_amount(offer_window)
+    reward_type = infer_reward_type(offer_window)
 
-    reward_type = infer_reward_type(
-        haystack
-    )
+    if amount is None or amount < 10 or amount > 1000:
+        raise ValueError(
+            "A plausible reward amount was not found inside the actual offer wording"
+        )
 
-    category = infer_category(
-        haystack
-    )
-
+    category = infer_category(page_text)
     variable_reward = bool(
-        re.search(
-            r"\bup to\s+\$?\s?\d{2,4}",
-            haystack,
-            re.I,
-        )
+        re.search(r"\\bup to\\s+\\$?\\s?\\d{2,4}", offer_window, re.I)
     )
-
     completion_language = bool(
         re.search(
-            r"(?:after|once|upon|following).{0,80}"
-            r"(?:demo|demonstration|appointment).{0,60}"
-            r"(?:complete|completed)|"
-            r"(?:complete|completed).{0,60}"
-            r"(?:demo|demonstration|appointment)",
-            haystack,
+            r"(?:after|once|upon|following).{0,90}(?:demo|demonstration|appointment)|"
+            r"(?:demo|demonstration|appointment).{0,90}(?:complete|completed|attend|attended)",
+            offer_window,
             re.I | re.S,
         )
     )
-
-    positive_url = any(
-        part in final_url.lower()
-        for part in POSITIVE_URL_PARTS
-    )
-
+    positive_url = any(part in final_url.lower() for part in POSITIVE_URL_PARTS)
     qualification_language = bool(
         re.search(
-            r"\b(?:qualified|eligible|eligibility|"
-            r"decision.?maker|job title|company size|"
-            r"employees|work email|terms apply|"
-            r"participants|leader)\b",
-            haystack,
+            r"\\b(?:qualified|eligible|eligibility|decision.?maker|job title|company size|employees|work email|terms apply|participants|leader|new customers?)\\b",
+            page_text,
             re.I,
         )
     )
 
-    confidence = 0
-    confidence += 25 if demo_match else 0
-    confidence += 25 if reward_match else 0
-    confidence += 20 if close_match else 0
+    confidence = 70
     confidence += 10 if amount else 0
     confidence += 5 if reward_type else 0
     confidence += 5 if qualification_language else 0
     confidence += 5 if positive_url else 0
     confidence += 5 if completion_language else 0
+    confidence = min(confidence, 100)
 
-    confidence = min(
-        confidence,
-        100,
-    )
-
-    if not demo_match or not reward_match:
-        status = "rejected"
-        rejection_reason = (
-            "Did not clearly contain both a demo action "
-            "and an incentive offer."
-        )
-
-    elif not close_match:
-        status = "rejected"
-        rejection_reason = (
-            "Demo and gift-card language were not close "
-            "enough to indicate the same promotion."
-        )
-
-    elif confidence >= 85:
-        status = "approved"
-        rejection_reason = None
-
-    elif confidence >= 70:
-        status = "needs_review"
-        rejection_reason = None
-
-    else:
-        status = "rejected"
-        rejection_reason = (
-            "Offer details were incomplete or ambiguous."
-        )
+    status = "approved" if confidence >= 90 else "needs_review"
+    rejection_reason = None
 
     eligibility = extract_context(
-        text,
+        page_text,
         (
-            r"\bqualified\b",
-            r"\beligible\b",
-            r"\beligibility\b",
-            r"\bdecision.?maker\b",
-            r"\bjob title\b",
-            r"\bcompany size\b",
-            r"\bnumber of employees\b",
-            r"\bwork email\b",
-            r"\bHR or TA leader\b",
-            r"\baccounting firm\b",
-            r"\bwealth management firm\b",
-            r"\bbusiness owner\b",
-            r"\bnew customers only\b",
+            r"\\bqualified\\b",
+            r"\\beligible\\b",
+            r"\\beligibility\\b",
+            r"\\bdecision.?maker\\b",
+            r"\\bjob title\\b",
+            r"\\bcompany size\\b",
+            r"\\bnumber of employees\\b",
+            r"\\bwork email\\b",
+            r"\\bnew customers only\\b",
+            r"\\bcurrent customers are not eligible\\b",
         ),
+        before=120,
+        after=260,
     )
 
     geography = extract_context(
-        text,
+        page_text,
         (
-            r"\bunited states\b",
-            r"\bu\.s\.\b",
-            r"\bcanada\b",
-            r"\bunited kingdom\b",
-            r"\bresidents only\b",
+            r"\\bunited states\\b",
+            r"\\bu\\.s\\.\\b",
+            r"\\bcanada\\b",
+            r"\\bunited kingdom\\b",
+            r"\\bresidents only\\b",
         ),
         before=100,
         after=180,
     )
 
     expiration = extract_context(
-        text,
+        page_text,
         (
-            r"\bexpires?\b",
-            r"\bvalid (?:until|through)\b",
-            r"\boffer ends\b",
-            r"\bpromotion ends\b",
+            r"\\bexpires?\\b",
+            r"\\bvalid (?:until|through)\\b",
+            r"\\boffer ends\\b",
+            r"\\bpromotion ends\\b",
+            r"\\bmust (?:attend|be completed) by\\b",
         ),
         before=100,
-        after=200,
+        after=220,
     )
 
-    qualifier = (
-        "Variable reward: up to stated amount. "
-        if variable_reward
-        else ""
-    )
-
-    extracted_text = (
-        f"{qualifier}{text[:11900]}"
-    )
+    qualifier = "Variable reward: up to stated amount. " if variable_reward else ""
+    extracted_text = f"{qualifier}{offer_window[:1800]}"
 
     return Candidate(
         discovered_url=final_url,
         source_domain=final_domain,
         search_query=query,
         page_title=title,
-        company_name=infer_company(
-            title,
-            final_domain,
-        ),
-        offer_title=(
-            title
-            or "Software demo reward offer"
-        ),
+        company_name=infer_company(title, final_domain),
+        offer_title=title or "Software demo reward offer",
         reward_amount=amount,
         reward_type=reward_type,
         category=category,
@@ -1184,7 +1178,6 @@ def extract_candidate(
         processing_status=status,
         rejection_reason=rejection_reason,
     )
-
 
 def upsert_candidate(
     base_url: str,
