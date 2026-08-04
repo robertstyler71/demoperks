@@ -11,9 +11,11 @@ from urllib.parse import urlparse
 import requests
 from bs4 import BeautifulSoup
 
+
 BRAVE_ENDPOINT = "https://api.search.brave.com/res/v1/web/search"
-USER_AGENT = "DemoPerksBot/0.3 (+https://github.com/robertstyler71/demoperks)"
+USER_AGENT = "DemoPerksBot/0.4 (+https://github.com/robertstyler71/demoperks)"
 TIMEOUT = 20
+
 
 BLOCKED_DOMAINS = {
     "facebook.com",
@@ -24,10 +26,25 @@ BLOCKED_DOMAINS = {
     "twitter.com",
     "youtube.com",
     "www.youtube.com",
+    "demoloot.com",
+    "www.demoloot.com",
+    "giftogram.com",
+    "www.giftogram.com",
+    "visa.com",
+    "www.visa.com",
+    "cnbc.com",
+    "www.cnbc.com",
+    "groups.google.com",
+    "amazon.com",
+    "www.amazon.com",
+    "reddit.com",
+    "www.reddit.com",
+    "old.reddit.com",
 }
 
-# These URLs are usually editorial pages or companies selling gift-card software,
-# not a vendor offering a reward for attending a product demo.
+
+# These URL patterns usually indicate editorial content, gift-card sellers,
+# directories, supporting terms pages, or unrelated consumer content.
 BAD_URL_PARTS = (
     "/blog/",
     "/blogs/",
@@ -45,9 +62,17 @@ BAD_URL_PARTS = (
     "code-generator",
     "gift-card-apps",
     "gift-card-companies",
+    "terms-and-conditions",
+    "/terms/",
+    "/gift-card/visa",
+    "/prepaid-cards",
+    "/card-finder",
+    "/refer-and-earn",
 )
 
-# These URL parts are common on legitimate campaign and incentive landing pages.
+
+# These URL patterns are commonly used for legitimate offer, promotion,
+# campaign, and demo landing pages.
 POSITIVE_URL_PARTS = (
     "/offer",
     "/offers",
@@ -58,7 +83,27 @@ POSITIVE_URL_PARTS = (
     "/request-demo",
     "/book-demo",
     "/ac-offers",
+    "/paid-demo",
+    "/incentivized-demo",
 )
+
+
+BAD_TITLE_PATTERNS = (
+    r"terms\s*(?:&|and)\s*conditions",
+    r"buy\s+(?:and\s+send\s+)?(?:prepaid\s+)?gift cards",
+    r"gift card platform",
+    r"gift card software",
+    r"gift card code generator",
+    r"best gift card",
+    r"gift card apps",
+    r"gift card companies",
+    r"gift card alternatives",
+    r"gift card integration",
+    r"gift card api",
+    r"amazon gift card balance",
+    r"visa gift card balance",
+)
+
 
 DEMO_PATTERNS = (
     r"book\s+(?:a|your|the)?\s*(?:live\s+)?demo",
@@ -77,8 +122,9 @@ DEMO_PATTERNS = (
     r"complete (?:an|the|your) appointment",
 )
 
+
 REWARD_PATTERNS = (
-    # Reward first, then the demo requirement.
+    # Reward appears before the demo requirement.
     r"(?:get|receive|earn|claim|qualify for|be sent)\s+"
     r"(?:up to\s+)?(?:a\s+)?\$?\s?\d{2,4}(?:\.\d{1,2})?\s*"
     r"(?:amazon|visa|mastercard|digital|e-?gift|gift)?\s*"
@@ -87,7 +133,7 @@ REWARD_PATTERNS = (
     r"gift card.{0,100}in exchange for.{0,80}"
     r"(?:demo|demonstration|appointment)",
 
-    # Demo first, then reward.
+    # Demo appears before the reward.
     r"(?:demo|demonstration|appointment).{0,180}"
     r"(?:receive|get|earn|claim|be sent|we(?:'|’)ll send|we will send).{0,100}"
     r"(?:up to\s+)?(?:a\s+)?\$?\s?\d{2,4}(?:\.\d{1,2})?.{0,50}"
@@ -98,7 +144,7 @@ REWARD_PATTERNS = (
     r"(?:receive|get|earn|claim|be sent|we(?:'|’)ll send|we will send).{0,100}"
     r"(?:gift card|prepaid card|cash reward)",
 
-    # General reward phrases used on campaign landing pages.
+    # General reward language commonly found on campaign pages.
     r"(?:receive|get|earn|claim|qualify for|be sent|we(?:'|’)ll send|we will send).{0,120}"
     r"(?:up to\s+)?(?:a\s+)?\$?\s?\d{2,4}(?:\.\d{1,2})?.{0,60}"
     r"(?:gift card|prepaid card|cash reward)",
@@ -115,6 +161,7 @@ REWARD_PATTERNS = (
     r"(?:gift card|prepaid card|cash reward).{0,100}"
     r"\$\s?\d{2,4}(?:\.\d{1,2})?",
 )
+
 
 CATEGORY_RULES = (
     (
@@ -149,6 +196,8 @@ CATEGORY_RULES = (
             "expense management",
             "spend management",
             "finance",
+            "payments",
+            "billing",
         ),
     ),
     (
@@ -226,8 +275,12 @@ class Candidate:
 
 def required_env(name: str) -> str:
     value = os.getenv(name, "").strip()
+
     if not value:
-        raise RuntimeError(f"Missing required environment variable: {name}")
+        raise RuntimeError(
+            f"Missing required environment variable: {name}"
+        )
+
     return value
 
 
@@ -247,10 +300,16 @@ def supabase_headers(
     return headers
 
 
-def create_run(base_url: str, service_key: str) -> str:
+def create_run(
+    base_url: str,
+    service_key: str,
+) -> str:
     response = requests.post(
         f"{base_url}/rest/v1/crawler_runs",
-        headers=supabase_headers(service_key, "return=representation"),
+        headers=supabase_headers(
+            service_key,
+            "return=representation",
+        ),
         json={
             "run_type": "discovery",
             "status": "running",
@@ -273,13 +332,18 @@ def finish_run(
     payload = {
         **stats,
         "status": status,
-        "completed_at": datetime.now(timezone.utc).isoformat(),
+        "completed_at": datetime.now(
+            timezone.utc
+        ).isoformat(),
         "error_details": error,
     }
 
     response = requests.patch(
         f"{base_url}/rest/v1/crawler_runs?id=eq.{run_id}",
-        headers=supabase_headers(service_key, "return=minimal"),
+        headers=supabase_headers(
+            service_key,
+            "return=minimal",
+        ),
         json=payload,
         timeout=TIMEOUT,
     )
@@ -309,14 +373,35 @@ def brave_search(
     )
 
     response.raise_for_status()
-    return response.json().get("web", {}).get("results", [])
+
+    return response.json().get(
+        "web",
+        {},
+    ).get(
+        "results",
+        [],
+    )
 
 
-def clean_page_text(html: str) -> tuple[str, str | None]:
-    soup = BeautifulSoup(html, "html.parser")
-    title = soup.title.get_text(" ", strip=True) if soup.title else None
+def clean_page_text(
+    html: str,
+) -> tuple[str, str | None]:
+    soup = BeautifulSoup(
+        html,
+        "html.parser",
+    )
 
-    # Keep headings and forms because incentive language is often located there.
+    title = (
+        soup.title.get_text(
+            " ",
+            strip=True,
+        )
+        if soup.title
+        else None
+    )
+
+    # Keep headers, headings, and forms because incentive text
+    # often appears in those parts of landing pages.
     for tag in soup(
         [
             "script",
@@ -332,13 +417,18 @@ def clean_page_text(html: str) -> tuple[str, str | None]:
     text = re.sub(
         r"\s+",
         " ",
-        soup.get_text(" ", strip=True),
+        soup.get_text(
+            " ",
+            strip=True,
+        ),
     )
 
     return text[:40000], title
 
 
-def fetch_page(url: str) -> tuple[str, str | None, str]:
+def fetch_page(
+    url: str,
+) -> tuple[str, str | None, str]:
     response = requests.get(
         url,
         headers={
@@ -351,11 +441,20 @@ def fetch_page(url: str) -> tuple[str, str | None, str]:
 
     response.raise_for_status()
 
-    content_type = response.headers.get("content-type", "")
-    if "text/html" not in content_type:
-        raise ValueError("Not an HTML page")
+    content_type = response.headers.get(
+        "content-type",
+        "",
+    )
 
-    text, title = clean_page_text(response.text)
+    if "text/html" not in content_type:
+        raise ValueError(
+            "Not an HTML page"
+        )
+
+    text, title = clean_page_text(
+        response.text
+    )
+
     return text, title, response.url
 
 
@@ -366,11 +465,13 @@ def infer_company(
     if title:
         parts = [
             part.strip()
-            for part in re.split(r"[|–—]", title)
+            for part in re.split(
+                r"[|–—]",
+                title,
+            )
             if part.strip()
         ]
 
-        # Prefer a compact brand portion from the title.
         for part in reversed(parts):
             if (
                 2 <= len(part) <= 45
@@ -451,7 +552,9 @@ def terms_are_close(
     )
 
 
-def extract_amount(text: str) -> float | None:
+def extract_amount(
+    text: str,
+) -> float | None:
     contextual = re.search(
         r"(?:up to\s+)?\$\s?(\d{2,4}(?:\.\d{1,2})?).{0,120}"
         r"(?:gift card|prepaid card|cash reward)|"
@@ -464,11 +567,17 @@ def extract_amount(text: str) -> float | None:
     if not contextual:
         return None
 
-    raw = contextual.group(1) or contextual.group(2)
+    raw = (
+        contextual.group(1)
+        or contextual.group(2)
+    )
+
     return float(raw) if raw else None
 
 
-def infer_reward_type(text: str) -> str | None:
+def infer_reward_type(
+    text: str,
+) -> str | None:
     lower = text.lower()
 
     if (
@@ -511,17 +620,25 @@ def infer_reward_type(text: str) -> str | None:
     }
 
     for label, patterns in reward_map.items():
-        if any(pattern in lower for pattern in patterns):
+        if any(
+            pattern in lower
+            for pattern in patterns
+        ):
             return label
 
     return None
 
 
-def infer_category(text: str) -> str | None:
+def infer_category(
+    text: str,
+) -> str | None:
     lower = f" {text.lower()} "
 
     for category, keywords in CATEGORY_RULES:
-        if any(keyword in lower for keyword in keywords):
+        if any(
+            keyword in lower
+            for keyword in keywords
+        ):
             return category
 
     return None
@@ -556,6 +673,28 @@ def extract_context(
     return None
 
 
+def contains_expired_year(
+    title: str,
+    url: str,
+) -> bool:
+    current_year = datetime.now(
+        timezone.utc
+    ).year
+
+    years_found = [
+        int(year)
+        for year in re.findall(
+            r"\b20\d{2}\b",
+            f"{title} {url}",
+        )
+    ]
+
+    return bool(
+        years_found
+        and max(years_found) < current_year
+    )
+
+
 def extract_candidate(
     url: str,
     query: str,
@@ -567,7 +706,7 @@ def extract_candidate(
 
     if domain in BLOCKED_DOMAINS:
         raise ValueError(
-            "Blocked social or video domain"
+            "Blocked marketplace, directory, social, discussion, or media domain"
         )
 
     if any(
@@ -575,13 +714,47 @@ def extract_candidate(
         for part in BAD_URL_PARTS
     ):
         raise ValueError(
-            "Likely editorial or gift-card software page"
+            "Likely editorial, terms, consumer, or gift-card software page"
         )
 
-    text, title, final_url = fetch_page(url)
+    text, title, final_url = fetch_page(
+        url
+    )
 
-    haystack = f"{title or ''} {snippet} {text}"
-    lower = haystack.lower()
+    final_domain = urlparse(
+        final_url
+    ).netloc.lower()
+
+    if final_domain in BLOCKED_DOMAINS:
+        raise ValueError(
+            "Redirected to a blocked domain"
+        )
+
+    title_text = title or ""
+
+    if any(
+        re.search(
+            pattern,
+            title_text,
+            re.I,
+        )
+        for pattern in BAD_TITLE_PATTERNS
+    ):
+        raise ValueError(
+            "Title indicates a terms page, gift-card seller, or editorial page"
+        )
+
+    if contains_expired_year(
+        title_text,
+        final_url,
+    ):
+        raise ValueError(
+            "Page appears to be an expired campaign from a previous year"
+        )
+
+    haystack = (
+        f"{title_text} {snippet} {text}"
+    )
 
     demo_match = first_match(
         DEMO_PATTERNS,
@@ -596,12 +769,22 @@ def extract_candidate(
     close_match = bool(
         demo_match
         and reward_match
-        and terms_are_close(haystack)
+        and terms_are_close(
+            haystack
+        )
     )
 
-    amount = extract_amount(haystack)
-    reward_type = infer_reward_type(haystack)
-    category = infer_category(haystack)
+    amount = extract_amount(
+        haystack
+    )
+
+    reward_type = infer_reward_type(
+        haystack
+    )
+
+    category = infer_category(
+        haystack
+    )
 
     variable_reward = bool(
         re.search(
@@ -624,7 +807,7 @@ def extract_candidate(
     )
 
     positive_url = any(
-        part in normalized_url
+        part in final_url.lower()
         for part in POSITIVE_URL_PARTS
     )
 
@@ -648,7 +831,10 @@ def extract_candidate(
     confidence += 5 if qualification_language else 0
     confidence += 5 if positive_url else 0
     confidence += 5 if completion_language else 0
-    confidence = min(confidence, 100)
+    confidence = min(
+        confidence,
+        100,
+    )
 
     if not demo_match or not reward_match:
         status = "rejected"
@@ -732,14 +918,12 @@ def extract_candidate(
 
     return Candidate(
         discovered_url=final_url,
-        source_domain=urlparse(
-            final_url
-        ).netloc.lower(),
+        source_domain=final_domain,
         search_query=query,
         page_title=title,
         company_name=infer_company(
             title,
-            domain,
+            final_domain,
         ),
         offer_title=(
             title
@@ -772,7 +956,9 @@ def upsert_candidate(
             service_key,
             "resolution=merge-duplicates,return=minimal",
         ),
-        json=asdict(candidate),
+        json=asdict(
+            candidate
+        ),
         timeout=TIMEOUT,
     )
 
@@ -834,7 +1020,9 @@ def main() -> int:
             )
 
             stats["searches_performed"] += 1
-            stats["results_found"] += len(results)
+            stats["results_found"] += len(
+                results
+            )
 
             for result in results:
                 url = result.get(
@@ -845,7 +1033,9 @@ def main() -> int:
                 if not url or url in seen:
                     continue
 
-                seen.add(url)
+                seen.add(
+                    url
+                )
 
                 try:
                     candidate = extract_candidate(
@@ -925,4 +1115,6 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit(
+        main()
+    )
