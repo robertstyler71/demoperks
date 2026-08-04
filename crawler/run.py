@@ -13,7 +13,7 @@ from bs4 import BeautifulSoup
 
 
 BRAVE_ENDPOINT = "https://api.search.brave.com/res/v1/web/search"
-USER_AGENT = "DemoPerksBot/0.4 (+https://github.com/robertstyler71/demoperks)"
+USER_AGENT = "DemoPerksBot/0.5 (+https://github.com/robertstyler71/demoperks)"
 TIMEOUT = 20
 
 
@@ -40,11 +40,23 @@ BLOCKED_DOMAINS = {
     "reddit.com",
     "www.reddit.com",
     "old.reddit.com",
+    "giftcards.com",
+    "www.giftcards.com",
+    "alldigitalrewards.com",
+    "www.alldigitalrewards.com",
+    "tangocard.com",
+    "www.tangocard.com",
+    "yiftee.com",
+    "www.yiftee.com",
+    "ticketor.com",
+    "www.ticketor.com",
+    "wp-giftcard.com",
+    "www.wp-giftcard.com",
+    "getscratch.com",
+    "www.getscratch.com",
 }
 
 
-# These URL patterns usually indicate editorial content, gift-card sellers,
-# directories, supporting terms pages, or unrelated consumer content.
 BAD_URL_PARTS = (
     "/blog/",
     "/blogs/",
@@ -71,8 +83,6 @@ BAD_URL_PARTS = (
 )
 
 
-# These URL patterns are commonly used for legitimate offer, promotion,
-# campaign, and demo landing pages.
 POSITIVE_URL_PARTS = (
     "/offer",
     "/offers",
@@ -102,6 +112,14 @@ BAD_TITLE_PATTERNS = (
     r"gift card api",
     r"amazon gift card balance",
     r"visa gift card balance",
+    r"virtual account gift card",
+    r"buy e-?gift cards",
+    r"prepaid visa",
+    r"restricted use card",
+    r"controlled spending",
+    r"gift card payments platform",
+    r"request a demo\s*\|\s*tango",
+    r"demo\s*-\s*gift card",
 )
 
 
@@ -124,7 +142,6 @@ DEMO_PATTERNS = (
 
 
 REWARD_PATTERNS = (
-    # Reward appears before the demo requirement.
     r"(?:get|receive|earn|claim|qualify for|be sent)\s+"
     r"(?:up to\s+)?(?:a\s+)?\$?\s?\d{2,4}(?:\.\d{1,2})?\s*"
     r"(?:amazon|visa|mastercard|digital|e-?gift|gift)?\s*"
@@ -133,7 +150,6 @@ REWARD_PATTERNS = (
     r"gift card.{0,100}in exchange for.{0,80}"
     r"(?:demo|demonstration|appointment)",
 
-    # Demo appears before the reward.
     r"(?:demo|demonstration|appointment).{0,180}"
     r"(?:receive|get|earn|claim|be sent|we(?:'|’)ll send|we will send).{0,100}"
     r"(?:up to\s+)?(?:a\s+)?\$?\s?\d{2,4}(?:\.\d{1,2})?.{0,50}"
@@ -144,7 +160,6 @@ REWARD_PATTERNS = (
     r"(?:receive|get|earn|claim|be sent|we(?:'|’)ll send|we will send).{0,100}"
     r"(?:gift card|prepaid card|cash reward)",
 
-    # General reward language commonly found on campaign pages.
     r"(?:receive|get|earn|claim|qualify for|be sent|we(?:'|’)ll send|we will send).{0,120}"
     r"(?:up to\s+)?(?:a\s+)?\$?\s?\d{2,4}(?:\.\d{1,2})?.{0,60}"
     r"(?:gift card|prepaid card|cash reward)",
@@ -400,8 +415,6 @@ def clean_page_text(
         else None
     )
 
-    # Keep headers, headings, and forms because incentive text
-    # often appears in those parts of landing pages.
     for tag in soup(
         [
             "script",
@@ -706,7 +719,7 @@ def extract_candidate(
 
     if domain in BLOCKED_DOMAINS:
         raise ValueError(
-            "Blocked marketplace, directory, social, discussion, or media domain"
+            "Blocked marketplace, directory, social, discussion, media, or gift-card service domain"
         )
 
     if any(
