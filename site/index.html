@@ -26,7 +26,7 @@
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body { margin: 0; min-width: 320px; background: #fbfcfa; }
-button, input, select { font: inherit; }
+button, input, select, textarea { font: inherit; }
 button, a { -webkit-tap-highlight-color: transparent; }
 a { color: inherit; text-decoration: none; }
 button { cursor: pointer; }
@@ -136,10 +136,10 @@ footer { padding: 42px 0; background: #f4f7f4; border-top: 1px solid var(--line)
 .modal-section { border-top: 1px solid var(--line); margin-top: 20px; padding-top: 16px; }
 .modal-section h3 { margin: 0 0 6px; font-size: .96rem; }
 
-.feedback-box { margin-top: 8px; padding-top: 8px; border-top: 1px solid #f0f3f1; display: flex; align-items: center; justify-content: flex-start; gap: 7px; flex-wrap: nowrap; min-width: 0; }
-.feedback-label { margin: 0; font-size: .64rem; color: #a0aaa5; white-space: nowrap; flex: 0 1 auto; }
-.feedback-actions { display: flex; align-items: center; gap: 5px; flex: 0 0 auto; }
-.feedback-button { border: 1px solid #e8eeea; background: transparent; color: #84908a; border-radius: 999px; padding: 3px 7px; font-size: .61rem; font-weight: 500; line-height: 1.15; white-space: nowrap; }
+.feedback-box { margin-top: 10px; padding-top: 10px; border-top: 1px solid #edf1ee; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.feedback-label { margin: 0; font-size: .69rem; color: #98a19d; white-space: nowrap; }
+.feedback-actions { display: flex; align-items: center; gap: 6px; }
+.feedback-button { border: 1px solid #e5ebe7; background: transparent; color: #7d8883; border-radius: 999px; padding: 5px 8px; font-size: .67rem; font-weight: 500; line-height: 1.2; }
 .feedback-button:hover { background: #f4f8f5; color: var(--green); border-color: #d5e3da; }
 .feedback-button--issue:hover { background: #fff7f3; color: #9a5d48; border-color: #ead9d0; }
 .feedback-message { width: 100%; margin: 2px 0 0; font-size: .68rem; color: var(--green); }
@@ -152,6 +152,36 @@ footer { padding: 42px 0; background: #f4f7f4; border-top: 1px solid var(--line)
 .report-details { width: 100%; min-height: 90px; resize: vertical; border: 1px solid var(--line); border-radius: 12px; padding: 12px; font: inherit; }
 .report-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px; }
 .report-error { margin: 10px 0 0; color: #a33f2f; font-size: .78rem; }
+
+
+.submit-form { display: grid; gap: 14px; margin-top: 20px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-field { display: grid; gap: 7px; }
+.form-field label { font-size: .78rem; font-weight: 700; color: var(--ink); }
+.form-field small { color: var(--muted); font-size: .72rem; line-height: 1.4; }
+.form-field input,
+.form-field select,
+.form-field textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  background: white;
+  color: var(--ink);
+  border-radius: 11px;
+  padding: 11px 12px;
+  outline: none;
+}
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  border-color: #8ab69f;
+  box-shadow: 0 0 0 3px rgba(47,122,91,.09);
+}
+.form-field textarea { min-height: 92px; resize: vertical; }
+.form-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 4px; }
+.form-status { margin: 2px 0 0; font-size: .8rem; line-height: 1.5; }
+.form-status--error { color: #a33f2f; }
+.form-status--success { color: var(--green); }
+.required-mark { color: #a33f2f; }
 
 @media (max-width: 980px) {
   nav a { display: none; }
@@ -172,16 +202,13 @@ footer { padding: 42px 0; background: #f4f7f4; border-top: 1px solid var(--line)
   .offer-card__footer { align-items: flex-start; flex-direction: column; }
   .card-actions { width: 100%; }
   .card-actions .button { flex: 1; }
-  .feedback-box { align-items: center; flex-wrap: nowrap; }
-  .feedback-label { white-space: nowrap; }
-  .feedback-actions { flex-wrap: nowrap; }
+  .feedback-box { align-items: flex-start; }
+  .feedback-label { white-space: normal; }
+  .feedback-actions { flex-wrap: wrap; }
+  .form-row { grid-template-columns: 1fr; }
   .how-grid { grid-template-columns: 1fr; }
   .footer-inner { flex-direction: column; }
   .disclaimer { text-align: left; }
-}
-
-@media (max-width: 390px) {
-  .feedback-box { flex-wrap: wrap; }
 }
 
 @media (max-width: 520px) {
@@ -206,7 +233,7 @@ footer { padding: 42px 0; background: #f4f7f4; border-top: 1px solid var(--line)
 </head>
 <body>
 <div class="site-shell">
-<header class="site-header"><div class="container header-inner"><a href="#top" class="brand"><span class="brand-mark">D</span> DemoPerks</a><nav><a href="#offers">Browse Offers</a><a href="#how-it-works">How It Works</a><button class="button button--small button--primary" type="button">Submit an Offer</button></nav></div></header>
+<header class="site-header"><div class="container header-inner"><a href="#top" class="brand"><span class="brand-mark">D</span> DemoPerks</a><nav><a href="#offers">Browse Offers</a><a href="#how-it-works">How It Works</a><button class="button button--small button--primary" type="button" id="submitOfferButton">Submit an Offer</button></nav></div></header>
 <main id="top">
 <section class="hero"><div class="container hero-inner"><span class="eyebrow">Verified SaaS demo incentives</span><h1>Find software demos that reward your time.</h1><p>Discover gift cards, prepaid cards, and professional audits offered by B2B software companies looking for qualified buyers and evaluators.</p><div class="hero-search"><span>⌕</span><input id="heroSearch" placeholder="Search companies, categories, or rewards" aria-label="Search offers"></div><div class="stats-grid"><div class="stat-card"><strong id="activeCount">0</strong><span>Active offers</span></div><div class="stat-card"><strong id="rewardTotal">$0+</strong><span>Total rewards listed</span></div><div class="stat-card"><strong id="categoryCount">0</strong><span>Software categories</span></div></div></div></section>
 <section class="directory-section" id="offers"><div class="container directory-layout">
@@ -222,6 +249,78 @@ footer { padding: 42px 0; background: #f4f7f4; border-top: 1px solid var(--line)
 <footer><div class="container footer-inner"><div><a href="#top" class="brand"><span class="brand-mark">D</span> DemoPerks</a><p>An independent directory of software demo incentives.</p></div><p class="disclaimer">DemoPerks does not issue rewards or guarantee eligibility. Offers are subject to vendor terms and may change without notice.</p></div></footer>
 <div class="modal-backdrop hidden" id="modal"><div class="modal" role="dialog" aria-modal="true"><button class="icon-button modal-close" id="modalClose" aria-label="Close">×</button><span id="modalStatus" class="status"></span><h2 id="modalCompany"></h2><p class="modal-kicker" id="modalTitle"></p><div class="modal-reward" id="modalReward"></div><p id="modalDescription"></p><div class="modal-section"><h3>Who may qualify</h3><p id="modalEligibility"></p></div><div class="modal-section"><h3>Important</h3><p>Rewards are issued by the vendor and are subject to its qualification rules, attendance requirements, and terms.</p></div><a class="button button--primary button--wide" id="modalLink" href="#">Visit Offer ↗</a></div></div>
 <div class="modal-backdrop hidden" id="reportModal"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="reportTitle"><button class="icon-button modal-close" id="reportClose" aria-label="Close">×</button><span class="eyebrow">Help keep DemoPerks accurate</span><h2 id="reportTitle">Report an issue</h2><p class="modal-kicker" id="reportOfferName"></p><form id="reportForm"><div class="report-options"><label class="report-option"><input type="radio" name="reportType" value="expired"><span><strong>Offer expired</strong><span>The page says the promotion has ended or expired.</span></span></label><label class="report-option"><input type="radio" name="reportType" value="broken_link"><span><strong>Broken link</strong><span>The page does not load or goes to an error page.</span></span></label><label class="report-option"><input type="radio" name="reportType" value="incentive_missing"><span><strong>Incentive no longer mentioned</strong><span>The page loads, but the demo reward is not shown.</span></span></label><label class="report-option"><input type="radio" name="reportType" value="other"><span><strong>Other</strong><span>Something else is wrong with this offer.</span></span></label></div><textarea class="report-details hidden" id="reportDetails" maxlength="500" placeholder="Tell us what you noticed"></textarea><p class="report-error hidden" id="reportError"></p><div class="report-actions"><button class="button button--secondary" type="button" id="reportCancel">Cancel</button><button class="button button--primary" type="submit" id="reportSubmit">Submit report</button></div></form></div></div>
+
+<div class="modal-backdrop hidden" id="submitOfferModal">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="submitOfferTitle">
+    <button class="icon-button modal-close" id="submitOfferClose" aria-label="Close">×</button>
+    <span class="eyebrow">Share a verified opportunity</span>
+    <h2 id="submitOfferTitle">Submit an Offer</h2>
+    <p class="modal-kicker">Send us a software demo incentive to review. Nothing is published automatically.</p>
+
+    <form id="submitOfferForm" class="submit-form">
+      <div class="form-field">
+        <label for="submissionCompany">Company name <span class="required-mark">*</span></label>
+        <input id="submissionCompany" name="companyName" maxlength="120" required autocomplete="organization">
+      </div>
+
+      <div class="form-field">
+        <label for="submissionUrl">Offer landing-page URL <span class="required-mark">*</span></label>
+        <input id="submissionUrl" name="offerUrl" type="url" maxlength="1000" placeholder="https://example.com/demo-offer" required>
+        <small>The linked page must clearly mention both the demo and the incentive.</small>
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label for="submissionAmount">Reward amount</label>
+          <input id="submissionAmount" name="rewardAmount" type="number" min="0" max="10000" step="0.01" placeholder="100">
+        </div>
+
+        <div class="form-field">
+          <label for="submissionRewardType">Reward type</label>
+          <select id="submissionRewardType" name="rewardType">
+            <option value="">Select one</option>
+            <option>Amazon Gift Card</option>
+            <option>Visa Prepaid Card</option>
+            <option>Mastercard Prepaid Card</option>
+            <option>Digital Gift Card</option>
+            <option>Gift Card of Choice</option>
+            <option>Cash Reward</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label for="submissionDescription">Offer description</label>
+        <textarea id="submissionDescription" name="offerDescription" maxlength="1500" placeholder="What does the participant need to do, and what do they receive?"></textarea>
+      </div>
+
+      <div class="form-field">
+        <label for="submissionEligibility">Eligibility requirements</label>
+        <textarea id="submissionEligibility" name="eligibilityDetails" maxlength="1500" placeholder="Job title, company size, location, new customers only, or other requirements"></textarea>
+      </div>
+
+      <div class="form-field">
+        <label for="submissionEmail">Your email <span class="required-mark">*</span></label>
+        <input id="submissionEmail" name="submitterEmail" type="email" maxlength="254" required autocomplete="email">
+        <small>Used only if we need clarification about the submission.</small>
+      </div>
+
+      <div class="form-field">
+        <label for="submissionNotes">Additional notes</label>
+        <textarea id="submissionNotes" name="additionalNotes" maxlength="1500" placeholder="Anything else we should know?"></textarea>
+      </div>
+
+      <p class="form-status hidden" id="submitOfferStatus"></p>
+
+      <div class="form-actions">
+        <button class="button button--secondary" type="button" id="submitOfferCancel">Cancel</button>
+        <button class="button button--primary" type="submit" id="submitOfferSubmit">Submit for Review</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 </div>
 <script src="demoperks-config.js"></script>
 <script>
@@ -230,6 +329,7 @@ const state={search:'',category:'All',rewardType:'All',status:'active',sort:'rec
 let categories=[];
 let rewardTypes=[];
 let activeReportOffer=null;
+let submitOfferBusy=false;
 const $=id=>document.getElementById(id);
 function escapeHtml(v){return String(v ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));}
 function safeUrl(value){try{const u=new URL(value);return ['http:','https:'].includes(u.protocol)?u.href:'#';}catch{return '#';}}
@@ -276,6 +376,107 @@ function showFeedbackMessage(offerId,message){const el=$(`feedback-${offerId}`);
 async function submitWorksFeedback(offerId){try{await sendFeedback(offerId,'works');showFeedbackMessage(offerId,'Thanks for confirming this offer.');}catch(err){showFeedbackMessage(offerId,'We could not save your feedback. Please try again.');console.error(err);}}
 function openReportModal(offerId){const offer=offers.find(x=>x.id===offerId);if(!offer)return;activeReportOffer=offer;$('reportOfferName').textContent=`${offer.company} — ${offer.title}`;$('reportForm').reset();$('reportDetails').value='';$('reportDetails').classList.add('hidden');$('reportError').classList.add('hidden');$('reportSubmit').disabled=false;$('reportSubmit').textContent='Submit report';$('reportModal').classList.remove('hidden');}
 function closeReportModal(){$('reportModal').classList.add('hidden');activeReportOffer=null;}
+
+function openSubmitOfferModal(){
+  $('submitOfferForm').reset();
+  $('submitOfferStatus').textContent='';
+  $('submitOfferStatus').className='form-status hidden';
+  $('submitOfferSubmit').disabled=false;
+  $('submitOfferSubmit').textContent='Submit for Review';
+  submitOfferBusy=false;
+  $('submitOfferModal').classList.remove('hidden');
+  setTimeout(()=>$('submissionCompany').focus(),50);
+}
+function closeSubmitOfferModal(){
+  if(submitOfferBusy)return;
+  $('submitOfferModal').classList.add('hidden');
+}
+async function sendOfferSubmission(payload){
+  const cfg=window.DEMOPERKS_CONFIG||{};
+  if(!cfg.supabaseUrl || !cfg.supabasePublishableKey){
+    throw new Error('The submission service is not configured.');
+  }
+  const endpoint=`${cfg.supabaseUrl.replace(/\/$/,'')}/rest/v1/rpc/submit_offer_submission`;
+  const response=await fetch(endpoint,{
+    method:'POST',
+    headers:{
+      apikey:cfg.supabasePublishableKey,
+      Authorization:`Bearer ${cfg.supabasePublishableKey}`,
+      'Content-Type':'application/json'
+    },
+    body:JSON.stringify(payload)
+  });
+  if(!response.ok){
+    const text=await response.text();
+    let message='We could not submit this offer. Please try again.';
+    try{
+      const parsed=JSON.parse(text);
+      message=parsed.message||parsed.hint||message;
+    }catch{}
+    throw new Error(message);
+  }
+  return response.json();
+}
+async function handleOfferSubmission(event){
+  event.preventDefault();
+  if(submitOfferBusy)return;
+
+  const companyName=$('submissionCompany').value.trim();
+  const offerUrl=$('submissionUrl').value.trim();
+  const email=$('submissionEmail').value.trim();
+  const rewardAmountRaw=$('submissionAmount').value.trim();
+
+  if(companyName.length<2){
+    $('submitOfferStatus').textContent='Please enter a valid company name.';
+    $('submitOfferStatus').className='form-status form-status--error';
+    return;
+  }
+  try{
+    const parsedUrl=new URL(offerUrl);
+    if(!['http:','https:'].includes(parsedUrl.protocol))throw new Error();
+  }catch{
+    $('submitOfferStatus').textContent='Please enter a valid offer URL beginning with http:// or https://.';
+    $('submitOfferStatus').className='form-status form-status--error';
+    return;
+  }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+    $('submitOfferStatus').textContent='Please enter a valid email address.';
+    $('submitOfferStatus').className='form-status form-status--error';
+    return;
+  }
+
+  submitOfferBusy=true;
+  $('submitOfferSubmit').disabled=true;
+  $('submitOfferSubmit').textContent='Submitting…';
+  $('submitOfferStatus').textContent='';
+  $('submitOfferStatus').className='form-status hidden';
+
+  try{
+    await sendOfferSubmission({
+      p_company_name:companyName,
+      p_offer_url:offerUrl,
+      p_reward_amount:rewardAmountRaw===''?null:Number(rewardAmountRaw),
+      p_reward_type:$('submissionRewardType').value||null,
+      p_offer_description:$('submissionDescription').value.trim()||null,
+      p_eligibility_details:$('submissionEligibility').value.trim()||null,
+      p_submitter_email:email,
+      p_additional_notes:$('submissionNotes').value.trim()||null
+    });
+
+    $('submitOfferForm').reset();
+    $('submitOfferStatus').textContent='Thanks! We’ll verify the landing page and review the offer before listing it.';
+    $('submitOfferStatus').className='form-status form-status--success';
+    $('submitOfferSubmit').textContent='Submitted';
+  }catch(err){
+    $('submitOfferStatus').textContent=err.message||'We could not submit this offer. Please try again.';
+    $('submitOfferStatus').className='form-status form-status--error';
+    $('submitOfferSubmit').disabled=false;
+    $('submitOfferSubmit').textContent='Submit for Review';
+    submitOfferBusy=false;
+    console.error(err);
+  }
+}
+
 async function loadOffers(){
   const cfg=window.DEMOPERKS_CONFIG||{};
   if(!cfg.supabaseUrl || !cfg.supabasePublishableKey || cfg.supabasePublishableKey.includes('PASTE_')){
@@ -295,7 +496,14 @@ $('statusButtons').onclick=e=>{const b=e.target.closest('[data-status]');if(!b)r
 $('categoryButtons').onclick=e=>{const b=e.target.closest('[data-category]');if(!b)return;state.category=b.dataset.category;document.querySelectorAll('[data-category]').forEach(x=>x.classList.toggle('is-selected',x===b));render();};
 $('rewardButtons').onclick=e=>{const b=e.target.closest('[data-reward]');if(!b)return;state.rewardType=b.dataset.reward;document.querySelectorAll('[data-reward]').forEach(x=>x.classList.toggle('is-selected',x===b));render();};
 $('sortSelect').onchange=e=>{state.sort=e.target.value;render();};$('gridView').onclick=()=>{state.view='grid';$('gridView').classList.add('is-selected');$('listView').classList.remove('is-selected');render();};$('listView').onclick=()=>{state.view='list';$('listView').classList.add('is-selected');$('gridView').classList.remove('is-selected');render();};
-$('mobileFilters').onclick=()=>$('filters').classList.toggle('filters--open');$('modalClose').onclick=closeModal;$('modal').onclick=e=>{if(e.target===$('modal'))closeModal();};$('reportClose').onclick=closeReportModal;$('reportCancel').onclick=closeReportModal;$('reportModal').onclick=e=>{if(e.target===$('reportModal'))closeReportModal();};document.querySelectorAll('input[name="reportType"]').forEach(input=>input.onchange=()=>{$('reportDetails').classList.toggle('hidden',input.value!=='other'||!input.checked);});$('reportForm').onsubmit=async e=>{e.preventDefault();if(!activeReportOffer)return;const selected=document.querySelector('input[name="reportType"]:checked');if(!selected){$('reportError').textContent='Choose a reason before submitting.';$('reportError').classList.remove('hidden');return;}const details=$('reportDetails').value.trim();if(selected.value==='other'&&details.length<3){$('reportError').textContent='Please add a short explanation for Other.';$('reportError').classList.remove('hidden');return;}$('reportError').classList.add('hidden');$('reportSubmit').disabled=true;$('reportSubmit').textContent='Submitting…';try{await sendFeedback(activeReportOffer.id,selected.value,details);const offerId=activeReportOffer.id;closeReportModal();showFeedbackMessage(offerId,'Thanks. We’ll review this offer.');}catch(err){$('reportError').textContent='We could not submit your report. Please try again.';$('reportError').classList.remove('hidden');$('reportSubmit').disabled=false;$('reportSubmit').textContent='Submit report';console.error(err);}};document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeReportModal();}});
+$('mobileFilters').onclick=()=>$('filters').classList.toggle('filters--open');$('modalClose').onclick=closeModal;$('modal').onclick=e=>{if(e.target===$('modal'))closeModal();};$('reportClose').onclick=closeReportModal;$('reportCancel').onclick=closeReportModal;$('reportModal').onclick=e=>{if(e.target===$('reportModal'))closeReportModal();};document.querySelectorAll('input[name="reportType"]').forEach(input=>input.onchange=()=>{$('reportDetails').classList.toggle('hidden',input.value!=='other'||!input.checked);});$('reportForm').onsubmit=async e=>{e.preventDefault();if(!activeReportOffer)return;const selected=document.querySelector('input[name="reportType"]:checked');if(!selected){$('reportError').textContent='Choose a reason before submitting.';$('reportError').classList.remove('hidden');return;}const details=$('reportDetails').value.trim();if(selected.value==='other'&&details.length<3){$('reportError').textContent='Please add a short explanation for Other.';$('reportError').classList.remove('hidden');return;}$('reportError').classList.add('hidden');$('reportSubmit').disabled=true;$('reportSubmit').textContent='Submitting…';try{await sendFeedback(activeReportOffer.id,selected.value,details);const offerId=activeReportOffer.id;closeReportModal();showFeedbackMessage(offerId,'Thanks. We’ll review this offer.');}catch(err){$('reportError').textContent='We could not submit your report. Please try again.';$('reportError').classList.remove('hidden');$('reportSubmit').disabled=false;$('reportSubmit').textContent='Submit report';console.error(err);}};document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeReportModal();closeSubmitOfferModal();}});
+
+$('submitOfferButton').onclick=openSubmitOfferModal;
+$('submitOfferClose').onclick=closeSubmitOfferModal;
+$('submitOfferCancel').onclick=closeSubmitOfferModal;
+$('submitOfferModal').onclick=e=>{if(e.target===$('submitOfferModal'))closeSubmitOfferModal();};
+$('submitOfferForm').onsubmit=handleOfferSubmission;
+
 loadOffers().catch(err=>{$('loadingState').classList.add('hidden');$('connectionError').classList.remove('hidden');$('connectionErrorText').innerHTML=`${escapeHtml(err.message)}<br><code>demoperks-config.js</code>`;console.error(err);});
 </script>
 </body></html>
