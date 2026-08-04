@@ -136,10 +136,10 @@ footer { padding: 42px 0; background: #f4f7f4; border-top: 1px solid var(--line)
 .modal-section { border-top: 1px solid var(--line); margin-top: 20px; padding-top: 16px; }
 .modal-section h3 { margin: 0 0 6px; font-size: .96rem; }
 
-.feedback-box { margin-top: 10px; padding-top: 10px; border-top: 1px solid #edf1ee; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.feedback-label { margin: 0; font-size: .69rem; color: #98a19d; white-space: nowrap; }
-.feedback-actions { display: flex; align-items: center; gap: 6px; }
-.feedback-button { border: 1px solid #e5ebe7; background: transparent; color: #7d8883; border-radius: 999px; padding: 5px 8px; font-size: .67rem; font-weight: 500; line-height: 1.2; }
+.feedback-box { margin-top: 8px; padding-top: 8px; border-top: 1px solid #f0f3f1; display: flex; align-items: center; justify-content: flex-start; gap: 7px; flex-wrap: nowrap; min-width: 0; }
+.feedback-label { margin: 0; font-size: .64rem; color: #a0aaa5; white-space: nowrap; flex: 0 1 auto; }
+.feedback-actions { display: flex; align-items: center; gap: 5px; flex: 0 0 auto; }
+.feedback-button { border: 1px solid #e8eeea; background: transparent; color: #84908a; border-radius: 999px; padding: 3px 7px; font-size: .61rem; font-weight: 500; line-height: 1.15; white-space: nowrap; }
 .feedback-button:hover { background: #f4f8f5; color: var(--green); border-color: #d5e3da; }
 .feedback-button--issue:hover { background: #fff7f3; color: #9a5d48; border-color: #ead9d0; }
 .feedback-message { width: 100%; margin: 2px 0 0; font-size: .68rem; color: var(--green); }
@@ -172,12 +172,16 @@ footer { padding: 42px 0; background: #f4f7f4; border-top: 1px solid var(--line)
   .offer-card__footer { align-items: flex-start; flex-direction: column; }
   .card-actions { width: 100%; }
   .card-actions .button { flex: 1; }
-  .feedback-box { align-items: flex-start; }
-  .feedback-label { white-space: normal; }
-  .feedback-actions { flex-wrap: wrap; }
+  .feedback-box { align-items: center; flex-wrap: nowrap; }
+  .feedback-label { white-space: nowrap; }
+  .feedback-actions { flex-wrap: nowrap; }
   .how-grid { grid-template-columns: 1fr; }
   .footer-inner { flex-direction: column; }
   .disclaimer { text-align: left; }
+}
+
+@media (max-width: 390px) {
+  .feedback-box { flex-wrap: wrap; }
 }
 
 @media (max-width: 520px) {
