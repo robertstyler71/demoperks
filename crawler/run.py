@@ -3,8 +3,7 @@ from __future__ import annotations
 import json
 import os
 import re
-import sys
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from datetime import datetime, timezone
 from urllib.parse import urlparse
 
@@ -12,118 +11,14 @@ import requests
 from bs4 import BeautifulSoup
 
 
-BRAVE_ENDPOINT = "https://api.search.brave.com/res/v1/web/search"
-USER_AGENT = "DemoPerksBot/0.6 (+https://github.com/robertstyler71/demoperks)"
 TIMEOUT = 20
-
-
-BLOCKED_DOMAINS = {
-    "facebook.com",
-    "www.facebook.com",
-    "linkedin.com",
-    "www.linkedin.com",
-    "x.com",
-    "twitter.com",
-    "youtube.com",
-    "www.youtube.com",
-    "demoloot.com",
-    "www.demoloot.com",
-    "giftogram.com",
-    "www.giftogram.com",
-    "visa.com",
-    "www.visa.com",
-    "cnbc.com",
-    "www.cnbc.com",
-    "groups.google.com",
-    "amazon.com",
-    "www.amazon.com",
-    "reddit.com",
-    "www.reddit.com",
-    "old.reddit.com",
-    "giftcards.com",
-    "www.giftcards.com",
-    "alldigitalrewards.com",
-    "www.alldigitalrewards.com",
-    "tangocard.com",
-    "www.tangocard.com",
-    "yiftee.com",
-    "www.yiftee.com",
-    "ticketor.com",
-    "www.ticketor.com",
-    "wp-giftcard.com",
-    "www.wp-giftcard.com",
-    "getscratch.com",
-    "www.getscratch.com",
-}
-
-
-BAD_URL_PARTS = (
-    "/blog/",
-    "/blogs/",
-    "/news/",
-    "/article/",
-    "/articles/",
-    "/best-",
-    "alternatives",
-    "comparison",
-    "reviews",
-    "roundup",
-    "gift-card-software",
-    "gift-card-api",
-    "gift-card-platform",
-    "code-generator",
-    "gift-card-apps",
-    "gift-card-companies",
-    "terms-and-conditions",
-    "/terms/",
-    "/gift-card/visa",
-    "/prepaid-cards",
-    "/card-finder",
-    "/refer-and-earn",
-    "/referral-program/",
-)
-
-
-POSITIVE_URL_PARTS = (
-    "/offer",
-    "/offers",
-    "/promo",
-    "/promotion",
-    "/campaign",
-    "/demo",
-    "/request-demo",
-    "/book-demo",
-    "/ac-offers",
-    "/paid-demo",
-    "/incentivized-demo",
-)
-
-
-BAD_TITLE_PATTERNS = (
-    r"terms\s*(?:&|and)\s*conditions",
-    r"buy\s+(?:and\s+send\s+)?(?:prepaid\s+)?gift cards",
-    r"gift card platform",
-    r"gift card software",
-    r"gift card code generator",
-    r"best gift card",
-    r"gift card apps",
-    r"gift card companies",
-    r"gift card alternatives",
-    r"gift card integration",
-    r"gift card api",
-    r"amazon gift card balance",
-    r"visa gift card balance",
-    r"virtual account gift card",
-    r"buy e-?gift cards",
-    r"prepaid visa",
-    r"restricted use card",
-    r"controlled spending",
-    r"gift card payments platform",
-    r"request a demo\s*\|\s*tango",
-    r"demo\s*-\s*gift card",
-    r"referral program",
-)
-
+MIN_CONFIDENCE = 90
+USER_AGENT = "DemoPerksBot/0.7 (+https://github.com/robertstyler71/demoperks)"
+MAX_TERM_DISTANCE = 1200
+MAX_SHORT_DESCRIPTION = 260
+MAX_FULL_DESCRIPTION = 650
+MAX_ELIGIBILITY_DETAILS = 500
+MAX_OFFER_TITLE = 180
 
 DEMO_PATTERNS = (
     r"book\s+(?:a|your|the)?\s*(?:live\s+)?demo",
@@ -136,1255 +31,569 @@ DEMO_PATTERNS = (
     r"product demonstration",
     r"software demonstration",
     r"live demonstration",
-    r"meet with (?:our|a) (?:sales|product) team",
     r"once (?:an|the|your) appointment is completed",
     r"after (?:an|the|your) appointment is completed",
     r"complete (?:an|the|your) appointment",
 )
 
-
-REWARD_PATTERNS = (
-    r"(?:get|receive|earn|claim|qualify for|be sent)\s+"
-    r"(?:up to\s+)?(?:a\s+)?\$?\s?\d{2,4}(?:\.\d{1,2})?\s*"
-    r"(?:amazon|visa|mastercard|digital|e-?gift|gift)?\s*"
-    r"(?:gift\s+)?card.{0,180}(?:demo|demonstration|appointment)",
-
-    r"gift card.{0,100}in exchange for.{0,80}"
-    r"(?:demo|demonstration|appointment)",
-
-    r"(?:demo|demonstration|appointment).{0,180}"
-    r"(?:receive|get|earn|claim|be sent|we(?:'|’)ll send|we will send).{0,100}"
-    r"(?:up to\s+)?(?:a\s+)?\$?\s?\d{2,4}(?:\.\d{1,2})?.{0,50}"
-    r"(?:gift card|prepaid card|cash reward)",
-
-    r"(?:book|schedule|request|take|attend|complete).{0,60}"
-    r"(?:demo|demonstration|appointment).{0,180}"
-    r"(?:receive|get|earn|claim|be sent|we(?:'|’)ll send|we will send).{0,100}"
-    r"(?:gift card|prepaid card|cash reward)",
-
-    r"(?:receive|get|earn|claim|qualify for|be sent|we(?:'|’)ll send|we will send).{0,120}"
-    r"(?:up to\s+)?(?:a\s+)?\$?\s?\d{2,4}(?:\.\d{1,2})?.{0,60}"
-    r"(?:gift card|prepaid card|cash reward)",
-
-    r"(?:receive|get|earn|claim|qualify for|be sent|we(?:'|’)ll send|we will send).{0,120}"
-    r"(?:amazon|visa|mastercard|digital|e-?gift|gift) (?:gift )?card",
-
-    r"(?:amazon|visa|mastercard|digital|e-?gift|gift) (?:gift )?card.{0,120}"
-    r"(?:after|for|when|upon|following|complete|attend|exchange)",
-
-    r"\$\s?\d{2,4}(?:\.\d{1,2})?.{0,100}"
-    r"(?:gift card|prepaid card|cash reward)",
-
-    r"(?:gift card|prepaid card|cash reward).{0,100}"
-    r"\$\s?\d{2,4}(?:\.\d{1,2})?",
+# These require the page to describe an incentive, not merely mention gift cards.
+INCENTIVE_PATTERNS = (
+    r"(?:receive|get|earn|claim|qualify for|be sent|we(?:'|’)ll send|we will send)"
+    r".{0,140}(?:amazon|visa|mastercard|digital|e-?gift|gift|prepaid)"
+    r"(?:\s+gift)?\s+card",
+    r"(?:receive|get|earn|claim|qualify for|be sent|we(?:'|’)ll send|we will send)"
+    r".{0,140}\$\s?\d{2,4}(?:\.\d{1,2})?"
+    r".{0,100}(?:gift card|prepaid card|cash reward|reward)",
+    r"(?:gift card|prepaid card|cash reward|reward)"
+    r".{0,140}(?:after|upon|following|when|for completing|in exchange for)"
+    r".{0,120}(?:demo|demonstration|appointment)",
+    r"(?:demo|demonstration|appointment)"
+    r".{0,180}(?:receive|get|earn|claim|be sent|we(?:'|’)ll send|we will send)"
+    r".{0,140}(?:gift card|prepaid card|cash reward|reward)",
+    r"\$\s?\d{2,4}(?:\.\d{1,2})?"
+    r".{0,100}(?:gift card|prepaid card|cash reward)"
+    r".{0,180}(?:demo|demonstration|appointment)",
 )
 
-
-CATEGORY_RULES = (
-    (
-        "HR & People Operations",
-        (
-            "recruiting",
-            "talent acquisition",
-            " hr ",
-            "people operations",
-            "hiring",
-            "candidate assessment",
-            "child care management",
-            "childcare management",
-            "employee management",
-            "workforce management",
-        ),
-    ),
-    (
-        "Security & Compliance",
-        (
-            "security",
-            "access control",
-            "surveillance",
-            "compliance",
-            "cybersecurity",
-            "workplace security",
-            "threat detection",
-            "network security",
-        ),
-    ),
-    (
-        "Finance & Accounting",
-        (
-            "accounts payable",
-            "accounts receivable",
-            "accounting firm",
-            "wealth management",
-            "expense management",
-            "spend management",
-            "finance",
-            "payments",
-            "billing",
-            "payment platform",
-            "insurance payments",
-        ),
-    ),
-    (
-        "Ecommerce & Customer Experience",
-        (
-            "ecommerce",
-            "e-commerce",
-            "returns",
-            "claims",
-            "checkout",
-            "order protection",
-            "customer experience",
-        ),
-    ),
-    (
-        "Marketing & Growth",
-        (
-            "marketing",
-            "conversion",
-            "campaign",
-            "advertising",
-            "growth",
-            "lead generation",
-        ),
-    ),
-    (
-        "Sales & CRM",
-        (
-            "sales",
-            "crm",
-            "revenue operations",
-            "revops",
-            "customer relationship management",
-        ),
-    ),
-    (
-        "Engineering & DevOps",
-        (
-            "developer",
-            "devops",
-            "engineering",
-            "cloud infrastructure",
-            "observability",
-        ),
-    ),
-    (
-        "Data & Analytics",
-        (
-            "analytics",
-            "business intelligence",
-            "data platform",
-            "data warehouse",
-        ),
-    ),
+DISCONTINUED_PATTERNS = (
+    r"offer (?:has )?(?:ended|expired|been discontinued)",
+    r"promotion (?:has )?(?:ended|expired|been discontinued)",
+    r"incentive (?:has )?(?:ended|expired|been discontinued)",
+    r"no longer (?:available|valid|active|offered)",
+    r"is no longer being offered",
+    r"has been discontinued",
+    r"this offer is closed",
+    r"this promotion is closed",
+    r"offer unavailable",
+    r"promotion unavailable",
 )
-
-
-BRAND_OVERRIDES = {
-    "hauntpay.com": "HauntPay",
-    "www.hauntpay.com": "HauntPay",
-    "reachfirst.com": "Reach First",
-    "www.reachfirst.com": "Reach First",
-    "tributetech.com": "Tribute Technology",
-    "www.tributetech.com": "Tribute Technology",
-    "info.jazzhr.com": "JazzHR",
-    "jazzhr.com": "JazzHR",
-    "www.jazzhr.com": "JazzHR",
-    "procaresoftware.com": "Procare",
-    "www.procaresoftware.com": "Procare",
-    "bill.com": "BILL",
-    "www.bill.com": "BILL",
-    "pages.bill.com": "BILL",
-    "taxdome.unstack.website": "TaxDome",
-    "blackpointcyber.com": "Blackpoint Cyber",
-    "www.blackpointcyber.com": "Blackpoint Cyber",
-    "epaypolicy.com": "ePayPolicy",
-    "www.epaypolicy.com": "ePayPolicy",
-    "crave.cards": "Crave",
-    "rise.ai": "Rise",
-    "www.rise.ai": "Rise",
-    "get.nectarhr.com": "Nectar",
-    "trytoolbox.com": "Toolbox",
-    "www.trytoolbox.com": "Toolbox",
-    "gratiflow.com": "Gratiflow",
-    "www.gratiflow.com": "Gratiflow",
-    "go.demandforce.com": "Demandforce",
-    "demandforce.com": "Demandforce",
-    "www.demandforce.com": "Demandforce",
-    "shipinsure.io": "ShipInsure",
-    "www.shipinsure.io": "ShipInsure",
-    "glider.ai": "Glider AI",
-    "www.glider.ai": "Glider AI",
-    "rightsystems.com": "Right! Systems",
-    "www.rightsystems.com": "Right! Systems",
-}
 
 
 @dataclass
-class Candidate:
-    discovered_url: str
-    source_domain: str
-    search_query: str
-    page_title: str | None
-    company_name: str | None
-    offer_title: str | None
-    reward_amount: float | None
-    reward_type: str | None
-    category: str | None
-    extracted_text: str
-    eligibility_details: str | None
-    geographic_restrictions: str | None
-    expiration_text: str | None
-    confidence_score: int
-    processing_status: str
-    rejection_reason: str | None
+class LandingPageCheck:
+    valid: bool
+    reason: str
+    final_url: str
+    title: str | None
+    text: str
 
 
 def required_env(name: str) -> str:
     value = os.getenv(name, "").strip()
-
     if not value:
-        raise RuntimeError(
-            f"Missing required environment variable: {name}"
-        )
-
+        raise RuntimeError(f"Missing required environment variable: {name}")
     return value
 
 
-
-
-def get_search_config() -> tuple[str, str, int, int]:
-    search_mode = os.getenv(
-        "SEARCH_MODE",
-        "daily",
-    ).strip().lower()
-
-    if search_mode not in {"daily", "deep"}:
-        print(
-            f"Unknown SEARCH_MODE '{search_mode}'. "
-            "Falling back to daily mode.",
-            file=sys.stderr,
-        )
-        search_mode = "daily"
-
-    if search_mode == "deep":
-        query_filename = "search_queries_deep.txt"
-        pages = 3
-        count = 20
-    else:
-        query_filename = "search_queries_daily.txt"
-        pages = 2
-        count = 20
-
-    query_path = os.path.join(
-        os.path.dirname(__file__),
-        query_filename,
-    )
-
-    return search_mode, query_path, pages, count
-
-
-def load_queries(query_path: str) -> list[str]:
-    if not os.path.exists(query_path):
-        raise FileNotFoundError(
-            f"Search query file not found: {query_path}"
-        )
-
-    with open(
-        query_path,
-        encoding="utf-8",
-    ) as query_file:
-        queries = [
-            line.strip()
-            for line in query_file
-            if line.strip()
-            and not line.lstrip().startswith("#")
-        ]
-
-    if not queries:
-        raise RuntimeError(
-            f"No search queries found in: {query_path}"
-        )
-
-    return queries
-
-
-def build_search_snippet(result: dict) -> str:
-    snippets: list[str] = []
-
-    description = result.get("description", "")
-    if description:
-        snippets.append(str(description))
-
-    extra_snippets = result.get("extra_snippets", [])
-    if isinstance(extra_snippets, list):
-        snippets.extend(
-            str(item)
-            for item in extra_snippets
-            if item
-        )
-
-    return " ".join(snippets)
-
-
-def supabase_headers(
-    service_key: str,
-    prefer: str | None = None,
-) -> dict[str, str]:
+def supabase_headers(service_key: str, prefer: str | None = None) -> dict[str, str]:
     headers = {
         "apikey": service_key,
         "Authorization": f"Bearer {service_key}",
         "Content-Type": "application/json",
     }
-
     if prefer:
         headers["Prefer"] = prefer
-
     return headers
 
 
-def create_run(
-    base_url: str,
-    service_key: str,
-) -> str:
-    response = requests.post(
-        f"{base_url}/rest/v1/crawler_runs",
-        headers=supabase_headers(
-            service_key,
-            "return=representation",
-        ),
-        json={
-            "run_type": "discovery",
-            "status": "running",
-        },
-        timeout=TIMEOUT,
-    )
-
-    response.raise_for_status()
-    return response.json()[0]["id"]
+def slugify(value: str) -> str:
+    slug = value.lower().strip()
+    slug = re.sub(r"[^a-z0-9]+", "-", slug)
+    return slug.strip("-") or "software-company"
 
 
-def finish_run(
-    base_url: str,
-    service_key: str,
-    run_id: str,
-    stats: dict,
-    status: str,
-    error: str | None = None,
-) -> None:
-    payload = {
-        **stats,
-        "status": status,
-        "completed_at": datetime.now(
-            timezone.utc
-        ).isoformat(),
-        "error_details": error,
+def company_website(url: str) -> str:
+    parsed = urlparse(url)
+    return f"{parsed.scheme}://{parsed.netloc}"
+
+
+def format_reward_amount(amount: float | int | None) -> str:
+    if amount is None:
+        return ""
+    numeric = float(amount)
+    if numeric.is_integer():
+        return f"${int(numeric)}"
+    return f"${numeric:,.2f}"
+
+
+def clean_display_text(value: str | None, max_length: int) -> str | None:
+    if not value:
+        return None
+
+    text = str(value)
+    replacements = {
+        "â€™": "'",
+        "â€œ": '"',
+        "â€": '"',
+        "â€“": "-",
+        "â€”": "-",
+        "Â": "",
+        " ": " ",
     }
+    for bad, good in replacements.items():
+        text = text.replace(bad, good)
 
-    response = requests.patch(
-        f"{base_url}/rest/v1/crawler_runs?id=eq.{run_id}",
-        headers=supabase_headers(
-            service_key,
-            "return=minimal",
+    text = re.sub(r"\s+", " ", text).strip()
+    if len(text) <= max_length:
+        return text
+
+    shortened = text[: max_length - 1].rsplit(" ", 1)[0].rstrip(" ,;:-")
+    return f"{shortened}."
+
+
+def build_full_description(candidate: dict) -> str:
+    short_description = build_short_description(candidate)
+    company = candidate.get("company_name") or "the vendor"
+    return clean_display_text(
+        (
+            f"{short_description} "
+            f"Review the official {company} offer page for current qualification "
+            "requirements, participation details, and reward terms."
         ),
-        json=payload,
-        timeout=TIMEOUT,
+        MAX_FULL_DESCRIPTION,
+    ) or short_description
+
+
+def build_offer_title(candidate: dict, check: LandingPageCheck, company_name: str) -> str:
+    raw_title = (
+        candidate.get("offer_title")
+        or check.title
+        or candidate.get("page_title")
+        or f"{company_name} Demo Reward"
+    )
+    return clean_display_text(raw_title, MAX_OFFER_TITLE) or f"{company_name} Demo Reward"
+
+
+def build_short_description(candidate: dict) -> str:
+    company = candidate.get("company_name") or "This software company"
+    amount = format_reward_amount(candidate.get("reward_amount"))
+    reward_type = candidate.get("reward_type") or "gift card"
+    extracted_text = candidate.get("extracted_text") or ""
+    variable_reward = extracted_text.startswith("Variable reward: up to stated amount.")
+
+    if variable_reward:
+        return (
+            f"Qualified participants may receive up to a {amount} {reward_type} "
+            f"after completing a {company} product demonstration."
+        )
+
+    return (
+        f"Qualified participants may receive a {amount} {reward_type} "
+        f"after completing a {company} product demonstration."
     )
 
-    response.raise_for_status()
 
+def clean_page_text(html: str) -> tuple[str, str | None]:
+    soup = BeautifulSoup(html, "html.parser")
+    title = soup.title.get_text(" ", strip=True) if soup.title else None
 
-def brave_search(
-    api_key: str,
-    query: str,
-    pages: int = 2,
-    count: int = 20,
-) -> tuple[list[dict], int]:
-    all_results: list[dict] = []
-    seen_urls: set[str] = set()
-    requests_performed = 0
-
-    for offset in range(pages):
-        response = requests.get(
-            BRAVE_ENDPOINT,
-            headers={
-                "X-Subscription-Token": api_key,
-                "Accept": "application/json",
-            },
-            params={
-                "q": query,
-                "count": count,
-                "offset": offset,
-                "safesearch": "strict",
-                "search_lang": "en",
-                "country": "us",
-                "extra_snippets": True,
-            },
-            timeout=TIMEOUT,
-        )
-
-        requests_performed += 1
-        response.raise_for_status()
-        data = response.json()
-
-        results = data.get(
-            "web",
-            {},
-        ).get(
-            "results",
-            [],
-        )
-
-        for result in results:
-            url = result.get(
-                "url",
-                "",
-            ).strip()
-
-            if not url or url in seen_urls:
-                continue
-
-            seen_urls.add(url)
-            all_results.append(result)
-
-        more_results = data.get(
-            "query",
-            {},
-        ).get(
-            "more_results_available",
-            False,
-        )
-
-        if not more_results:
-            break
-
-    return all_results, requests_performed
-
-
-def clean_page_text(
-    html: str,
-) -> tuple[str, str | None]:
-    soup = BeautifulSoup(
-        html,
-        "html.parser",
-    )
-
-    title = (
-        soup.title.get_text(
-            " ",
-            strip=True,
-        )
-        if soup.title
-        else None
-    )
-
-    for tag in soup(
-        [
-            "script",
-            "style",
-            "noscript",
-            "svg",
-            "nav",
-            "footer",
-        ]
-    ):
+    for tag in soup(["script", "style", "noscript", "svg", "nav", "footer"]):
         tag.decompose()
 
-    text = re.sub(
-        r"\s+",
-        " ",
-        soup.get_text(
-            " ",
-            strip=True,
-        ),
-    )
-
-    return text[:40000], title
+    text = re.sub(r"\s+", " ", soup.get_text(" ", strip=True))
+    return text[:50000], title
 
 
-def fetch_page(
-    url: str,
-) -> tuple[str, str | None, str]:
-    response = requests.get(
-        url,
-        headers={
-            "User-Agent": USER_AGENT,
-            "Accept": "text/html,application/xhtml+xml",
-        },
-        timeout=TIMEOUT,
-        allow_redirects=True,
-    )
-
-    response.raise_for_status()
-
-    content_type = response.headers.get(
-        "content-type",
-        "",
-    )
-
-    if "text/html" not in content_type:
-        raise ValueError(
-            "Not an HTML page"
-        )
-
-    text, title = clean_page_text(
-        response.text
-    )
-
-    return text, title, response.url
-
-
-def domain_to_brand(domain: str) -> str:
-    normalized = domain.lower().strip()
-
-    if normalized in BRAND_OVERRIDES:
-        return BRAND_OVERRIDES[normalized]
-
-    parts = normalized.removeprefix("www.").split(".")
-
-    ignored_subdomains = {
-        "info",
-        "go",
-        "get",
-        "pages",
-        "lp",
-        "try",
-        "app",
-        "demo",
-        "offers",
-    }
-
-    if len(parts) >= 3 and parts[0] in ignored_subdomains:
-        brand_part = parts[1]
-    else:
-        brand_part = parts[0]
-
-    return brand_part.replace("-", " ").strip().title()
-
-
-def infer_company(
-    title: str | None,
-    domain: str,
-) -> str:
-    normalized_domain = domain.lower().strip()
-
-    if normalized_domain in BRAND_OVERRIDES:
-        return BRAND_OVERRIDES[normalized_domain]
-
-    domain_brand = domain_to_brand(
-        normalized_domain
-    )
-
-    if not title:
-        return domain_brand
-
-    title_parts = [
-        part.strip()
-        for part in re.split(
-            r"[|–—]",
-            title,
-        )
-        if part.strip()
-    ]
-
-    blocked_title_phrases = (
-        "book a demo",
-        "request a demo",
-        "schedule a demo",
-        "take a demo",
-        "attend a demo",
-        "complete a demo",
-        "get paid",
-        "gift card",
-        "receive a",
-        "receive an",
-        "leader in",
-        "see ",
-        "demo request",
-        "paid demo",
-        "incentivized demo",
-        "get a $",
-        "get an amazon",
-    )
-
-    for part in reversed(title_parts):
-        lower_part = part.lower()
-
-        if any(
-            phrase in lower_part
-            for phrase in blocked_title_phrases
-        ):
-            continue
-
-        if re.fullmatch(
-            r"[A-Za-z0-9!&.' -]{2,45}",
-            part,
-        ):
-            return part
-
-    return domain_brand
-
-
-def first_match(
-    patterns: tuple[str, ...],
-    text: str,
-) -> re.Match | None:
-    for pattern in patterns:
-        match = re.search(
-            pattern,
-            text,
-            re.I | re.S,
-        )
-
-        if match:
-            return match
-
-    return None
-
-
-def match_positions(
-    patterns: tuple[str, ...],
-    text: str,
-) -> list[int]:
+def match_positions(patterns: tuple[str, ...], text: str) -> list[int]:
     positions: list[int] = []
-
     for pattern in patterns:
         positions.extend(
             match.start()
-            for match in re.finditer(
-                pattern,
-                text,
-                re.I | re.S,
-            )
+            for match in re.finditer(pattern, text, re.I | re.S)
         )
-
     return positions
 
 
-def terms_are_close(
-    text: str,
-    max_distance: int = 1600,
-) -> bool:
-    demo_positions = match_positions(
-        DEMO_PATTERNS,
-        text,
-    )
-
-    reward_positions = match_positions(
-        REWARD_PATTERNS,
-        text,
-    )
-
+def terms_are_close(text: str, max_distance: int = MAX_TERM_DISTANCE) -> bool:
+    demo_positions = match_positions(DEMO_PATTERNS, text)
+    incentive_positions = match_positions(INCENTIVE_PATTERNS, text)
     return any(
-        abs(demo - reward) <= max_distance
-        for demo in demo_positions
-        for reward in reward_positions
+        abs(demo_position - incentive_position) <= max_distance
+        for demo_position in demo_positions
+        for incentive_position in incentive_positions
     )
 
 
-def extract_amount(
-    text: str,
-) -> float | None:
-    contextual = re.search(
-        r"(?:up to\s+)?\$\s?(\d{2,4}(?:\.\d{1,2})?).{0,120}"
-        r"(?:gift card|prepaid card|cash reward)|"
-        r"(?:gift card|prepaid card|cash reward).{0,120}"
-        r"(?:up to\s+)?\$\s?(\d{2,4}(?:\.\d{1,2})?)",
-        text,
-        re.I | re.S,
-    )
-
-    if not contextual:
-        return None
-
-    raw = (
-        contextual.group(1)
-        or contextual.group(2)
-    )
-
-    return float(raw) if raw else None
-
-
-def infer_reward_type(
-    text: str,
-) -> str | None:
-    lower = text.lower()
-
-    if (
-        "visa" in lower
-        and "mastercard" in lower
-        and (
-            "gift card" in lower
-            or "prepaid card" in lower
+def verify_landing_page(url: str) -> LandingPageCheck:
+    try:
+        response = requests.get(
+            url,
+            headers={
+                "User-Agent": USER_AGENT,
+                "Accept": "text/html,application/xhtml+xml",
+            },
+            timeout=TIMEOUT,
+            allow_redirects=True,
         )
-    ):
-        return "Visa or Mastercard Gift Card"
+        response.raise_for_status()
+    except requests.RequestException as exc:
+        return LandingPageCheck(
+            valid=False,
+            reason=f"Landing page could not be verified: {exc}",
+            final_url=url,
+            title=None,
+            text="",
+        )
 
-    reward_map = {
-        "Amazon Gift Card": (
-            "amazon gift card",
-            "amazon e-gift card",
-            "amazon egift card",
+    final_url = response.url
+    content_type = response.headers.get("content-type", "").lower()
+    if "text/html" not in content_type:
+        return LandingPageCheck(
+            valid=False,
+            reason="Landing page is not an HTML page.",
+            final_url=final_url,
+            title=None,
+            text="",
+        )
+
+    text, title = clean_page_text(response.text)
+    page_text = f"{title or ''} {text}"
+
+    if any(re.search(pattern, page_text, re.I | re.S) for pattern in DISCONTINUED_PATTERNS):
+        return LandingPageCheck(
+            valid=False,
+            reason="Landing page says the offer is ended, expired, discontinued, or unavailable.",
+            final_url=final_url,
+            title=title,
+            text=text,
+        )
+
+    demo_match = any(re.search(pattern, page_text, re.I | re.S) for pattern in DEMO_PATTERNS)
+    if not demo_match:
+        return LandingPageCheck(
+            valid=False,
+            reason="Exact landing page does not explicitly mention a demo or qualifying appointment.",
+            final_url=final_url,
+            title=title,
+            text=text,
+        )
+
+    incentive_match = any(
+        re.search(pattern, page_text, re.I | re.S)
+        for pattern in INCENTIVE_PATTERNS
+    )
+    if not incentive_match:
+        return LandingPageCheck(
+            valid=False,
+            reason="Exact landing page does not explicitly mention a gift-card or reward incentive.",
+            final_url=final_url,
+            title=title,
+            text=text,
+        )
+
+    if not terms_are_close(page_text):
+        return LandingPageCheck(
+            valid=False,
+            reason="Demo and incentive language are not close enough to clearly describe the same offer.",
+            final_url=final_url,
+            title=title,
+            text=text,
+        )
+
+    return LandingPageCheck(
+        valid=True,
+        reason="Landing page explicitly mentions both the demo and the incentive.",
+        final_url=final_url,
+        title=title,
+        text=text,
+    )
+
+
+def fetch_publishable_candidates(base_url: str, service_key: str) -> list[dict]:
+    params = {
+        "processing_status": "eq.approved",
+        "confidence_score": f"gte.{MIN_CONFIDENCE}",
+        "reward_amount": "not.is.null",
+        "reward_type": "not.is.null",
+        "page_title": "not.is.null",
+        "select": (
+            "id,discovered_url,source_domain,page_title,"
+            "company_name,offer_title,reward_amount,"
+            "reward_type,category,extracted_text,"
+            "eligibility_details,geographic_restrictions,"
+            "expiration_text,confidence_score"
         ),
-        "Visa Prepaid Card": (
-            "visa gift card",
-            "visa prepaid card",
-            "visa virtual card",
-        ),
-        "Mastercard Prepaid Card": (
-            "mastercard gift card",
-            "mastercard prepaid card",
-        ),
-        "Digital Gift Card": (
-            "digital gift card",
-            "e-gift card",
-            "egift card",
-        ),
-        "Gift Card of Choice": (
-            "gift card of your choice",
-            "gift card of choice",
-        ),
-        "Gift Card": (
-            "gift card",
-        ),
+        "order": "confidence_score.desc",
     }
 
-    for label, patterns in reward_map.items():
-        if any(
-            pattern in lower
-            for pattern in patterns
-        ):
-            return label
-
-    return None
-
-
-def infer_category(
-    text: str,
-) -> str | None:
-    lower = f" {text.lower()} "
-
-    category_scores: dict[str, int] = {}
-
-    for category, keywords in CATEGORY_RULES:
-        score = sum(
-            1
-            for keyword in keywords
-            if keyword in lower
-        )
-
-        if score:
-            category_scores[category] = score
-
-    if not category_scores:
-        return None
-
-    return max(
-        category_scores,
-        key=category_scores.get,
+    response = requests.get(
+        f"{base_url}/rest/v1/offer_candidates",
+        headers=supabase_headers(service_key),
+        params=params,
+        timeout=TIMEOUT,
     )
+    response.raise_for_status()
+    return response.json()
 
 
-def extract_context(
-    text: str,
-    terms: tuple[str, ...],
-    before: int = 160,
-    after: int = 360,
-) -> str | None:
-    for term in terms:
-        match = re.search(
-            term,
-            text,
-            re.I,
-        )
-
-        if match:
-            start = max(
-                0,
-                match.start() - before,
-            )
-
-            end = min(
-                len(text),
-                match.end() + after,
-            )
-
-            return text[start:end].strip()
-
-    return None
-
-
-def contains_expired_year(
-    title: str,
-    url: str,
-) -> bool:
-    current_year = datetime.now(
-        timezone.utc
-    ).year
-
-    years_found = [
-        int(year)
-        for year in re.findall(
-            r"\b20\d{2}\b",
-            f"{title} {url}",
-        )
-    ]
-
-    return bool(
-        years_found
-        and max(years_found) < current_year
+def fetch_active_offers(base_url: str, service_key: str) -> list[dict]:
+    response = requests.get(
+        f"{base_url}/rest/v1/offers",
+        headers=supabase_headers(service_key),
+        params={
+            "status": "eq.active",
+            "select": "id,claim_url,company_name,status",
+        },
+        timeout=TIMEOUT,
     )
+    response.raise_for_status()
+    return response.json()
 
 
-def extract_candidate(
-    url: str,
-    query: str,
-    snippet: str = "",
-) -> Candidate:
-    parsed = urlparse(url)
-    domain = parsed.netloc.lower()
-    normalized_url = url.lower()
-
-    if domain in BLOCKED_DOMAINS:
-        raise ValueError(
-            "Blocked marketplace, directory, social, discussion, media, or gift-card service domain"
-        )
-
-    if any(
-        part in normalized_url
-        for part in BAD_URL_PARTS
-    ):
-        raise ValueError(
-            "Likely editorial, terms, consumer, or gift-card software page"
-        )
-
-    text, title, final_url = fetch_page(
-        url
-    )
-
-    final_domain = urlparse(
-        final_url
-    ).netloc.lower()
-
-    if final_domain in BLOCKED_DOMAINS:
-        raise ValueError(
-            "Redirected to a blocked domain"
-        )
-
-    title_text = title or ""
-
-    if any(
-        re.search(
-            pattern,
-            title_text,
-            re.I,
-        )
-        for pattern in BAD_TITLE_PATTERNS
-    ):
-        raise ValueError(
-            "Title indicates a terms page, gift-card seller, or editorial page"
-        )
-
-    if contains_expired_year(
-        title_text,
-        final_url,
-    ):
-        raise ValueError(
-            "Page appears to be an expired campaign from a previous year"
-        )
-
-    haystack = (
-        f"{title_text} {snippet} {text}"
-    )
-
-    demo_match = first_match(
-        DEMO_PATTERNS,
-        haystack,
-    )
-
-    reward_match = first_match(
-        REWARD_PATTERNS,
-        haystack,
-    )
-
-    close_match = bool(
-        demo_match
-        and reward_match
-        and terms_are_close(
-            haystack
-        )
-    )
-
-    amount = extract_amount(
-        haystack
-    )
-
-    reward_type = infer_reward_type(
-        haystack
-    )
-
-    category = infer_category(
-        haystack
-    )
-
-    variable_reward = bool(
-        re.search(
-            r"\bup to\s+\$?\s?\d{2,4}",
-            haystack,
-            re.I,
-        )
-    )
-
-    completion_language = bool(
-        re.search(
-            r"(?:after|once|upon|following).{0,80}"
-            r"(?:demo|demonstration|appointment).{0,60}"
-            r"(?:complete|completed)|"
-            r"(?:complete|completed).{0,60}"
-            r"(?:demo|demonstration|appointment)",
-            haystack,
-            re.I | re.S,
-        )
-    )
-
-    positive_url = any(
-        part in final_url.lower()
-        for part in POSITIVE_URL_PARTS
-    )
-
-    qualification_language = bool(
-        re.search(
-            r"\b(?:qualified|eligible|eligibility|"
-            r"decision.?maker|job title|company size|"
-            r"employees|work email|terms apply|"
-            r"participants|leader)\b",
-            haystack,
-            re.I,
-        )
-    )
-
-    confidence = 0
-    confidence += 25 if demo_match else 0
-    confidence += 25 if reward_match else 0
-    confidence += 20 if close_match else 0
-    confidence += 10 if amount else 0
-    confidence += 5 if reward_type else 0
-    confidence += 5 if qualification_language else 0
-    confidence += 5 if positive_url else 0
-    confidence += 5 if completion_language else 0
-
-    confidence = min(
-        confidence,
-        100,
-    )
-
-    if not demo_match or not reward_match:
-        status = "rejected"
-        rejection_reason = (
-            "Did not clearly contain both a demo action "
-            "and an incentive offer."
-        )
-
-    elif not close_match:
-        status = "rejected"
-        rejection_reason = (
-            "Demo and gift-card language were not close "
-            "enough to indicate the same promotion."
-        )
-
-    elif confidence >= 85:
-        status = "approved"
-        rejection_reason = None
-
-    elif confidence >= 70:
-        status = "needs_review"
-        rejection_reason = None
-
-    else:
-        status = "rejected"
-        rejection_reason = (
-            "Offer details were incomplete or ambiguous."
-        )
-
-    eligibility = extract_context(
-        text,
-        (
-            r"\bqualified\b",
-            r"\beligible\b",
-            r"\beligibility\b",
-            r"\bdecision.?maker\b",
-            r"\bjob title\b",
-            r"\bcompany size\b",
-            r"\bnumber of employees\b",
-            r"\bwork email\b",
-            r"\bHR or TA leader\b",
-            r"\baccounting firm\b",
-            r"\bwealth management firm\b",
-            r"\bbusiness owner\b",
-            r"\bnew customers only\b",
-        ),
-    )
-
-    geography = extract_context(
-        text,
-        (
-            r"\bunited states\b",
-            r"\bu\.s\.\b",
-            r"\bcanada\b",
-            r"\bunited kingdom\b",
-            r"\bresidents only\b",
-        ),
-        before=100,
-        after=180,
-    )
-
-    expiration = extract_context(
-        text,
-        (
-            r"\bexpires?\b",
-            r"\bvalid (?:until|through)\b",
-            r"\boffer ends\b",
-            r"\bpromotion ends\b",
-        ),
-        before=100,
-        after=200,
-    )
-
-    qualifier = (
-        "Variable reward: up to stated amount. "
-        if variable_reward
-        else ""
-    )
-
-    extracted_text = (
-        f"{qualifier}{text[:11900]}"
-    )
-
-    return Candidate(
-        discovered_url=final_url,
-        source_domain=final_domain,
-        search_query=query,
-        page_title=title,
-        company_name=infer_company(
-            title,
-            final_domain,
-        ),
-        offer_title=(
-            title
-            or "Software demo reward offer"
-        ),
-        reward_amount=amount,
-        reward_type=reward_type,
-        category=category,
-        extracted_text=extracted_text,
-        eligibility_details=eligibility,
-        geographic_restrictions=geography,
-        expiration_text=expiration,
-        confidence_score=confidence,
-        processing_status=status,
-        rejection_reason=rejection_reason,
-    )
-
-
-def upsert_candidate(
+def publish_offer(
     base_url: str,
     service_key: str,
-    candidate: Candidate,
+    candidate: dict,
+    check: LandingPageCheck,
 ) -> None:
+    now = datetime.now(timezone.utc).isoformat()
+    company_name = (
+        candidate.get("company_name")
+        or candidate.get("source_domain")
+        or "Software Company"
+    )
+
+    claim_url = check.final_url
+    short_description = clean_display_text(
+        build_short_description(candidate),
+        MAX_SHORT_DESCRIPTION,
+    )
+    full_description = build_full_description(candidate)
+    eligibility_details = clean_display_text(
+        candidate.get("eligibility_details"),
+        MAX_ELIGIBILITY_DETAILS,
+    ) or "Eligibility is determined by the vendor."
+
+    payload = {
+        "company_name": company_name,
+        "company_slug": slugify(company_name),
+        "company_website": company_website(claim_url),
+        "company_logo_url": None,
+        "offer_title": build_offer_title(candidate, check, company_name),
+        "short_description": short_description,
+        "full_description": full_description,
+        "reward_amount": candidate.get("reward_amount"),
+        "reward_currency": "USD",
+        "reward_type": candidate.get("reward_type"),
+        "category": candidate.get("category"),
+        "audience_tags": [],
+        "eligibility_details": eligibility_details,
+        "geographic_restrictions": candidate.get("geographic_restrictions"),
+        "claim_url": claim_url,
+        "source_url": claim_url,
+        "status": "active",
+        "confidence_score": candidate.get("confidence_score"),
+        "verified_at": now,
+        "expires_at": None,
+        "last_checked_at": now,
+        "featured": False,
+        "sponsored": False,
+        "failed_check_count": 0,
+    }
+
     response = requests.post(
-        (
-            f"{base_url}/rest/v1/offer_candidates"
-            "?on_conflict=discovered_url"
-        ),
+        f"{base_url}/rest/v1/offers?on_conflict=company_slug,claim_url",
         headers=supabase_headers(
             service_key,
             "resolution=merge-duplicates,return=minimal",
         ),
-        json=asdict(
-            candidate
-        ),
+        json=payload,
         timeout=TIMEOUT,
     )
-
     response.raise_for_status()
 
 
-def main() -> int:
-    supabase_url = required_env(
-        "SUPABASE_URL"
-    ).rstrip("/")
-
-    service_key = required_env(
-        "SUPABASE_SERVICE_ROLE_KEY"
-    )
-
-    brave_key = required_env(
-        "BRAVE_SEARCH_API_KEY"
-    )
-
-    (
-        search_mode,
-        query_path,
-        search_pages,
-        results_per_page,
-    ) = get_search_config()
-
-    queries = load_queries(
-        query_path
-    )
-
-    print(
-        f"Search mode: {search_mode}"
-    )
-    print(
-        f"Query file: {query_path}"
-    )
-    print(
-        f"Queries loaded: {len(queries)}"
-    )
-    print(
-        f"Search depth: {search_pages} page(s) "
-        f"of up to {results_per_page} results"
-    )
-
-    stats = {
-        "searches_performed": 0,
-        "results_found": 0,
-        "candidates_created": 0,
-        "offers_published": 0,
-        "offers_updated": 0,
-        "offers_expired": 0,
-        "errors_count": 0,
+def mark_candidate_status(
+    base_url: str,
+    service_key: str,
+    candidate_id: str,
+    status: str,
+    reason: str | None = None,
+) -> None:
+    payload = {
+        "processing_status": status,
+        "rejection_reason": reason,
+        "processed_at": datetime.now(timezone.utc).isoformat(),
     }
 
-    run_id = create_run(
+    response = requests.patch(
+        f"{base_url}/rest/v1/offer_candidates",
+        headers=supabase_headers(service_key, "return=minimal"),
+        params={"id": f"eq.{candidate_id}"},
+        json=payload,
+        timeout=TIMEOUT,
+    )
+    response.raise_for_status()
+
+
+def deactivate_offer_by_url(
+    base_url: str,
+    service_key: str,
+    claim_url: str,
+    reason: str,
+) -> int:
+    now = datetime.now(timezone.utc).isoformat()
+    response = requests.patch(
+        f"{base_url}/rest/v1/offers",
+        headers=supabase_headers(service_key, "return=representation"),
+        params={"claim_url": f"eq.{claim_url}"},
+        json={
+            "status": "inactive",
+            "last_checked_at": now,
+            "failed_check_count": 1,
+        },
+        timeout=TIMEOUT,
+    )
+    response.raise_for_status()
+    return len(response.json())
+
+
+def deactivate_offer_by_id(
+    base_url: str,
+    service_key: str,
+    offer_id: str,
+    reason: str,
+) -> None:
+    now = datetime.now(timezone.utc).isoformat()
+    response = requests.patch(
+        f"{base_url}/rest/v1/offers",
+        headers=supabase_headers(service_key, "return=minimal"),
+        params={"id": f"eq.{offer_id}"},
+        json={
+            "status": "inactive",
+            "last_checked_at": now,
+            "failed_check_count": 1,
+        },
+        timeout=TIMEOUT,
+    )
+    response.raise_for_status()
+
+
+def audit_existing_offers(base_url: str, service_key: str) -> tuple[int, int]:
+    checked = 0
+    deactivated = 0
+
+    for offer in fetch_active_offers(base_url, service_key):
+        checked += 1
+        check = verify_landing_page(offer["claim_url"])
+
+        if check.valid:
+            print(f"Verified active offer: {offer['claim_url']}")
+            continue
+
+        deactivate_offer_by_id(
+            base_url,
+            service_key,
+            offer["id"],
+            check.reason,
+        )
+        deactivated += 1
+        print(f"Deactivated: {offer['claim_url']} - {check.reason}")
+
+    return checked, deactivated
+
+
+def main() -> int:
+    supabase_url = required_env("SUPABASE_URL").rstrip("/")
+    service_key = required_env("SUPABASE_SERVICE_ROLE_KEY")
+
+    stats = {
+        "active_offers_checked": 0,
+        "active_offers_deactivated": 0,
+        "qualified_candidates": 0,
+        "offers_published": 0,
+        "candidates_rejected": 0,
+        "candidates_needing_review": 0,
+        "errors": 0,
+    }
+
+    try:
+        checked, deactivated = audit_existing_offers(
+            supabase_url,
+            service_key,
+        )
+        stats["active_offers_checked"] = checked
+        stats["active_offers_deactivated"] = deactivated
+    except Exception as exc:
+        stats["errors"] += 1
+        print(f"Failed to audit existing offers: {exc}")
+
+    candidates = fetch_publishable_candidates(
         supabase_url,
         service_key,
     )
+    stats["qualified_candidates"] = len(candidates)
 
-    seen: set[str] = set()
+    for candidate in candidates:
+        candidate_url = candidate["discovered_url"]
 
-    try:
-        for query_number, query in enumerate(
-            queries,
-            start=1,
-        ):
-            print(
-                f"[{query_number}/{len(queries)}] "
-                f"Searching: {query}"
-            )
+        try:
+            check = verify_landing_page(candidate_url)
 
-            try:
-                results, requests_performed = brave_search(
-                    brave_key,
-                    query,
-                    pages=search_pages,
-                    count=results_per_page,
+            if not check.valid:
+                transient_failure = check.reason.startswith(
+                    "Landing page could not be verified:"
                 )
-            except Exception as exc:
-                stats["errors_count"] += 1
-                print(
-                    f"Search failed for '{query}': {exc}",
-                    file=sys.stderr,
-                )
-                continue
+                new_status = "needs_review" if transient_failure else "rejected"
 
-            stats["searches_performed"] += requests_performed
-            stats["results_found"] += len(
-                results
-            )
-
-            for result in results:
-                url = result.get(
-                    "url",
-                    "",
-                ).strip()
-
-                if not url or url in seen:
-                    continue
-
-                seen.add(
-                    url
+                mark_candidate_status(
+                    supabase_url,
+                    service_key,
+                    candidate["id"],
+                    new_status,
+                    check.reason,
                 )
 
-                try:
-                    candidate = extract_candidate(
-                        url,
-                        query,
-                        build_search_snippet(
-                            result
-                        ),
-                    )
+                deactivate_offer_by_url(
+                    supabase_url,
+                    service_key,
+                    candidate_url,
+                    check.reason,
+                )
 
-                    upsert_candidate(
+                if check.final_url != candidate_url:
+                    deactivate_offer_by_url(
                         supabase_url,
                         service_key,
-                        candidate,
+                        check.final_url,
+                        check.reason,
                     )
 
-                    stats["candidates_created"] += 1
+                if transient_failure:
+                    stats["candidates_needing_review"] += 1
+                else:
+                    stats["candidates_rejected"] += 1
 
-                    print(
-                        f"Saved "
-                        f"{candidate.processing_status} "
-                        f"candidate "
-                        f"({candidate.confidence_score}): "
-                        f"{candidate.company_name} - "
-                        f"{candidate.discovered_url}"
-                    )
+                print(f"Not published: {candidate_url} - {check.reason}")
+                continue
 
-                except ValueError as exc:
-                    print(
-                        f"Filtered {url}: {exc}"
-                    )
-
-                except Exception as exc:
-                    stats["errors_count"] += 1
-
-                    print(
-                        f"Skipping {url}: {exc}",
-                        file=sys.stderr,
-                    )
-
-        status = (
-            "completed_with_errors"
-            if stats["errors_count"]
-            else "completed"
-        )
-
-        finish_run(
-            supabase_url,
-            service_key,
-            run_id,
-            stats,
-            status,
-        )
-
-        print(
-            json.dumps(
-                stats,
-                indent=2,
+            publish_offer(
+                supabase_url,
+                service_key,
+                candidate,
+                check,
             )
-        )
 
-        return 0
+            mark_candidate_status(
+                supabase_url,
+                service_key,
+                candidate["id"],
+                "approved",
+                None,
+            )
 
-    except Exception as exc:
-        stats["errors_count"] += 1
+            stats["offers_published"] += 1
+            print(
+                f"Published: {candidate.get('company_name')} - {check.final_url}"
+            )
 
-        finish_run(
-            supabase_url,
-            service_key,
-            run_id,
-            stats,
-            "failed",
-            str(exc),
-        )
+        except Exception as exc:
+            stats["errors"] += 1
+            print(f"Failed to process {candidate_url}: {exc}")
 
-        raise
+    print(json.dumps(stats, indent=2))
+    return 1 if stats["errors"] else 0
 
 
 if __name__ == "__main__":
-    raise SystemExit(
-        main()
-    )
+    raise SystemExit(main())
