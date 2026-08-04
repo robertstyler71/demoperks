@@ -467,6 +467,7 @@ async function handleOfferSubmission(event){
     $('submitOfferStatus').textContent='Thanks! We’ll verify the landing page and review the offer before listing it.';
     $('submitOfferStatus').className='form-status form-status--success';
     $('submitOfferSubmit').textContent='Submitted';
+    submitOfferBusy=false;
   }catch(err){
     $('submitOfferStatus').textContent=err.message||'We could not submit this offer. Please try again.';
     $('submitOfferStatus').className='form-status form-status--error';
