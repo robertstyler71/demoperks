@@ -1,6 +1,21 @@
-"book a demo" "Amazon gift card" -blog -best -software
-"schedule a demo" "Visa gift card" -blog -best -platform
-"attend a demo" "gift card" "qualified" -blog
-"request a demo" "gift card" "eligible" -blog
-"complete a demo" "gift card" SaaS -blog
-"product demonstration" "Amazon gift card" -blog
+# Broad discovery queries. The crawler performs the strict filtering.
+book a demo gift card
+schedule a demo gift card
+request a demo gift card
+take a demo gift card
+attend a demo gift card
+complete a demo gift card
+demo gift card offer
+software demo gift card
+SaaS demo gift card
+book demo Amazon gift card
+schedule demo Visa gift card
+demo earn gift card
+demo receive gift card
+demo get $50 gift card
+demo get $100 gift card
+demo get $200 gift card
+demo get $250 gift card
+"gift card in exchange for" demo
+"once an appointment is completed" gift card
+"gift card of your choice" demo
