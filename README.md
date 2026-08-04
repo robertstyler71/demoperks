@@ -31,3 +31,5 @@ The crawler first writes discovered pages into `offer_candidates`. It does not a
 ## Hosting
 
 For Cloudflare Pages, connect this repository and set the build output directory to `site`. No build command is required.
+
+Production deployment refresh
