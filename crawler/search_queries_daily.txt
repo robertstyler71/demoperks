@@ -1,11 +1,37 @@
-demo "gift card"
-demo "Amazon gift card"
-demo "Visa gift card"
-demo "$25 gift card"
-demo "$50 gift card"
-demo "$100 gift card"
-demo "$200 gift card"
-demo "$250 gift card"
-book a demo gift card
-schedule a demo gift card
-request a demo gift card
+"book a demo" "gift card"
+"schedule a demo" "gift card"
+"request a demo" "gift card"
+"attend a demo" "gift card"
+"product demo" "gift card"
+"software demo" "gift card"
+
+"book a demo" "Amazon gift card"
+"schedule a demo" "Amazon gift card"
+"request a demo" "Amazon gift card"
+"attend a demo" "Amazon gift card"
+
+"book a demo" "Visa gift card"
+"schedule a demo" "Visa gift card"
+"request a demo" "Visa gift card"
+
+"demo" "$25 gift card"
+"demo" "$50 gift card"
+"demo" "$75 gift card"
+"demo" "$100 gift card"
+"demo" "$150 gift card"
+"demo" "$200 gift card"
+"demo" "$250 gift card"
+
+"gift card for your time" demo
+"receive a gift card" demo
+"get a gift card" demo
+"free gift card" "product demo"
+"demo incentive" software
+"incentivized demo" software
+
+site:linkedin.com/posts "book a demo" "gift card"
+site:linkedin.com/posts "schedule a demo" "gift card"
+site:linkedin.com/posts "request a demo" "gift card"
+site:linkedin.com/posts "Amazon gift card" "demo"
+site:linkedin.com/posts "$50 gift card" "demo"
+site:linkedin.com/posts "$100 gift card" "demo"
