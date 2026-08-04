@@ -1,7 +1,0 @@
-1. Unzip this folder.
-2. Edit site/demoperks-config.js and paste your Supabase publishable key.
-3. On your GitHub repository page, click Add file > Upload files.
-4. Drag every item from inside this folder into the upload area, including the hidden .github folder if your computer shows it.
-5. Commit the files to the main branch.
-6. Add the three GitHub Actions secrets listed in README.md.
-7. Run the workflow manually once from the Actions tab.

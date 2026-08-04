@@ -1,5 +1,0 @@
-"book a demo" "gift card" software
-"schedule a demo" "Amazon gift card" SaaS
-"attend a demo" "Visa gift card" software
-"qualified participants" "gift card" demo
-"product demo" "$100 gift card"
