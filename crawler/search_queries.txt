@@ -1,5 +1,6 @@
-"book a demo" "gift card" software
-"schedule a demo" "Amazon gift card" SaaS
-"attend a demo" "Visa gift card" software
-"qualified participants" "gift card" demo
-"product demo" "$100 gift card"
+"book a demo" "Amazon gift card" -blog -best -software
+"schedule a demo" "Visa gift card" -blog -best -platform
+"attend a demo" "gift card" "qualified" -blog
+"request a demo" "gift card" "eligible" -blog
+"complete a demo" "gift card" SaaS -blog
+"product demonstration" "Amazon gift card" -blog
