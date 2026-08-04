@@ -1,21 +1,69 @@
 # Broad discovery queries. The crawler performs the strict filtering.
+
+demo "gift card"
+demo "Amazon gift card"
+demo "Visa gift card"
+demo "$25 gift card"
+demo "$50 gift card"
+demo "$75 gift card"
+demo "$100 gift card"
+demo "$150 gift card"
+demo "$200 gift card"
+demo "$250 gift card"
+
 book a demo gift card
 schedule a demo gift card
 request a demo gift card
 take a demo gift card
 attend a demo gift card
 complete a demo gift card
+
+book demo Amazon gift card
+schedule demo Amazon gift card
+request demo Amazon gift card
+attend demo Amazon gift card
+
+book demo Visa gift card
+schedule demo Visa gift card
+request demo Visa gift card
+attend demo Visa gift card
+
 demo gift card offer
 software demo gift card
 SaaS demo gift card
-book demo Amazon gift card
-schedule demo Visa gift card
+product demo gift card
+live demo gift card
+demo incentive gift card
+
 demo earn gift card
 demo receive gift card
+demo get gift card
+demo get $25 gift card
 demo get $50 gift card
+demo get $75 gift card
 demo get $100 gift card
+demo get $150 gift card
 demo get $200 gift card
 demo get $250 gift card
+
 "gift card in exchange for" demo
-"once an appointment is completed" gift card
 "gift card of your choice" demo
+"once an appointment is completed" gift card
+"after completing the demo" gift card
+"after attending the demo" gift card
+"complete a demo and receive" gift card
+"book a demo and receive" gift card
+"schedule a demo and receive" gift card
+"request a demo and receive" gift card
+
+HR software demo gift card
+recruiting software demo gift card
+accounting software demo gift card
+expense management demo gift card
+cybersecurity demo gift card
+security software demo gift card
+CRM demo gift card
+marketing software demo gift card
+ecommerce software demo gift card
+property management demo gift card
+IT software demo gift card
