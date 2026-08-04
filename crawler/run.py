@@ -80,6 +80,7 @@ BAD_URL_PARTS = (
     "/prepaid-cards",
     "/card-finder",
     "/refer-and-earn",
+    "/referral-program/",
 )
 
 
@@ -120,6 +121,7 @@ BAD_TITLE_PATTERNS = (
     r"gift card payments platform",
     r"request a demo\s*\|\s*tango",
     r"demo\s*-\s*gift card",
+    r"referral program",
 )
 
 
