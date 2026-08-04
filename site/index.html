@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Discover software demo incentives, gift cards, and rewards in one searchable directory.">
+<title>DemoPerks | Software Demo Rewards</title>
+<style>@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  font-family: Inter, system-ui, sans-serif;
+  color: #1a2521;
+  background: #fbfcfa;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --ink: #18231f;
+  --muted: #69736f;
+  --line: #dfe7e1;
+  --green: #2f7a5b;
+  --green-soft: #e9f4ed;
+  --cream: #fff7e9;
+  --pink: #fbeef3;
+  --blue: #edf5fb;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; min-width: 320px; background: #fbfcfa; }
+button, input, select { font: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
+a { color: inherit; text-decoration: none; }
+button { cursor: pointer; }
+
+.container { width: min(1240px, calc(100% - 36px)); margin: 0 auto; }
+.site-header { position: sticky; top: 0; z-index: 20; background: rgba(251,252,250,.92); backdrop-filter: blur(14px); border-bottom: 1px solid rgba(223,231,225,.8); }
+.header-inner { min-height: 72px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; }
+.brand-mark { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 11px; color: white; background: linear-gradient(135deg, #2f7a5b, #6da886); font-family: 'DM Serif Display', serif; }
+nav { display: flex; align-items: center; gap: 28px; font-size: .93rem; color: var(--muted); }
+
+.button { border: 0; border-radius: 12px; padding: 12px 16px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 7px; }
+.button--primary { color: white; background: linear-gradient(135deg, #2f7a5b, #3f8f6c); box-shadow: 0 8px 22px rgba(47,122,91,.17); }
+.button--secondary { background: white; color: var(--ink); border: 1px solid var(--line); }
+.button--small { padding: 10px 14px; }
+.button--wide { width: 100%; margin-top: 8px; }
+
+.hero { background: radial-gradient(circle at 15% 15%, #e9f6ed 0, transparent 34%), radial-gradient(circle at 85% 20%, #eef5fb 0, transparent 30%), linear-gradient(180deg, #fbfcfa 0%, #f7faf7 100%); border-bottom: 1px solid var(--line); }
+.hero-inner { padding: 92px 0 74px; text-align: center; }
+.eyebrow { display: inline-flex; font-size: .76rem; letter-spacing: .13em; text-transform: uppercase; font-weight: 700; color: var(--green); }
+.hero h1, .how-section h2 { font-family: 'DM Serif Display', serif; font-weight: 400; letter-spacing: -.02em; }
+.hero h1 { font-size: clamp(3rem, 7vw, 5.6rem); line-height: .98; max-width: 920px; margin: 18px auto 20px; }
+.hero p { max-width: 760px; margin: 0 auto; font-size: 1.15rem; color: var(--muted); line-height: 1.7; }
+.hero-search { max-width: 720px; margin: 34px auto 0; display: flex; align-items: center; gap: 12px; background: white; border: 1px solid var(--line); border-radius: 16px; padding: 16px 18px; box-shadow: 0 14px 40px rgba(32,54,44,.08); }
+.hero-search input, .sidebar-search input { flex: 1; border: 0; outline: 0; background: transparent; min-width: 0; }
+.stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; max-width: 760px; margin: 36px auto 0; }
+.stat-card { background: rgba(255,255,255,.78); border: 1px solid var(--line); padding: 22px; border-radius: 16px; display: flex; flex-direction: column; gap: 4px; }
+.stat-card strong { font-size: 1.8rem; }
+.stat-card span { color: var(--muted); font-size: .9rem; }
+
+.directory-section { padding: 64px 0 84px; }
+.directory-layout { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 36px; align-items: start; }
+.filters { position: sticky; top: 98px; }
+.filter-header, .results-toolbar, .company-row, .offer-card__footer, .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.filter-header h2 { margin: 0; font-size: 1.05rem; }
+.text-button { border: 0; background: none; color: var(--green); font-size: .84rem; font-weight: 600; }
+.filter-group { padding: 22px 0; border-bottom: 1px solid var(--line); }
+.filter-group label, .filter-label { display: block; font-size: .78rem; text-transform: uppercase; letter-spacing: .08em; font-weight: 700; margin-bottom: 12px; }
+.sidebar-search { display: flex; gap: 9px; align-items: center; border: 1px solid var(--line); background: white; border-radius: 11px; padding: 11px 12px; }
+.segmented { display: grid; grid-template-columns: repeat(3, 1fr); background: #eef2ef; padding: 4px; border-radius: 10px; }
+.segmented button { border: 0; background: transparent; padding: 7px 4px; border-radius: 7px; text-transform: capitalize; color: var(--muted); font-size: .78rem; }
+.segmented button.is-selected { background: white; color: var(--ink); box-shadow: 0 2px 8px rgba(26,37,33,.08); }
+.filter-option { display: block; width: 100%; text-align: left; border: 0; background: transparent; color: var(--muted); padding: 8px 10px; border-radius: 9px; margin: 2px 0; font-size: .88rem; }
+.filter-option:hover, .filter-option.is-selected { color: var(--ink); background: var(--green-soft); }
+
+.results-toolbar { margin-bottom: 22px; }
+.results-count { font-size: .9rem; color: var(--muted); }
+.toolbar-actions { display: flex; align-items: center; gap: 10px; }
+.view-toggle { display: flex; border: 1px solid var(--line); padding: 3px; border-radius: 10px; background: white; }
+.view-toggle button { border: 0; background: transparent; display: grid; place-items: center; padding: 8px; border-radius: 7px; color: var(--muted); }
+.view-toggle button.is-selected { background: #edf3ef; color: var(--ink); }
+select { border: 1px solid var(--line); background: white; border-radius: 10px; padding: 10px 12px; color: var(--ink); }
+.mobile-filter-button { display: none; border: 0; background: transparent; color: var(--green); align-items: center; gap: 6px; padding: 0; margin-top: 8px; }
+
+.offers-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.offers-grid--list { grid-template-columns: 1fr; }
+.offer-card { background: white; border: 1px solid var(--line); border-left: 4px solid #8fc9a7; border-radius: 16px; padding: 22px; min-height: 310px; display: flex; flex-direction: column; transition: transform .18s ease, box-shadow .18s ease; }
+.offer-card:hover { transform: translateY(-2px); box-shadow: 0 16px 36px rgba(34,52,44,.08); }
+.offer-card.is-expired { border-left-color: #d7d7d7; opacity: .76; }
+.offer-card--list { min-height: 0; }
+.offer-card__top { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 13px; align-items: start; }
+.company-mark { width: 46px; height: 46px; border-radius: 12px; background: linear-gradient(135deg, #edf5fb, #e8f4ec); display: grid; place-items: center; font-weight: 700; color: var(--green); }
+.offer-card h3 { margin: 0; font-size: 1.03rem; }
+.company-row { justify-content: flex-start; }
+.offer-title { margin: 5px 0 0; color: var(--muted); font-size: .88rem; line-height: 1.4; }
+.status { font-size: .69rem; text-transform: capitalize; border-radius: 999px; padding: 4px 8px; font-weight: 700; }
+.status--active { background: var(--green-soft); color: var(--green); }
+.status--expired { background: #f1f1f1; color: #7a7a7a; }
+.reward-block { text-align: right; }
+.reward-block strong { display: block; font-size: 1.15rem; color: #b58031; }
+.reward-block span { font-size: .68rem; color: var(--muted); }
+.offer-summary { color: #66706c; line-height: 1.58; font-size: .92rem; margin: 22px 0 16px; }
+.tag-list { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 18px; }
+.tag { font-size: .7rem; background: #f3f6f4; color: #65706b; border-radius: 999px; padding: 5px 8px; }
+.tag--category { background: #eef6fb; color: #55738a; }
+.offer-card__footer { margin-top: auto; padding-top: 16px; border-top: 1px solid #edf1ee; align-items: flex-end; }
+.verified { display: flex; align-items: center; gap: 6px; font-size: .74rem; color: #8a938f; }
+.card-actions { display: flex; gap: 8px; }
+.card-actions .button { font-size: .78rem; padding: 9px 11px; }
+
+.empty-state { padding: 80px 24px; text-align: center; background: white; border: 1px dashed var(--line); border-radius: 18px; }
+.empty-state h2 { margin-top: 0; }
+.empty-state p { color: var(--muted); }
+
+.how-section { padding: 90px 0; background: #17241f; color: white; }
+.how-section .eyebrow { color: #9fd1b2; }
+.how-section h2 { font-size: clamp(2.4rem, 5vw, 4.5rem); max-width: 780px; line-height: 1.02; margin: 16px 0 44px; }
+.how-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
+.how-grid > div { border-top: 1px solid rgba(255,255,255,.18); padding-top: 22px; }
+.how-grid strong { color: #9fd1b2; }
+.how-grid h3 { margin: 22px 0 8px; }
+.how-grid p { color: #bdc7c2; line-height: 1.6; }
+
+footer { padding: 42px 0; background: #f4f7f4; border-top: 1px solid var(--line); }
+.footer-inner { align-items: flex-start; }
+.footer-inner p { color: var(--muted); font-size: .84rem; }
+.disclaimer { max-width: 600px; text-align: right; }
+
+.modal-backdrop { position: fixed; inset: 0; z-index: 100; background: rgba(12,20,17,.52); display: grid; place-items: center; padding: 20px; }
+.modal { width: min(560px, 100%); max-height: calc(100vh - 40px); overflow: auto; background: white; border-radius: 20px; padding: 30px; position: relative; box-shadow: 0 28px 80px rgba(0,0,0,.2); }
+.modal-close { position: absolute; top: 18px; right: 18px; }
+.icon-button { border: 1px solid var(--line); background: white; width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; }
+.modal h2 { font-family: 'DM Serif Display', serif; font-size: 2.5rem; margin: 12px 0 4px; }
+.modal-kicker { color: var(--muted); margin-top: 0; }
+.modal-reward { display: inline-flex; margin: 12px 0 20px; background: var(--cream); color: #92691f; border-radius: 10px; padding: 9px 12px; font-weight: 700; }
+.modal p { line-height: 1.65; color: #59635f; }
+.modal-section { border-top: 1px solid var(--line); margin-top: 20px; padding-top: 16px; }
+.modal-section h3 { margin: 0 0 6px; font-size: .96rem; }
+
+@media (max-width: 980px) {
+  nav a { display: none; }
+  .directory-layout { grid-template-columns: 1fr; }
+  .filters { position: static; display: none; padding: 18px; background: white; border: 1px solid var(--line); border-radius: 16px; }
+  .filters--open { display: block; }
+  .mobile-filter-button { display: inline-flex; }
+}
+
+@media (max-width: 760px) {
+  .container { width: min(100% - 24px, 1240px); }
+  .hero-inner { padding: 64px 0 48px; }
+  .hero h1 { font-size: 3.2rem; }
+  .stats-grid { grid-template-columns: 1fr; }
+  .offers-grid { grid-template-columns: 1fr; }
+  .results-toolbar { align-items: flex-start; }
+  .toolbar-actions { flex-wrap: wrap; justify-content: flex-end; }
+  .offer-card__footer { align-items: flex-start; flex-direction: column; }
+  .card-actions { width: 100%; }
+  .card-actions .button { flex: 1; }
+  .how-grid { grid-template-columns: 1fr; }
+  .footer-inner { flex-direction: column; }
+  .disclaimer { text-align: left; }
+}
+
+@media (max-width: 520px) {
+  .header-inner { min-height: 64px; }
+  nav .button { display: none; }
+  .hero h1 { font-size: 2.7rem; }
+  .hero p { font-size: 1rem; }
+  .hero-search { padding: 14px; }
+  .offer-card__top { grid-template-columns: auto 1fr; }
+  .reward-block { grid-column: 2; text-align: left; margin-top: 8px; }
+  .toolbar-actions select { max-width: 164px; }
+}
+
+/* Live database helpers */
+.loading-state, .connection-error { padding: 54px 24px; text-align: center; background: white; border: 1px solid var(--line); border-radius: 18px; }
+.loading-state p, .connection-error p { color: var(--muted); line-height: 1.6; }
+.connection-error code { display: inline-block; margin-top: 8px; padding: 4px 8px; background: #f4f6f4; border-radius: 7px; }
+.status--unverified { background: #fff4d9; color: #9a6a17; }
+.status--hidden { background: #f1f1f1; color: #777; }
+.hidden{display:none!important} .modal-close{font-size:24px;line-height:1} .icon{font-style:normal}
+</style>
+</head>
+<body>
+<div class="site-shell">
+<header class="site-header"><div class="container header-inner"><a href="#top" class="brand"><span class="brand-mark">D</span> DemoPerks</a><nav><a href="#offers">Browse Offers</a><a href="#how-it-works">How It Works</a><button class="button button--small button--primary" type="button">Submit an Offer</button></nav></div></header>
+<main id="top">
+<section class="hero"><div class="container hero-inner"><span class="eyebrow">Verified SaaS demo incentives</span><h1>Find software demos that reward your time.</h1><p>Discover gift cards, prepaid cards, and professional audits offered by B2B software companies looking for qualified buyers and evaluators.</p><div class="hero-search"><span>⌕</span><input id="heroSearch" placeholder="Search companies, categories, or rewards" aria-label="Search offers"></div><div class="stats-grid"><div class="stat-card"><strong id="activeCount">0</strong><span>Active offers</span></div><div class="stat-card"><strong id="rewardTotal">$0+</strong><span>Total rewards listed</span></div><div class="stat-card"><strong id="categoryCount">0</strong><span>Software categories</span></div></div></div></section>
+<section class="directory-section" id="offers"><div class="container directory-layout">
+<aside class="filters" id="filters"><div class="filter-header"><h2>Filters</h2><button class="text-button" id="clearFilters">Clear</button></div>
+<div class="filter-group"><label for="sideSearch">Search</label><div class="sidebar-search"><span>⌕</span><input id="sideSearch" placeholder="Search offers"></div></div>
+<div class="filter-group"><span class="filter-label">Status</span><div class="segmented" id="statusButtons"><button data-status="active" class="is-selected">active</button><button data-status="all">all</button><button data-status="expired">expired</button></div></div>
+<div class="filter-group"><span class="filter-label">Category</span><div id="categoryButtons"></div></div>
+<div class="filter-group"><span class="filter-label">Reward type</span><div id="rewardButtons"></div></div></aside>
+<div class="results-column"><div class="results-toolbar"><div><span class="results-count" id="resultsCount"></span><button class="mobile-filter-button" id="mobileFilters">☰ Filters</button></div><div class="toolbar-actions"><div class="view-toggle"><button id="gridView" class="is-selected" aria-label="Grid view">▦</button><button id="listView" aria-label="List view">☷</button></div><select id="sortSelect"><option value="recent">Recently verified</option><option value="highest">Highest reward</option><option value="company">Company name</option></select></div></div><div class="loading-state" id="loadingState"><h2>Loading live offers…</h2><p>Connecting to the DemoPerks database.</p></div><div class="connection-error hidden" id="connectionError"><h2>Database connection needed</h2><p id="connectionErrorText">Open <code>demoperks-config.js</code> and paste your Supabase publishable key.</p></div><div class="offers-grid hidden" id="offersGrid"></div><div class="empty-state hidden" id="emptyState"><h2>No offers match those filters.</h2><p>Try broadening your search or resetting the directory.</p><button class="button button--primary" id="emptyReset">Reset filters</button></div></div>
+</div></section>
+<section class="how-section" id="how-it-works"><div class="container"><span class="eyebrow">How it works</span><h2>Browse. Qualify. Attend. Get rewarded.</h2><div class="how-grid"><div><strong>01</strong><h3>Find a relevant offer</h3><p>Filter by your role, software category, or preferred reward type.</p></div><div><strong>02</strong><h3>Check the requirements</h3><p>Review eligibility details before submitting your information to the vendor.</p></div><div><strong>03</strong><h3>Complete the demo</h3><p>Attend the qualifying session and follow the vendor’s reward terms.</p></div></div></div></section>
+</main>
+<footer><div class="container footer-inner"><div><a href="#top" class="brand"><span class="brand-mark">D</span> DemoPerks</a><p>An independent directory of software demo incentives.</p></div><p class="disclaimer">DemoPerks does not issue rewards or guarantee eligibility. Offers are subject to vendor terms and may change without notice.</p></div></footer>
+<div class="modal-backdrop hidden" id="modal"><div class="modal" role="dialog" aria-modal="true"><button class="icon-button modal-close" id="modalClose" aria-label="Close">×</button><span id="modalStatus" class="status"></span><h2 id="modalCompany"></h2><p class="modal-kicker" id="modalTitle"></p><div class="modal-reward" id="modalReward"></div><p id="modalDescription"></p><div class="modal-section"><h3>Who may qualify</h3><p id="modalEligibility"></p></div><div class="modal-section"><h3>Important</h3><p>Rewards are issued by the vendor and are subject to its qualification rules, attendance requirements, and terms.</p></div><a class="button button--primary button--wide" id="modalLink" href="#">Visit Offer ↗</a></div></div>
+</div>
+<script src="demoperks-config.js"></script>
+<script>
+let offers = [];
+const state={search:'',category:'All',rewardType:'All',status:'active',sort:'recent',view:'grid'};
+let categories=[];
+let rewardTypes=[];
+const $=id=>document.getElementById(id);
+function escapeHtml(v){return String(v ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));}
+function safeUrl(value){try{const u=new URL(value);return ['http:','https:'].includes(u.protocol)?u.href:'#';}catch{return '#';}}
+function normalizeOffer(row){
+  const amount=Number(row.reward_amount || 0);
+  const rewardType=row.reward_type || 'Reward';
+  return {
+    id: row.id,
+    company: row.company_name || 'Unknown company',
+    title: row.offer_title || 'Software demo offer',
+    summary: row.short_description || row.full_description || 'Review the vendor terms for complete offer details.',
+    description: row.full_description || row.short_description || 'Review the vendor terms for complete offer details.',
+    rewardAmount: Number.isFinite(amount)?amount:0,
+    rewardLabel: amount>0 ? `$${amount.toLocaleString()} ${rewardType}` : rewardType,
+    rewardType,
+    category: row.category || 'Other',
+    tags: Array.isArray(row.audience_tags)?row.audience_tags:[],
+    status: row.status || 'unverified',
+    verifiedAt: row.verified_at || row.last_checked_at || row.created_at,
+    claimUrl: safeUrl(row.claim_url),
+    eligibility: row.eligibility_details || 'Eligibility is determined by the vendor.',
+    geography: row.geographic_restrictions || '',
+    featured: Boolean(row.featured),
+  };
+}
+function initFilters(){
+  categories=[...new Set(offers.map(o=>o.category).filter(Boolean))].sort();
+  rewardTypes=[...new Set(offers.map(o=>o.rewardType).filter(Boolean))].sort();
+  $('categoryButtons').innerHTML=`<button class="filter-option is-selected" data-category="All">All categories</button>`+categories.map(x=>`<button class="filter-option" data-category="${escapeHtml(x)}">${escapeHtml(x)}</button>`).join('');
+  $('rewardButtons').innerHTML=`<button class="filter-option is-selected" data-reward="All">All reward types</button>`+rewardTypes.map(x=>`<button class="filter-option" data-reward="${escapeHtml(x)}">${escapeHtml(x)}</button>`).join('');
+}
+function filtered(){const term=state.search.trim().toLowerCase();return offers.filter(o=>{const hay=[o.company,o.title,o.summary,o.category,o.rewardType,...o.tags].join(' ').toLowerCase();return(!term||hay.includes(term))&&(state.category==='All'||o.category===state.category)&&(state.rewardType==='All'||o.rewardType===state.rewardType)&&(state.status==='all'||o.status===state.status);}).sort((a,b)=>state.sort==='highest'?b.rewardAmount-a.rewardAmount:state.sort==='company'?a.company.localeCompare(b.company):new Date(b.verifiedAt||0)-new Date(a.verifiedAt||0));}
+function formatDate(d){if(!d)return 'Not yet';const dt=new Date(d);return Number.isNaN(dt.getTime())?'Not yet':dt.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});}
+function card(o){const claimDisabled=o.claimUrl==='#';return `<article class="offer-card ${state.view==='list'?'offer-card--list':''} ${o.status==='expired'?'is-expired':''}"><div class="offer-card__top"><div class="company-mark">${escapeHtml(o.company[0]||'D')}</div><div><div class="company-row"><h3>${escapeHtml(o.company)}</h3><span class="status status--${escapeHtml(o.status)}">${escapeHtml(o.status)}</span></div><p class="offer-title">${escapeHtml(o.title)}</p></div><div class="reward-block"><strong>${o.rewardAmount?('$'+o.rewardAmount.toLocaleString()):'Free'}</strong><span>Reward</span></div></div><p class="offer-summary">${escapeHtml(o.summary)}</p><div class="tag-list"><span class="tag tag--category">${escapeHtml(o.category)}</span>${o.tags.map(t=>`<span class="tag">${escapeHtml(t)}</span>`).join('')}</div><div class="offer-card__footer"><div class="verified">◷ Checked ${formatDate(o.verifiedAt)}</div><div class="card-actions"><button class="button button--secondary details" data-id="${escapeHtml(o.id)}">View Details</button><a class="button button--primary" ${claimDisabled?'aria-disabled="true" style="opacity:.55;pointer-events:none"':`href="${escapeHtml(o.claimUrl)}" target="_blank" rel="noopener noreferrer sponsored"`}>Claim Offer ↗</a></div></div></article>`;}
+function updateStats(){const active=offers.filter(o=>o.status==='active');$('activeCount').textContent=active.length;$('rewardTotal').textContent='$'+active.reduce((s,o)=>s+o.rewardAmount,0).toLocaleString()+'+';$('categoryCount').textContent=categories.length;}
+function render(){const list=filtered();$('resultsCount').textContent=`${list.length} offers found`;$('offersGrid').className='offers-grid'+(state.view==='list'?' offers-grid--list':'');$('offersGrid').innerHTML=list.map(card).join('');$('emptyState').classList.toggle('hidden',list.length!==0);$('offersGrid').classList.toggle('hidden',list.length===0);document.querySelectorAll('.details').forEach(b=>b.onclick=()=>openModal(b.dataset.id));}
+function syncSearch(v){state.search=v;$('heroSearch').value=v;$('sideSearch').value=v;render();}
+function clearAll(){state.search='';state.category='All';state.rewardType='All';state.status='active';$('heroSearch').value='';$('sideSearch').value='';document.querySelectorAll('[data-category]').forEach(b=>b.classList.toggle('is-selected',b.dataset.category==='All'));document.querySelectorAll('[data-reward]').forEach(b=>b.classList.toggle('is-selected',b.dataset.reward==='All'));document.querySelectorAll('[data-status]').forEach(b=>b.classList.toggle('is-selected',b.dataset.status==='active'));render();}
+function openModal(id){const o=offers.find(x=>x.id===id);if(!o)return;$('modalStatus').textContent=o.status;$('modalStatus').className='status status--'+o.status;$('modalCompany').textContent=o.company;$('modalTitle').textContent=o.title;$('modalReward').textContent=o.rewardLabel;$('modalDescription').textContent=o.description;$('modalEligibility').textContent=o.eligibility+(o.geography?` Geographic availability: ${o.geography}.`:'');$('modalLink').href=o.claimUrl;$('modalLink').target='_blank';$('modalLink').rel='noopener noreferrer sponsored';$('modal').classList.remove('hidden');}
+function closeModal(){$('modal').classList.add('hidden');}
+async function loadOffers(){
+  const cfg=window.DEMOPERKS_CONFIG||{};
+  if(!cfg.supabaseUrl || !cfg.supabasePublishableKey || cfg.supabasePublishableKey.includes('PASTE_')){
+    throw new Error('Open demoperks-config.js and paste your Supabase publishable key.');
+  }
+  const endpoint=`${cfg.supabaseUrl.replace(/\/$/,'')}/rest/v1/offers?select=*&order=featured.desc,verified_at.desc.nullslast,created_at.desc`;
+  const response=await fetch(endpoint,{headers:{apikey:cfg.supabasePublishableKey,Authorization:`Bearer ${cfg.supabasePublishableKey}`}});
+  if(!response.ok){const text=await response.text();throw new Error(`Supabase returned ${response.status}. ${text.slice(0,220)}`);}
+  const rows=await response.json();
+  offers=rows.map(normalizeOffer);
+  initFilters();updateStats();render();
+  $('loadingState').classList.add('hidden');
+  $('connectionError').classList.add('hidden');
+}
+$('heroSearch').oninput=e=>syncSearch(e.target.value);$('sideSearch').oninput=e=>syncSearch(e.target.value);$('clearFilters').onclick=clearAll;$('emptyReset').onclick=clearAll;
+$('statusButtons').onclick=e=>{const b=e.target.closest('[data-status]');if(!b)return;state.status=b.dataset.status;document.querySelectorAll('[data-status]').forEach(x=>x.classList.toggle('is-selected',x===b));render();};
+$('categoryButtons').onclick=e=>{const b=e.target.closest('[data-category]');if(!b)return;state.category=b.dataset.category;document.querySelectorAll('[data-category]').forEach(x=>x.classList.toggle('is-selected',x===b));render();};
+$('rewardButtons').onclick=e=>{const b=e.target.closest('[data-reward]');if(!b)return;state.rewardType=b.dataset.reward;document.querySelectorAll('[data-reward]').forEach(x=>x.classList.toggle('is-selected',x===b));render();};
+$('sortSelect').onchange=e=>{state.sort=e.target.value;render();};$('gridView').onclick=()=>{state.view='grid';$('gridView').classList.add('is-selected');$('listView').classList.remove('is-selected');render();};$('listView').onclick=()=>{state.view='list';$('listView').classList.add('is-selected');$('gridView').classList.remove('is-selected');render();};
+$('mobileFilters').onclick=()=>$('filters').classList.toggle('filters--open');$('modalClose').onclick=closeModal;$('modal').onclick=e=>{if(e.target===$('modal'))closeModal();};document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+loadOffers().catch(err=>{$('loadingState').classList.add('hidden');$('connectionError').classList.remove('hidden');$('connectionErrorText').innerHTML=`${escapeHtml(err.message)}<br><code>demoperks-config.js</code>`;console.error(err);});
+</script>
+</body></html>
