@@ -1,67 +1,194 @@
-demo "gift card"
-demo "Amazon gift card"
-demo "Visa gift card"
-demo "$25 gift card"
-demo "$50 gift card"
-demo "$75 gift card"
-demo "$100 gift card"
-demo "$150 gift card"
-demo "$200 gift card"
-demo "$250 gift card"
+# General demo reward searches
+"book a demo" "gift card"
+"schedule a demo" "gift card"
+"request a demo" "gift card"
+"take a demo" "gift card"
+"attend a demo" "gift card"
+"complete a demo" "gift card"
+"product demo" "gift card"
+"software demo" "gift card"
+"SaaS demo" "gift card"
+"live demo" "gift card"
 
-book a demo gift card
-schedule a demo gift card
-request a demo gift card
-take a demo gift card
-attend a demo gift card
-complete a demo gift card
+# Amazon gift card searches
+"book a demo" "Amazon gift card"
+"schedule a demo" "Amazon gift card"
+"request a demo" "Amazon gift card"
+"attend a demo" "Amazon gift card"
+"complete a demo" "Amazon gift card"
+"product demo" "Amazon gift card"
+"software demo" "Amazon gift card"
 
-book demo Amazon gift card
-schedule demo Amazon gift card
-request demo Amazon gift card
-attend demo Amazon gift card
+# Visa and prepaid card searches
+"book a demo" "Visa gift card"
+"schedule a demo" "Visa gift card"
+"request a demo" "Visa gift card"
+"attend a demo" "Visa gift card"
+"complete a demo" "Visa gift card"
+"product demo" "Visa gift card"
+"demo" "prepaid card"
+"demo" "Visa prepaid card"
+"demo" "digital prepaid card"
 
-book demo Visa gift card
-schedule demo Visa gift card
-request demo Visa gift card
-attend demo Visa gift card
+# Reward amount searches
+"demo" "$25 gift card"
+"demo" "$50 gift card"
+"demo" "$75 gift card"
+"demo" "$100 gift card"
+"demo" "$125 gift card"
+"demo" "$150 gift card"
+"demo" "$200 gift card"
+"demo" "$250 gift card"
+"demo" "$300 gift card"
+"demo" "$500 gift card"
 
-demo gift card offer
-software demo gift card
-SaaS demo gift card
-product demo gift card
-live demo gift card
-demo incentive gift card
+"book a demo" "$25"
+"book a demo" "$50"
+"book a demo" "$100"
+"book a demo" "$200"
+"schedule a demo" "$25"
+"schedule a demo" "$50"
+"schedule a demo" "$100"
+"schedule a demo" "$200"
+"request a demo" "$25"
+"request a demo" "$50"
+"request a demo" "$100"
+"request a demo" "$200"
 
-demo earn gift card
-demo receive gift card
-demo get gift card
-demo get $25 gift card
-demo get $50 gift card
-demo get $75 gift card
-demo get $100 gift card
-demo get $150 gift card
-demo get $200 gift card
-demo get $250 gift card
-
+# Common promotional wording
 "gift card in exchange for" demo
+"gift card for your time" demo
 "gift card of your choice" demo
-"once an appointment is completed" gift card
-"after completing the demo" gift card
-"after attending the demo" gift card
-"complete a demo and receive" gift card
-"book a demo and receive" gift card
-"schedule a demo and receive" gift card
-"request a demo and receive" gift card
+"receive a gift card" "book a demo"
+"receive a gift card" "schedule a demo"
+"receive a gift card" "request a demo"
+"get a gift card" "product demo"
+"earn a gift card" demo
+"free gift card" "software demo"
+"demo incentive" software
+"incentivized demo" software
+"demo reward" software
+"demo promotion" software
 
-HR software demo gift card
-recruiting software demo gift card
-accounting software demo gift card
-expense management demo gift card
-cybersecurity demo gift card
-security software demo gift card
-CRM demo gift card
-marketing software demo gift card
-ecommerce software demo gift card
-property management demo gift card
-IT software demo gift card
+"once an appointment is completed" "gift card"
+"after completing the demo" "gift card"
+"after attending the demo" "gift card"
+"complete a demo and receive" "gift card"
+"book a demo and receive" "gift card"
+"schedule a demo and receive" "gift card"
+"request a demo and receive" "gift card"
+"attend a demo and receive" "gift card"
+"participate in a demo" "gift card"
+"qualified demo" "gift card"
+"qualified participants" "gift card" demo
+
+# HR and recruiting software
+"HR software" demo "gift card"
+"recruiting software" demo "gift card"
+"applicant tracking system" demo "gift card"
+"talent acquisition software" demo "gift card"
+"payroll software" demo "gift card"
+"employee engagement software" demo "gift card"
+"workforce management" demo "gift card"
+
+# Finance and accounting software
+"accounting software" demo "gift card"
+"expense management" demo "gift card"
+"accounts payable software" demo "gift card"
+"financial software" demo "gift card"
+"corporate card software" demo "gift card"
+"invoice automation" demo "gift card"
+"procurement software" demo "gift card"
+
+# Sales, CRM, and marketing
+"CRM software" demo "gift card"
+"sales software" demo "gift card"
+"sales enablement" demo "gift card"
+"marketing automation" demo "gift card"
+"email marketing software" demo "gift card"
+"customer engagement software" demo "gift card"
+"lead generation software" demo "gift card"
+"call tracking software" demo "gift card"
+
+# IT and cybersecurity
+"cybersecurity software" demo "gift card"
+"security software" demo "gift card"
+"IT software" demo "gift card"
+"IT management software" demo "gift card"
+"network security" demo "gift card"
+"identity management" demo "gift card"
+"endpoint security" demo "gift card"
+"cloud security" demo "gift card"
+"data security" demo "gift card"
+"backup software" demo "gift card"
+"help desk software" demo "gift card"
+"IT service management" demo "gift card"
+
+# Ecommerce and customer experience
+"ecommerce software" demo "gift card"
+"customer experience software" demo "gift card"
+"customer support software" demo "gift card"
+"contact center software" demo "gift card"
+"live chat software" demo "gift card"
+"customer feedback software" demo "gift card"
+"review management software" demo "gift card"
+"loyalty software" demo "gift card"
+
+# Operations and business software
+"project management software" demo "gift card"
+"workflow automation" demo "gift card"
+"document management software" demo "gift card"
+"contract management software" demo "gift card"
+"inventory management software" demo "gift card"
+"field service software" demo "gift card"
+"fleet management software" demo "gift card"
+"construction software" demo "gift card"
+"manufacturing software" demo "gift card"
+"supply chain software" demo "gift card"
+
+# Industry-specific software
+"property management software" demo "gift card"
+"real estate software" demo "gift card"
+"healthcare software" demo "gift card"
+"medical software" demo "gift card"
+"dental software" demo "gift card"
+"legal software" demo "gift card"
+"insurance software" demo "gift card"
+"restaurant software" demo "gift card"
+"retail software" demo "gift card"
+"education software" demo "gift card"
+
+# LinkedIn discovery searches
+site:linkedin.com/posts "book a demo" "gift card"
+site:linkedin.com/posts "schedule a demo" "gift card"
+site:linkedin.com/posts "request a demo" "gift card"
+site:linkedin.com/posts "attend a demo" "gift card"
+site:linkedin.com/posts "complete a demo" "gift card"
+site:linkedin.com/posts "product demo" "gift card"
+site:linkedin.com/posts "software demo" "gift card"
+
+site:linkedin.com/posts "Amazon gift card" "demo"
+site:linkedin.com/posts "Visa gift card" "demo"
+site:linkedin.com/posts "prepaid card" "demo"
+site:linkedin.com/posts "$25 gift card" "demo"
+site:linkedin.com/posts "$50 gift card" "demo"
+site:linkedin.com/posts "$75 gift card" "demo"
+site:linkedin.com/posts "$100 gift card" "demo"
+site:linkedin.com/posts "$150 gift card" "demo"
+site:linkedin.com/posts "$200 gift card" "demo"
+site:linkedin.com/posts "$250 gift card" "demo"
+
+site:linkedin.com/posts "gift card for your time" demo
+site:linkedin.com/posts "receive a gift card" demo
+site:linkedin.com/posts "get a gift card" demo
+site:linkedin.com/posts "demo incentive"
+site:linkedin.com/posts "demo reward"
+site:linkedin.com/posts "qualified participants" "gift card"
+
+# LinkedIn company-page and ad discovery
+site:linkedin.com/company "book a demo" "gift card"
+site:linkedin.com/company "schedule a demo" "gift card"
+site:linkedin.com/company "Amazon gift card" demo
+site:linkedin.com/company "$100 gift card" demo
+site:linkedin.com "sponsored" "book a demo" "gift card"
+site:linkedin.com "promoted" "schedule a demo" "gift card"
