@@ -1,12 +1,4 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Requirements for submitting a legitimate, current, and verifiable software demo incentive.">
-<title>Submission Guidelines | DemoPerks</title>
-<link rel="canonical" href="https://demoperks.pages.dev/submission-guidelines.html"><meta property="og:title" content="Submission Guidelines | DemoPerks"><meta property="og:description" content="Requirements for submitting a legitimate software demo incentive."><meta property="og:type" content="website"><meta property="og:url" content="https://demoperks.pages.dev/submission-guidelines.html"><meta property="og:image" content="https://demoperks.pages.dev/social-preview.svg"><meta name="twitter:card" content="summary_large_image"><link rel="manifest" href="/site.webmanifest">
-<style>@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap');
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="View verified software demo reward details on DemoPerks."><title>Saved Offers | DemoPerks</title><link rel="canonical" href="https://demoperks.pages.dev/offer.html"><meta property="og:title" content="Offer Details | DemoPerks"><meta property="og:description" content="View software demo reward details and verification information."><meta property="og:type" content="website"><meta property="og:image" content="https://demoperks.pages.dev/social-preview.svg"><style>@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
   font-family: Inter, system-ui, sans-serif;
@@ -231,6 +223,40 @@ nav a[aria-current="page"], .footer-link[aria-current="page"] { color: var(--gre
 .contact-choice p { margin: 0 0 12px; font-size: .86rem; }
 .contact-placeholder { display: inline-block; background: var(--cream); color: #8b641e; border-radius: 8px; padding: 5px 8px; font-weight: 700; font-size: .78rem; }
 
+
+.menu-button { display:none; border:1px solid var(--line); background:white; width:42px; height:42px; border-radius:11px; font-size:1.2rem; }
+.offer-meta-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; margin:12px 0 18px; }
+.offer-meta-item { background:#f7faf8; border:1px solid #edf2ee; border-radius:10px; padding:9px 10px; font-size:.72rem; color:var(--muted); }
+.offer-meta-item strong { display:block; color:var(--ink); font-size:.76rem; margin-top:2px; }
+.verification-badge { display:inline-flex; align-items:center; gap:5px; font-size:.68rem; border-radius:999px; padding:5px 8px; background:#eef6fb; color:#55738a; font-weight:700; }
+.verification-badge--manual { background:var(--green-soft); color:var(--green); }
+.verification-badge--community { background:var(--cream); color:#92691f; }
+.ending-soon { color:#a45d31; font-weight:700; }
+.source-domain { font-size:.72rem; color:var(--muted); margin-top:7px; }
+.card-icon-button { border:1px solid var(--line); background:white; border-radius:9px; padding:9px 10px; font-size:.76rem; font-weight:600; color:var(--muted); }
+.card-icon-button:hover { color:var(--green); background:#f6faf7; }
+.external-note { font-size:.75rem; color:var(--muted); line-height:1.5; margin:10px 0 0; }
+.modal-meta { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin:16px 0; }
+.modal-meta div { border:1px solid var(--line); border-radius:11px; padding:10px; font-size:.75rem; color:var(--muted); }
+.modal-meta strong { display:block; color:var(--ink); margin-top:3px; }
+.back-to-top { position:fixed; right:20px; bottom:20px; z-index:30; width:44px; height:44px; border:0; border-radius:50%; background:var(--ink); color:white; box-shadow:0 10px 30px rgba(0,0,0,.18); display:grid; place-items:center; }
+.section-strip { padding:54px 0; border-top:1px solid var(--line); }
+.section-strip h2 { font-family:'DM Serif Display',serif; font-size:2.2rem; font-weight:400; margin:0 0 20px; }
+.featured-row { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+.mini-offer { background:white; border:1px solid var(--line); border-radius:14px; padding:18px; }
+.mini-offer h3 { margin:0 0 6px; }
+.mini-offer p { color:var(--muted); font-size:.84rem; line-height:1.5; }
+.mini-offer a { color:var(--green); font-weight:700; font-size:.8rem; }
+@media (max-width:980px){
+  .menu-button{display:grid;place-items:center;}
+  #siteNav{position:absolute;top:calc(100% + 1px);left:0;right:0;background:#fbfcfa;border-bottom:1px solid var(--line);padding:18px;display:none;flex-direction:column;align-items:stretch;gap:14px;}
+  #siteNav.is-open{display:flex;}
+  #siteNav a{display:block;}
+  #siteNav .button{width:100%;}
+  .featured-row{grid-template-columns:1fr;}
+}
+@media (max-width:620px){.offer-meta-grid,.modal-meta{grid-template-columns:1fr;}}
+
 @media (max-width: 980px) {
   nav a { display: none; }
   .directory-layout { grid-template-columns: 1fr; }
@@ -282,150 +308,7 @@ nav a[aria-current="page"], .footer-link[aria-current="page"] { color: var(--gre
 .status--hidden { background: #f1f1f1; color: #777; }
 .hidden{display:none!important} .modal-close{font-size:24px;line-height:1} .icon{font-style:normal}
 
-
-.page-hero {
-  padding: 86px 0 46px;
-  background:
-    radial-gradient(circle at 15% 15%, #e9f6ed 0, transparent 34%),
-    radial-gradient(circle at 85% 20%, #eef5fb 0, transparent 30%),
-    linear-gradient(180deg, #fbfcfa 0%, #f7faf7 100%);
-  border-bottom: 1px solid var(--line);
-}
-.page-hero h1 {
-  font-family: 'DM Serif Display', serif;
-  font-weight: 400;
-  letter-spacing: -.02em;
-  font-size: clamp(2.8rem, 6vw, 5rem);
-  line-height: 1;
-  margin: 14px 0 16px;
-}
-.page-hero p {
-  max-width: 760px;
-  color: var(--muted);
-  line-height: 1.75;
-  font-size: 1.05rem;
-}
-.page-content {
-  padding: 64px 0 88px;
-}
-.content-card {
-  max-width: 900px;
-  background: white;
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  padding: clamp(24px, 4vw, 44px);
-  box-shadow: 0 12px 35px rgba(32,54,44,.05);
-}
-.content-card h2 {
-  font-family: 'DM Serif Display', serif;
-  font-weight: 400;
-  font-size: 2rem;
-  margin: 34px 0 10px;
-}
-.content-card h2:first-child { margin-top: 0; }
-.content-card h3 {
-  font-size: 1.05rem;
-  margin: 28px 0 8px;
-}
-.content-card p,
-.content-card li {
-  color: #55615b;
-  line-height: 1.75;
-}
-.content-card ol {
-  padding-left: 22px;
-}
-.content-card li {
-  margin: 8px 0;
-}
-.notice-box {
-  border: 1px solid #d9e5dd;
-  background: #f4f8f5;
-  border-radius: 12px;
-  padding: 14px 16px;
-  color: #53615a;
-  font-size: .88rem;
-  margin-bottom: 26px;
-}
-.page-footer {
-  padding: 38px 0;
-  background: #f4f7f4;
-  border-top: 1px solid var(--line);
-}
-.page-footer .footer-links {
-  justify-content: flex-start;
-  margin-top: 16px;
-}
-.contact-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-}
-.contact-card {
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 18px;
-  background: #fafcfb;
-}
-.contact-card h3 { margin-top: 0; }
-.placeholder-email {
-  display: inline-block;
-  background: var(--cream);
-  color: #8b641e;
-  border-radius: 8px;
-  padding: 6px 9px;
-  font-weight: 700;
-  font-size: .8rem;
-}
-@media (max-width: 760px) {
-  .page-hero { padding: 62px 0 36px; }
-  .contact-grid { grid-template-columns: 1fr; }
-}
-
-.menu-button{display:none;border:1px solid var(--line);background:white;width:42px;height:42px;border-radius:11px;font-size:1.2rem;}@media(max-width:980px){.menu-button{display:grid;place-items:center}#siteNav{position:absolute;top:calc(100% + 1px);left:0;right:0;background:#fbfcfa;border-bottom:1px solid var(--line);padding:18px;display:none;flex-direction:column;align-items:stretch;gap:14px}#siteNav.is-open{display:flex}#siteNav a{display:block}#siteNav .button{width:100%}}</style>
-</head>
-<body>
-<div class="site-shell">
-<header class="site-header"><div class="container header-inner"><a href="/#top" class="brand"><span class="brand-mark">D</span> DemoPerks</a><button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="siteNav" aria-label="Open navigation">☰</button><nav id="siteNav"><a href="/#offers">Browse Offers</a><a href="/#how-it-works">How It Works</a><a href="/about.html">About</a><a href="/faq.html">FAQ</a><a href="/saved.html">Saved</a><a class="button button--small button--primary" href="/#submit-offer">Submit an Offer</a></nav></div></header>
-<main>
-  <section class="page-hero">
-    <div class="container">
-      <span class="eyebrow">Before submitting</span>
-      <h1>Submission Guidelines</h1>
-      <p>Requirements for submitting a legitimate, current, and verifiable software demo incentive.</p>
-    </div>
-  </section>
-  <section class="page-content">
-    <div class="container">
-      <article class="content-card">
-        
-<h2>What qualifies</h2>
-<ol>
-  <li>An official vendor landing page clearly connects a qualifying demo or sales appointment with a stated reward.</li>
-  <li>The reward amount or reward type is clearly described.</li>
-  <li>The offer appears current and the page does not contain a past participation deadline.</li>
-  <li>The submission includes enough information to verify eligibility and participation requirements.</li>
-  <li>The offer is relevant to business software, professional services, or a closely related B2B product.</li>
-</ol>
-
-<h2>What does not qualify</h2>
-<ol>
-  <li>Expired promotions or pages with past completion deadlines.</li>
-  <li>Raffles, drawings, sweepstakes, contests, or chance-to-win promotions.</li>
-  <li>Blog posts, playbooks, guides, news articles, or educational pages that merely discuss gift cards or incentivized marketing.</li>
-  <li>LinkedIn posts, ads, search results, or social posts without a verifiable official landing page.</li>
-  <li>Pages where demo language appears only in the site navigation and is unrelated to the reward.</li>
-  <li>Offers requiring payment, misleading claims, impersonation, or unlawful activity.</li>
-</ol>
-
-<h2>Review process</h2>
-<p>Nothing is published automatically. DemoPerks may verify the URL, edit the listing for clarity, request more information, reject the submission, or remove it later if the offer changes.</p>
-
-      </article>
-    </div>
-  </section>
-</main>
-<footer>
+.detail-shell{padding:70px 0 90px}.detail-card{max-width:900px;margin:auto;background:white;border:1px solid var(--line);border-radius:20px;padding:clamp(24px,5vw,48px)}.detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:26px 0}.detail-grid div{border:1px solid var(--line);border-radius:12px;padding:13px;color:var(--muted);font-size:.78rem}.detail-grid strong{display:block;color:var(--ink);margin-top:4px}@media(max-width:650px){.detail-grid{grid-template-columns:1fr}}</style></head><body><header class="site-header"><div class="container header-inner"><a href="/" class="brand"><span class="brand-mark">D</span> DemoPerks</a><nav><a href="/#offers">Browse Offers</a><a href="/saved.html">Saved</a><a href="/faq.html">FAQ</a></nav></div></header><main class="detail-shell"><div class="container"><article class="detail-card"><span class="eyebrow">Your shortlist</span><h1>Saved Offers</h1><p class="modal-kicker">Saved locally in this browser. No account is required.</p><div id="savedList"><p>Loading saved offers…</p></div></article></div></main><footer>
   <div class="container footer-inner">
     <div class="footer-brand-block">
       <a href="#top" class="brand"><span class="brand-mark">D</span> DemoPerks</a>
@@ -444,8 +327,7 @@ nav a[aria-current="page"], .footer-link[aria-current="page"] { color: var(--gre
       <p>© <span id="footerYear"></span> DemoPerks</p>
     </div>
   </div>
-</footer>
-</div>
-<script>document.getElementById('footerYear').textContent=new Date().getFullYear();</script>
-<script>const m=document.getElementById('menuButton'),n=document.getElementById('siteNav');m.onclick=()=>{const o=n.classList.toggle('is-open');m.setAttribute('aria-expanded',String(o));};</script></body>
-</html>
+</footer><script src="demoperks-config.js"></script><script>
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+(async()=>{let ids=[];try{ids=JSON.parse(localStorage.getItem('demoperks_saved_offers')||'[]')}catch{}const el=document.getElementById('savedList');if(!ids.length){el.innerHTML='<div class="empty-state"><h2>No saved offers yet</h2><p>Use the Save button on any offer to build a shortlist.</p><a class="button button--primary" href="/#offers">Browse offers</a></div>';return}const c=window.DEMOPERKS_CONFIG||{};const ep=`${c.supabaseUrl.replace(/\/$/,'')}/rest/v1/offers?id=in.(${ids.map(encodeURIComponent).join(',')})&select=*`;const r=await fetch(ep,{headers:{apikey:c.supabasePublishableKey,Authorization:`Bearer ${c.supabasePublishableKey}`}});const rows=await r.json();el.innerHTML=rows.map(o=>`<article class="mini-offer"><h3>${esc(o.company_name)}</h3><p>${esc(o.offer_title||'Software demo offer')} · ${o.reward_amount?'$'+Number(o.reward_amount).toLocaleString()+' ':''}${esc(o.reward_type||'Reward')}</p><a href="/offer.html?id=${encodeURIComponent(o.id)}">View details →</a></article>`).join('')||'<p>Saved offers are no longer available.</p>'})().catch(e=>{document.getElementById('savedList').innerHTML='<p>Unable to load saved offers.</p>';console.error(e)});
+</script></body></html>

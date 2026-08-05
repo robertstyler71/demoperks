@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Answers about eligibility, verification, rewards, submissions, reports, and listing accuracy.">
 <title>Frequently Asked Questions | DemoPerks</title>
+<link rel="canonical" href="https://demoperks.pages.dev/faq.html"><meta property="og:title" content="DemoPerks FAQ | DemoPerks"><meta property="og:description" content="Answers about eligibility, verification, rewards, submissions, and listing accuracy."><meta property="og:type" content="website"><meta property="og:url" content="https://demoperks.pages.dev/faq.html"><meta property="og:image" content="https://demoperks.pages.dev/social-preview.svg"><meta name="twitter:card" content="summary_large_image"><link rel="manifest" href="/site.webmanifest">
 <style>@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
@@ -380,22 +381,12 @@ nav a[aria-current="page"], .footer-link[aria-current="page"] { color: var(--gre
   .page-hero { padding: 62px 0 36px; }
   .contact-grid { grid-template-columns: 1fr; }
 }
-</style>
+
+.menu-button{display:none;border:1px solid var(--line);background:white;width:42px;height:42px;border-radius:11px;font-size:1.2rem;}@media(max-width:980px){.menu-button{display:grid;place-items:center}#siteNav{position:absolute;top:calc(100% + 1px);left:0;right:0;background:#fbfcfa;border-bottom:1px solid var(--line);padding:18px;display:none;flex-direction:column;align-items:stretch;gap:14px}#siteNav.is-open{display:flex}#siteNav a{display:block}#siteNav .button{width:100%}}</style>
 </head>
 <body>
 <div class="site-shell">
-<header class="site-header">
-  <div class="container header-inner">
-    <a href="index.html#top" class="brand"><span class="brand-mark">D</span> DemoPerks</a>
-    <nav>
-      <a href="index.html#offers">Browse Offers</a>
-      <a href="index.html#how-it-works">How It Works</a>
-      <a href="about.html">About</a>
-      <a href="faq.html" aria-current="page">FAQ</a>
-      <a class="button button--small button--primary" href="index.html#submit-offer">Submit an Offer</a>
-    </nav>
-  </div>
-</header>
+<header class="site-header"><div class="container header-inner"><a href="/#top" class="brand"><span class="brand-mark">D</span> DemoPerks</a><button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="siteNav" aria-label="Open navigation">☰</button><nav id="siteNav"><a href="/#offers">Browse Offers</a><a href="/#how-it-works">How It Works</a><a href="/about.html">About</a><a href="/faq.html">FAQ</a><a href="/saved.html">Saved</a><a class="button button--small button--primary" href="/#submit-offer">Submit an Offer</a></nav></div></header>
 <main>
   <section class="page-hero">
     <div class="container">
@@ -449,12 +440,12 @@ nav a[aria-current="page"], .footer-link[aria-current="page"] { color: var(--gre
       <p>An independent directory of software demo incentives.</p>
     </div>
     <div class="footer-links" aria-label="Footer links">
-      <a class="footer-link" href="about.html">About</a>
-      <a class="footer-link" href="index.html#how-it-works">How It Works</a>
-      <a class="footer-link" href="faq.html">FAQ</a>
-      <a class="footer-link" href="submission-guidelines.html">Submission Guidelines</a>
-            <a class="footer-link" href="privacy-policy.html">Privacy Policy</a>
-      <a class="footer-link" href="terms-of-use.html">Terms of Use</a>
+      <a class="footer-link" href="/about.html">About</a>
+      <a class="footer-link" href="/#how-it-works">How It Works</a>
+      <a class="footer-link" href="/faq.html">FAQ</a>
+      <a class="footer-link" href="/submission-guidelines.html">Submission Guidelines</a>
+            <a class="footer-link" href="/privacy-policy.html">Privacy Policy</a>
+      <a class="footer-link" href="/terms-of-use.html">Terms of Use</a>
     </div>
     <div class="footer-bottom">
       <p class="disclaimer">DemoPerks does not issue rewards, determine eligibility, or guarantee fulfillment. Offers are administered by their respective vendors and may change without notice.</p>
@@ -464,5 +455,5 @@ nav a[aria-current="page"], .footer-link[aria-current="page"] { color: var(--gre
 </footer>
 </div>
 <script>document.getElementById('footerYear').textContent=new Date().getFullYear();</script>
-</body>
+<script>const m=document.getElementById('menuButton'),n=document.getElementById('siteNav');m.onclick=()=>{const o=n.classList.toggle('is-open');m.setAttribute('aria-expanded',String(o));};</script></body>
 </html>

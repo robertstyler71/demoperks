@@ -5,6 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Discover software demo incentives, gift cards, and rewards in one searchable directory.">
 <title>DemoPerks | Software Demo Rewards</title>
+<link rel="canonical" href="https://demoperks.pages.dev/">
+<meta property="og:title" content="DemoPerks | Software Demo Rewards">
+<meta property="og:description" content="Discover verified software demo incentives, gift cards, and rewards in one searchable directory.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://demoperks.pages.dev/">
+<meta property="og:image" content="https://demoperks.pages.dev/social-preview.svg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="manifest" href="/site.webmanifest">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"DemoPerks","url":"https://demoperks.pages.dev/","description":"An independent directory of software demo incentives."}</script>
+
 <style>@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
@@ -230,6 +240,40 @@ nav a[aria-current="page"], .footer-link[aria-current="page"] { color: var(--gre
 .contact-choice p { margin: 0 0 12px; font-size: .86rem; }
 .contact-placeholder { display: inline-block; background: var(--cream); color: #8b641e; border-radius: 8px; padding: 5px 8px; font-weight: 700; font-size: .78rem; }
 
+
+.menu-button { display:none; border:1px solid var(--line); background:white; width:42px; height:42px; border-radius:11px; font-size:1.2rem; }
+.offer-meta-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; margin:12px 0 18px; }
+.offer-meta-item { background:#f7faf8; border:1px solid #edf2ee; border-radius:10px; padding:9px 10px; font-size:.72rem; color:var(--muted); }
+.offer-meta-item strong { display:block; color:var(--ink); font-size:.76rem; margin-top:2px; }
+.verification-badge { display:inline-flex; align-items:center; gap:5px; font-size:.68rem; border-radius:999px; padding:5px 8px; background:#eef6fb; color:#55738a; font-weight:700; }
+.verification-badge--manual { background:var(--green-soft); color:var(--green); }
+.verification-badge--community { background:var(--cream); color:#92691f; }
+.ending-soon { color:#a45d31; font-weight:700; }
+.source-domain { font-size:.72rem; color:var(--muted); margin-top:7px; }
+.card-icon-button { border:1px solid var(--line); background:white; border-radius:9px; padding:9px 10px; font-size:.76rem; font-weight:600; color:var(--muted); }
+.card-icon-button:hover { color:var(--green); background:#f6faf7; }
+.external-note { font-size:.75rem; color:var(--muted); line-height:1.5; margin:10px 0 0; }
+.modal-meta { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin:16px 0; }
+.modal-meta div { border:1px solid var(--line); border-radius:11px; padding:10px; font-size:.75rem; color:var(--muted); }
+.modal-meta strong { display:block; color:var(--ink); margin-top:3px; }
+.back-to-top { position:fixed; right:20px; bottom:20px; z-index:30; width:44px; height:44px; border:0; border-radius:50%; background:var(--ink); color:white; box-shadow:0 10px 30px rgba(0,0,0,.18); display:grid; place-items:center; }
+.section-strip { padding:54px 0; border-top:1px solid var(--line); }
+.section-strip h2 { font-family:'DM Serif Display',serif; font-size:2.2rem; font-weight:400; margin:0 0 20px; }
+.featured-row { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+.mini-offer { background:white; border:1px solid var(--line); border-radius:14px; padding:18px; }
+.mini-offer h3 { margin:0 0 6px; }
+.mini-offer p { color:var(--muted); font-size:.84rem; line-height:1.5; }
+.mini-offer a { color:var(--green); font-weight:700; font-size:.8rem; }
+@media (max-width:980px){
+  .menu-button{display:grid;place-items:center;}
+  #siteNav{position:absolute;top:calc(100% + 1px);left:0;right:0;background:#fbfcfa;border-bottom:1px solid var(--line);padding:18px;display:none;flex-direction:column;align-items:stretch;gap:14px;}
+  #siteNav.is-open{display:flex;}
+  #siteNav a{display:block;}
+  #siteNav .button{width:100%;}
+  .featured-row{grid-template-columns:1fr;}
+}
+@media (max-width:620px){.offer-meta-grid,.modal-meta{grid-template-columns:1fr;}}
+
 @media (max-width: 980px) {
   nav a { display: none; }
   .directory-layout { grid-template-columns: 1fr; }
@@ -284,7 +328,7 @@ nav a[aria-current="page"], .footer-link[aria-current="page"] { color: var(--gre
 </head>
 <body>
 <div class="site-shell">
-<header class="site-header"><div class="container header-inner"><a href="#top" class="brand"><span class="brand-mark">D</span> DemoPerks</a><nav><a href="index.html#offers">Browse Offers</a><a href="#how-it-works">How It Works</a><a href="about.html">About</a><a href="faq.html">FAQ</a><button class="button button--small button--primary" type="button" id="submitOfferButton">Submit an Offer</button></nav></div></header>
+<header class="site-header"><div class="container header-inner"><a href="/#top" class="brand"><span class="brand-mark">D</span> DemoPerks</a><button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="siteNav" aria-label="Open navigation">☰</button><nav id="siteNav"><a href="/#offers">Browse Offers</a><a href="/#how-it-works">How It Works</a><a href="/about.html">About</a><a href="/faq.html">FAQ</a><a href="/saved.html">Saved</a><button class="button button--small button--primary" type="button" id="submitOfferButton">Submit an Offer</button></nav></div></header>
 <main id="top">
 <section class="hero"><div class="container hero-inner"><span class="eyebrow">Verified SaaS demo incentives</span><h1>Find software demos that reward your time.</h1><p>Discover gift cards, prepaid cards, and professional audits offered by B2B software companies looking for qualified buyers and evaluators.</p><div class="hero-search"><span>⌕</span><input id="heroSearch" placeholder="Search companies, categories, or rewards" aria-label="Search offers"></div><div class="stats-grid"><div class="stat-card"><strong id="activeCount">0</strong><span>Active offers</span></div><div class="stat-card"><strong id="rewardTotal">$0+</strong><span>Total rewards listed</span></div><div class="stat-card"><strong id="categoryCount">0</strong><span>Software categories</span></div></div></div></section>
 <section class="directory-section" id="offers"><div class="container directory-layout">
@@ -293,8 +337,9 @@ nav a[aria-current="page"], .footer-link[aria-current="page"] { color: var(--gre
 <div class="filter-group"><span class="filter-label">Status</span><div class="segmented" id="statusButtons"><button data-status="active" class="is-selected">active</button><button data-status="all">all</button><button data-status="expired">expired</button></div></div>
 <div class="filter-group"><span class="filter-label">Category</span><div id="categoryButtons"></div></div>
 <div class="filter-group"><span class="filter-label">Reward type</span><div id="rewardButtons"></div></div></aside>
-<div class="results-column"><div class="results-toolbar"><div><span class="results-count" id="resultsCount"></span><button class="mobile-filter-button" id="mobileFilters">☰ Filters</button></div><div class="toolbar-actions"><div class="view-toggle"><button id="gridView" class="is-selected" aria-label="Grid view">▦</button><button id="listView" aria-label="List view">☷</button></div><select id="sortSelect"><option value="recent">Recently verified</option><option value="highest">Highest reward</option><option value="company">Company name</option></select></div></div><div class="loading-state" id="loadingState"><h2>Loading live offers…</h2><p>Connecting to the DemoPerks database.</p></div><div class="connection-error hidden" id="connectionError"><h2>Database connection needed</h2><p id="connectionErrorText">Open <code>demoperks-config.js</code> and paste your Supabase publishable key.</p></div><div class="offers-grid hidden" id="offersGrid"></div><div class="empty-state hidden" id="emptyState"><h2>No offers match those filters.</h2><p>Try broadening your search or resetting the directory.</p><button class="button button--primary" id="emptyReset">Reset filters</button></div></div>
+<div class="results-column"><div class="results-toolbar"><div><span class="results-count" id="resultsCount"></span><button class="mobile-filter-button" id="mobileFilters">☰ Filters</button></div><div class="toolbar-actions"><div class="view-toggle"><button id="gridView" class="is-selected" aria-label="Grid view">▦</button><button id="listView" aria-label="List view">☷</button></div><select id="sortSelect"><option value="recent">Recently verified</option><option value="added">Recently added</option><option value="ending">Ending soon</option><option value="highest">Highest reward</option><option value="company">Company name</option></select></div></div><div class="loading-state" id="loadingState"><h2>Loading live offers…</h2><p>Connecting to the DemoPerks database.</p></div><div class="connection-error hidden" id="connectionError"><h2>Database connection needed</h2><p id="connectionErrorText">Open <code>demoperks-config.js</code> and paste your Supabase publishable key.</p></div><div class="offers-grid hidden" id="offersGrid"></div><div class="empty-state hidden" id="emptyState"><h2>No offers match those filters.</h2><p>Try broadening your search or resetting the directory.</p><button class="button button--primary" id="emptyReset">Reset filters</button></div></div>
 </div></section>
+<section class="section-strip" id="highlights"><div class="container"><span class="eyebrow">Directory highlights</span><h2>Recently added and ending soon</h2><div class="featured-row" id="featuredRow"></div></div></section>
 <section class="how-section" id="how-it-works"><div class="container"><span class="eyebrow">How it works</span><h2>Browse. Qualify. Attend. Get rewarded.</h2><div class="how-grid"><div><strong>01</strong><h3>Find a relevant offer</h3><p>Filter by your role, software category, or preferred reward type.</p></div><div><strong>02</strong><h3>Check the requirements</h3><p>Review eligibility details before submitting your information to the vendor.</p></div><div><strong>03</strong><h3>Complete the demo</h3><p>Attend the qualifying session and follow the vendor’s reward terms.</p></div></div></div></section>
 
 <section class="info-section info-section--soft" id="about">
@@ -384,12 +429,12 @@ nav a[aria-current="page"], .footer-link[aria-current="page"] { color: var(--gre
       <p>An independent directory of software demo incentives.</p>
     </div>
     <div class="footer-links" aria-label="Footer links">
-      <a class="footer-link" href="about.html">About</a>
-      <a class="footer-link" href="#how-it-works">How It Works</a>
-      <a class="footer-link" href="faq.html">FAQ</a>
-      <a class="footer-link" href="submission-guidelines.html">Submission Guidelines</a>
-            <a class="footer-link" href="privacy-policy.html">Privacy Policy</a>
-      <a class="footer-link" href="terms-of-use.html">Terms of Use</a>
+      <a class="footer-link" href="/about.html">About</a>
+      <a class="footer-link" href="/#how-it-works">How It Works</a>
+      <a class="footer-link" href="/faq.html">FAQ</a>
+      <a class="footer-link" href="/submission-guidelines.html">Submission Guidelines</a>
+            <a class="footer-link" href="/privacy-policy.html">Privacy Policy</a>
+      <a class="footer-link" href="/terms-of-use.html">Terms of Use</a>
     </div>
     <div class="footer-bottom">
       <p class="disclaimer">DemoPerks does not issue rewards, determine eligibility, or guarantee fulfillment. Offers are administered by their respective vendors and may change without notice.</p>
@@ -397,7 +442,7 @@ nav a[aria-current="page"], .footer-link[aria-current="page"] { color: var(--gre
     </div>
   </div>
 </footer>
-<div class="modal-backdrop hidden" id="modal"><div class="modal" role="dialog" aria-modal="true"><button class="icon-button modal-close" id="modalClose" aria-label="Close">×</button><span id="modalStatus" class="status"></span><h2 id="modalCompany"></h2><p class="modal-kicker" id="modalTitle"></p><div class="modal-reward" id="modalReward"></div><p id="modalDescription"></p><div class="modal-section"><h3>Who may qualify</h3><p id="modalEligibility"></p></div><div class="modal-section"><h3>Important</h3><p>Rewards are issued by the vendor and are subject to its qualification rules, attendance requirements, and terms.</p></div><a class="button button--primary button--wide" id="modalLink" href="#">Visit Offer ↗</a></div></div>
+<div class="modal-backdrop hidden" id="modal"><div class="modal" role="dialog" aria-modal="true"><button class="icon-button modal-close" id="modalClose" aria-label="Close">×</button><span id="modalStatus" class="status"></span><h2 id="modalCompany"></h2><p class="modal-kicker" id="modalTitle"></p><div class="modal-reward" id="modalReward"></div><p id="modalDescription"></p><div class="modal-meta" id="modalMeta"></div><div class="modal-section"><h3>Who may qualify</h3><p id="modalEligibility"></p></div><div class="modal-section"><h3>Important</h3><p>Rewards are issued by the vendor and are subject to its qualification rules, attendance requirements, and terms.</p></div><div class="form-row"><button class="button button--secondary" id="modalSave" type="button">Save Offer</button><button class="button button--secondary" id="modalCopy" type="button">Copy Link</button></div><a class="button button--primary button--wide" id="modalLink" href="#">Visit Official Offer ↗</a><p class="external-note">You are leaving DemoPerks. The vendor's terms and privacy policy apply.</p></div></div>
 <div class="modal-backdrop hidden" id="reportModal"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="reportTitle"><button class="icon-button modal-close" id="reportClose" aria-label="Close">×</button><span class="eyebrow">Help keep DemoPerks accurate</span><h2 id="reportTitle">Report an issue</h2><p class="modal-kicker" id="reportOfferName"></p><form id="reportForm"><div class="report-options"><label class="report-option"><input type="radio" name="reportType" value="expired"><span><strong>Offer expired</strong><span>The page says the promotion has ended or expired.</span></span></label><label class="report-option"><input type="radio" name="reportType" value="broken_link"><span><strong>Broken link</strong><span>The page does not load or goes to an error page.</span></span></label><label class="report-option"><input type="radio" name="reportType" value="incentive_missing"><span><strong>Incentive no longer mentioned</strong><span>The page loads, but the demo reward is not shown.</span></span></label><label class="report-option"><input type="radio" name="reportType" value="other"><span><strong>Other</strong><span>Something else is wrong with this offer.</span></span></label></div><textarea class="report-details hidden" id="reportDetails" maxlength="500" placeholder="Tell us what you noticed"></textarea><p class="report-error hidden" id="reportError"></p><div class="report-actions"><button class="button button--secondary" type="button" id="reportCancel">Cancel</button><button class="button button--primary" type="submit" id="reportSubmit">Submit report</button></div></form></div></div>
 
 <div class="modal-backdrop hidden" id="submitOfferModal" data-section="submit-offer">
@@ -416,7 +461,7 @@ nav a[aria-current="page"], .footer-link[aria-current="page"] { color: var(--gre
       <div class="form-field">
         <label for="submissionUrl">Offer landing-page URL <span class="required-mark">*</span></label>
         <input id="submissionUrl" name="offerUrl" type="url" maxlength="1000" placeholder="https://example.com/demo-offer" required>
-        <small>The linked page must clearly mention both the demo and the incentive. <a class="inline-policy-link" href="submission-guidelines.html">Read the Submission Guidelines</a>.</small>
+        <small>The linked page must clearly mention both the demo and the incentive. <a class="inline-policy-link" href="/submission-guidelines.html">Read the Submission Guidelines</a>.</small>
       </div>
 
       <div class="form-row">
@@ -462,7 +507,7 @@ nav a[aria-current="page"], .footer-link[aria-current="page"] { color: var(--gre
       </div>
 
       <p class="form-status hidden" id="submitOfferStatus"></p>
-      <small>By submitting, you acknowledge the <a class="inline-policy-link" href="terms-of-use.html">Terms of Use</a> and <a class="inline-policy-link" href="privacy-policy.html">Privacy Policy</a>.</small>
+      <small>By submitting, you acknowledge the <a class="inline-policy-link" href="/terms-of-use.html">Terms of Use</a> and <a class="inline-policy-link" href="/privacy-policy.html">Privacy Policy</a>.</small>
 
       <div class="form-actions">
         <button class="button button--secondary" type="button" id="submitOfferCancel">Cancel</button>
@@ -482,7 +527,7 @@ nav a[aria-current="page"], .footer-link[aria-current="page"] { color: var(--gre
   </div>
 </div>
 
-</div>
+</div><button class="back-to-top hidden" id="backToTop" type="button" aria-label="Back to top">↑</button>
 <script src="demoperks-config.js"></script>
 <script>
 let offers = [];
@@ -512,6 +557,14 @@ function cleanOfferCopy(value,maxLength){
   }
   return text.slice(0,maxLength);
 }
+function domainFromUrl(value){try{return new URL(value).hostname.replace(/^www\./,'');}catch{return 'Vendor website';}}
+function daysUntil(value){if(!value)return null;const d=new Date(value);if(Number.isNaN(d.getTime()))return null;return Math.ceil((d-new Date())/86400000);}
+function offerPermalink(id){return `${location.origin}/offer.html?id=${encodeURIComponent(id)}`;}
+function getSavedOffers(){try{return JSON.parse(localStorage.getItem('demoperks_saved_offers')||'[]');}catch{return [];}}
+function setSavedOffers(ids){localStorage.setItem('demoperks_saved_offers',JSON.stringify(ids));}
+function isSaved(id){return getSavedOffers().includes(String(id));}
+function toggleSaved(id){let ids=getSavedOffers();id=String(id);ids=ids.includes(id)?ids.filter(x=>x!==id):[...ids,id];setSavedOffers(ids);return ids.includes(id);}
+function verificationLabel(o){if(o.manuallyReviewed)return 'Manually reviewed';if(o.communityConfirmed)return 'Community confirmed';return 'Automatically verified';}
 function normalizeOffer(row){
   const amount=Number(row.reward_amount || 0);
   const rewardType=row.reward_type || 'Reward';
@@ -532,6 +585,16 @@ function normalizeOffer(row){
     eligibility: cleanOfferCopy(row.eligibility_details, 500) || 'Eligibility is determined by the vendor.',
     geography: row.geographic_restrictions || '',
     featured: Boolean(row.featured),
+    createdAt: row.created_at,
+    expiresAt: row.expires_at || null,
+    sourceDomain: domainFromUrl(row.claim_url),
+    manuallyReviewed: Boolean(row.manually_reviewed || row.reviewed_at),
+    communityConfirmed: Number(row.works_count || 0) > 0,
+    demoLength: row.demo_length_minutes || null,
+    guaranteed: row.reward_guaranteed === true ? 'Guaranteed when qualified' : row.reward_guaranteed === false ? 'Conditional' : 'Vendor terms apply',
+    customerRule: row.new_customers_only === true ? 'New customers only' : row.new_customers_only === false ? 'Existing customers may qualify' : 'Not stated',
+    companyEmailRequired: Boolean(row.company_email_required),
+    minCompanySize: row.minimum_company_size || null,
   };
 }
 function initFilters(){
@@ -540,14 +603,31 @@ function initFilters(){
   $('categoryButtons').innerHTML=`<button class="filter-option is-selected" data-category="All">All categories</button>`+categories.map(x=>`<button class="filter-option" data-category="${escapeHtml(x)}">${escapeHtml(x)}</button>`).join('');
   $('rewardButtons').innerHTML=`<button class="filter-option is-selected" data-reward="All">All reward types</button>`+rewardTypes.map(x=>`<button class="filter-option" data-reward="${escapeHtml(x)}">${escapeHtml(x)}</button>`).join('');
 }
-function filtered(){const term=state.search.trim().toLowerCase();return offers.filter(o=>{const hay=[o.company,o.title,o.summary,o.category,o.rewardType,...o.tags].join(' ').toLowerCase();return(!term||hay.includes(term))&&(state.category==='All'||o.category===state.category)&&(state.rewardType==='All'||o.rewardType===state.rewardType)&&(state.status==='all'||o.status===state.status);}).sort((a,b)=>state.sort==='highest'?b.rewardAmount-a.rewardAmount:state.sort==='company'?a.company.localeCompare(b.company):new Date(b.verifiedAt||0)-new Date(a.verifiedAt||0));}
+function filtered(){const term=state.search.trim().toLowerCase();return offers.filter(o=>{const hay=[o.company,o.title,o.summary,o.category,o.rewardType,...o.tags].join(' ').toLowerCase();return(!term||hay.includes(term))&&(state.category==='All'||o.category===state.category)&&(state.rewardType==='All'||o.rewardType===state.rewardType)&&(state.status==='all'||o.status===state.status);}).sort((a,b)=>{if(state.sort==='highest')return b.rewardAmount-a.rewardAmount;if(state.sort==='company')return a.company.localeCompare(b.company);if(state.sort==='added')return new Date(b.createdAt||0)-new Date(a.createdAt||0);if(state.sort==='ending'){const ad=daysUntil(a.expiresAt),bd=daysUntil(b.expiresAt);return (ad===null?999999:ad)-(bd===null?999999:bd);}return new Date(b.verifiedAt||0)-new Date(a.verifiedAt||0);});}
 function formatDate(d){if(!d)return 'Not yet';const dt=new Date(d);return Number.isNaN(dt.getTime())?'Not yet':dt.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});}
-function card(o){const claimDisabled=o.claimUrl==='#';return `<article class="offer-card ${state.view==='list'?'offer-card--list':''} ${o.status==='expired'?'is-expired':''}"><div class="offer-card__top"><div class="company-mark">${escapeHtml(o.company[0]||'D')}</div><div><div class="company-row"><h3>${escapeHtml(o.company)}</h3><span class="status status--${escapeHtml(o.status)}">${escapeHtml(o.status)}</span></div><p class="offer-title">${escapeHtml(o.title)}</p></div><div class="reward-block"><strong>${o.rewardAmount?('$'+o.rewardAmount.toLocaleString()):'Free'}</strong><span>Reward</span></div></div><p class="offer-summary">${escapeHtml(o.summary)}</p><div class="tag-list"><span class="tag tag--category">${escapeHtml(o.category)}</span>${o.tags.map(t=>`<span class="tag">${escapeHtml(t)}</span>`).join('')}</div><div class="offer-card__footer"><div class="verified">◷ Checked ${formatDate(o.verifiedAt)}</div><div class="card-actions"><button class="button button--secondary details" data-id="${escapeHtml(o.id)}">View Details</button><a class="button button--primary" ${claimDisabled?'aria-disabled="true" style="opacity:.55;pointer-events:none"':`href="${escapeHtml(o.claimUrl)}" target="_blank" rel="noopener noreferrer sponsored"`}>Claim Offer ↗</a></div></div><div class="feedback-box"><p class="feedback-label">Is this offer still available?</p><div class="feedback-actions"><button class="feedback-button works-feedback" type="button" data-id="${escapeHtml(o.id)}">✓ Yes, it works</button><button class="feedback-button feedback-button--issue issue-feedback" type="button" data-id="${escapeHtml(o.id)}">Report an issue</button></div><p class="feedback-message hidden" id="feedback-${escapeHtml(o.id)}"></p></div></article>`;}
+function card(o){
+  const claimDisabled=o.claimUrl==='#';
+  const remaining=daysUntil(o.expiresAt);
+  const expiresText=remaining===null?'No public expiration':remaining<0?'Expired':remaining===0?'Ends today':remaining<=14?`Ends in ${remaining} days`:formatDate(o.expiresAt);
+  const verificationClass=o.manuallyReviewed?'verification-badge--manual':o.communityConfirmed?'verification-badge--community':'';
+  return `<article class="offer-card ${state.view==='list'?'offer-card--list':''} ${o.status==='expired'?'is-expired':''}"><div class="offer-card__top"><div class="company-mark">${escapeHtml(o.company[0]||'D')}</div><div><div class="company-row"><h3>${escapeHtml(o.company)}</h3><span class="status status--${escapeHtml(o.status)}">${escapeHtml(o.status)}</span></div><p class="offer-title">${escapeHtml(o.title)}</p></div><div class="reward-block"><strong>${o.rewardAmount?('$'+o.rewardAmount.toLocaleString()):'See terms'}</strong><span>${escapeHtml(o.rewardType)}</span></div></div><p class="offer-summary">${escapeHtml(o.summary)}</p><div class="tag-list"><span class="tag tag--category">${escapeHtml(o.category)}</span>${o.tags.map(t=>`<span class="tag">${escapeHtml(t)}</span>`).join('')}${o.geography?`<span class="tag">${escapeHtml(o.geography)}</span>`:''}${o.customerRule!=='Not stated'?`<span class="tag">${escapeHtml(o.customerRule)}</span>`:''}</div><div class="offer-meta-grid"><div class="offer-meta-item">Expiration<strong class="${remaining!==null&&remaining<=14?'ending-soon':''}">${escapeHtml(expiresText)}</strong></div><div class="offer-meta-item">Official source<strong>${escapeHtml(o.sourceDomain)}</strong></div></div><span class="verification-badge ${verificationClass}">✓ ${escapeHtml(verificationLabel(o))}</span><div class="offer-card__footer"><div class="verified">◷ Checked ${formatDate(o.verifiedAt)}</div><div class="card-actions"><button class="card-icon-button save-offer" data-id="${escapeHtml(o.id)}">${isSaved(o.id)?'★ Saved':'☆ Save'}</button><button class="button button--secondary details" data-id="${escapeHtml(o.id)}">Details</button><a class="button button--primary" ${claimDisabled?'aria-disabled="true" style="opacity:.55;pointer-events:none"':`href="${escapeHtml(o.claimUrl)}" target="_blank" rel="noopener noreferrer sponsored"`}>Visit Offer ↗</a></div></div><div class="feedback-box"><p class="feedback-label">Is this offer still available?</p><div class="feedback-actions"><button class="feedback-button works-feedback" type="button" data-id="${escapeHtml(o.id)}">✓ Yes, it works</button><button class="feedback-button feedback-button--issue issue-feedback" type="button" data-id="${escapeHtml(o.id)}">Report an issue</button></div><p class="feedback-message hidden" id="feedback-${escapeHtml(o.id)}"></p></div></article>`;
+}
 function updateStats(){const active=offers.filter(o=>o.status==='active');$('activeCount').textContent=active.length;$('rewardTotal').textContent='$'+active.reduce((s,o)=>s+o.rewardAmount,0).toLocaleString()+'+';$('categoryCount').textContent=categories.length;}
-function render(){const list=filtered();$('resultsCount').textContent=`${list.length} offers found`;$('offersGrid').className='offers-grid'+(state.view==='list'?' offers-grid--list':'');$('offersGrid').innerHTML=list.map(card).join('');$('emptyState').classList.toggle('hidden',list.length!==0);$('offersGrid').classList.toggle('hidden',list.length===0);document.querySelectorAll('.details').forEach(b=>b.onclick=()=>openModal(b.dataset.id));document.querySelectorAll('.works-feedback').forEach(b=>b.onclick=()=>submitWorksFeedback(b.dataset.id));document.querySelectorAll('.issue-feedback').forEach(b=>b.onclick=()=>openReportModal(b.dataset.id));}
+function render(){const list=filtered();$('resultsCount').textContent=`${list.length} offers found`;$('offersGrid').className='offers-grid'+(state.view==='list'?' offers-grid--list':'');$('offersGrid').innerHTML=list.map(card).join('');$('emptyState').classList.toggle('hidden',list.length!==0);$('offersGrid').classList.toggle('hidden',list.length===0);document.querySelectorAll('.details').forEach(b=>b.onclick=()=>openModal(b.dataset.id));document.querySelectorAll('.works-feedback').forEach(b=>b.onclick=()=>submitWorksFeedback(b.dataset.id));document.querySelectorAll('.issue-feedback').forEach(b=>b.onclick=()=>openReportModal(b.dataset.id));document.querySelectorAll('.save-offer').forEach(b=>b.onclick=()=>{toggleSaved(b.dataset.id);render();});renderHighlights();}
+
+function renderHighlights(){
+  const target=$('featuredRow');if(!target)return;
+  const active=offers.filter(o=>o.status==='active');
+  const recent=[...active].sort((a,b)=>new Date(b.createdAt||0)-new Date(a.createdAt||0))[0];
+  const ending=[...active].filter(o=>daysUntil(o.expiresAt)!==null&&daysUntil(o.expiresAt)>=0).sort((a,b)=>daysUntil(a.expiresAt)-daysUntil(b.expiresAt))[0];
+  const highest=[...active].sort((a,b)=>b.rewardAmount-a.rewardAmount)[0];
+  const items=[['Recently added',recent],['Ending soon',ending],['Highest reward',highest]].filter(x=>x[1]);
+  target.innerHTML=items.map(([label,o])=>`<article class="mini-offer"><span class="eyebrow">${label}</span><h3>${escapeHtml(o.company)}</h3><p>${escapeHtml(o.title)} · ${escapeHtml(o.rewardLabel)}</p><a href="/offer.html?id=${encodeURIComponent(o.id)}">View offer →</a></article>`).join('')||'<p>No active offers are available yet.</p>';
+}
+
 function syncSearch(v){state.search=v;$('heroSearch').value=v;$('sideSearch').value=v;render();}
 function clearAll(){state.search='';state.category='All';state.rewardType='All';state.status='active';$('heroSearch').value='';$('sideSearch').value='';document.querySelectorAll('[data-category]').forEach(b=>b.classList.toggle('is-selected',b.dataset.category==='All'));document.querySelectorAll('[data-reward]').forEach(b=>b.classList.toggle('is-selected',b.dataset.reward==='All'));document.querySelectorAll('[data-status]').forEach(b=>b.classList.toggle('is-selected',b.dataset.status==='active'));render();}
-function openModal(id){const o=offers.find(x=>x.id===id);if(!o)return;$('modalStatus').textContent=o.status;$('modalStatus').className='status status--'+o.status;$('modalCompany').textContent=o.company;$('modalTitle').textContent=o.title;$('modalReward').textContent=o.rewardLabel;$('modalDescription').textContent=o.description;$('modalEligibility').textContent=o.eligibility+(o.geography?` Geographic availability: ${o.geography}.`:'');$('modalLink').href=o.claimUrl;$('modalLink').target='_blank';$('modalLink').rel='noopener noreferrer sponsored';$('modal').classList.remove('hidden');}
+function openModal(id){const o=offers.find(x=>String(x.id)===String(id));if(!o)return;const remaining=daysUntil(o.expiresAt);$('modalStatus').textContent=o.status;$('modalStatus').className='status status--'+o.status;$('modalCompany').textContent=o.company;$('modalTitle').textContent=o.title;$('modalReward').textContent=o.rewardLabel;$('modalDescription').textContent=o.description;$('modalEligibility').textContent=o.eligibility+(o.geography?` Geographic availability: ${o.geography}.`:'');$('modalMeta').innerHTML=`<div>Last verified<strong>${formatDate(o.verifiedAt)}</strong></div><div>Expiration<strong>${o.expiresAt?formatDate(o.expiresAt):'No public date found'}</strong></div><div>Verification<strong>${escapeHtml(verificationLabel(o))}</strong></div><div>Official source<strong>${escapeHtml(o.sourceDomain)}</strong></div><div>Reward status<strong>${escapeHtml(o.guaranteed)}</strong></div><div>Demo length<strong>${o.demoLength?escapeHtml(o.demoLength+' minutes'):'Not stated'}</strong></div>`;$('modalLink').href=o.claimUrl;$('modalLink').target='_blank';$('modalLink').rel='noopener noreferrer sponsored';$('modalSave').textContent=isSaved(o.id)?'★ Saved':'☆ Save Offer';$('modalSave').onclick=()=>{$('modalSave').textContent=toggleSaved(o.id)?'★ Saved':'☆ Save Offer';render();};$('modalCopy').onclick=async()=>{try{await navigator.clipboard.writeText(offerPermalink(o.id));$('modalCopy').textContent='Copied';setTimeout(()=>$('modalCopy').textContent='Copy Link',1400);}catch{$('modalCopy').textContent='Copy failed';}};$('modal').classList.remove('hidden');}
 function closeModal(){$('modal').classList.add('hidden');}
 function getVisitorId(){let id=localStorage.getItem('demoperks_visitor_id');if(!id){id=(crypto.randomUUID?crypto.randomUUID():`visitor-${Date.now()}-${Math.random().toString(36).slice(2)}`);localStorage.setItem('demoperks_visitor_id',id);}return id;}
 async function sendFeedback(offerId,reportType,details=''){const cfg=window.DEMOPERKS_CONFIG||{};const endpoint=`${cfg.supabaseUrl.replace(/\/$/,'')}/rest/v1/rpc/submit_offer_feedback`;const response=await fetch(endpoint,{method:'POST',headers:{apikey:cfg.supabasePublishableKey,Authorization:`Bearer ${cfg.supabasePublishableKey}`,'Content-Type':'application/json'},body:JSON.stringify({p_offer_id:offerId,p_visitor_id:getVisitorId(),p_report_type:reportType,p_details:details||null})});if(!response.ok){const text=await response.text();throw new Error(text||`Unable to submit feedback (${response.status})`);}return response.json();}
@@ -685,6 +765,12 @@ $('submitOfferClose').onclick=closeSubmitOfferModal;
 $('submitOfferCancel').onclick=closeSubmitOfferModal;
 $('submitOfferModal').onclick=e=>{if(e.target===$('submitOfferModal'))closeSubmitOfferModal();};
 $('submitOfferForm').onsubmit=handleOfferSubmission;
+
+$('menuButton').onclick=()=>{const open=$('siteNav').classList.toggle('is-open');$('menuButton').setAttribute('aria-expanded',String(open));};
+document.querySelectorAll('#siteNav a').forEach(a=>a.addEventListener('click',()=>{$('siteNav').classList.remove('is-open');$('menuButton').setAttribute('aria-expanded','false');}));
+window.addEventListener('scroll',()=>$('backToTop').classList.toggle('hidden',window.scrollY<500));
+$('backToTop').onclick=()=>window.scrollTo({top:0,behavior:'smooth'});
+
 
 function openSubmitFromHash(){
   if(location.hash==='#submit-offer')openSubmitOfferModal();
