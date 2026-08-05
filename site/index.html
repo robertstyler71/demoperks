@@ -183,9 +183,56 @@ footer { padding: 42px 0; background: #f4f7f4; border-top: 1px solid var(--line)
 .form-status--success { color: var(--green); }
 .required-mark { color: #a33f2f; }
 
+
+.info-section { padding: 88px 0; border-top: 1px solid var(--line); }
+.info-section--soft { background: #f4f7f4; }
+.section-heading { max-width: 760px; margin-bottom: 38px; }
+.section-heading h2 { font-family: 'DM Serif Display', serif; font-size: clamp(2.35rem, 5vw, 4rem); font-weight: 400; letter-spacing: -.02em; line-height: 1.05; margin: 12px 0 14px; }
+.section-heading p { color: var(--muted); line-height: 1.75; margin: 0; }
+.trust-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.trust-card { background: white; border: 1px solid var(--line); border-radius: 16px; padding: 24px; }
+.trust-card strong { display: block; color: var(--green); font-size: .76rem; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 13px; }
+.trust-card h3 { margin: 0 0 9px; font-size: 1.05rem; }
+.trust-card p { margin: 0; color: var(--muted); line-height: 1.65; font-size: .9rem; }
+
+.faq-list { max-width: 900px; display: grid; gap: 11px; }
+.faq-item { background: white; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+.faq-item summary { list-style: none; cursor: pointer; padding: 18px 52px 18px 20px; font-weight: 700; position: relative; }
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after { content: "+"; position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: var(--green); font-size: 1.25rem; }
+.faq-item[open] summary::after { content: "−"; }
+.faq-answer { padding: 0 20px 20px; color: var(--muted); line-height: 1.7; font-size: .92rem; }
+.faq-answer p { margin: 0; }
+
+.footer-inner { flex-wrap: wrap; }
+.footer-brand-block { max-width: 310px; }
+.footer-links { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px 18px; max-width: 620px; }
+.footer-link { border: 0; background: none; padding: 0; color: var(--muted); font-size: .82rem; }
+.footer-link:hover, .footer-link:focus-visible { color: var(--green); }
+.footer-bottom { width: 100%; border-top: 1px solid var(--line); padding-top: 20px; margin-top: 18px; display: flex; justify-content: space-between; gap: 20px; }
+.footer-bottom p { margin: 0; }
+.disclaimer { max-width: 760px; text-align: left; }
+
+.policy-modal { width: min(760px, 100%); }
+.policy-modal h2 { padding-right: 48px; }
+.policy-content { margin-top: 24px; color: #4f5a55; line-height: 1.72; }
+.policy-content h3 { color: var(--ink); margin: 26px 0 7px; font-size: 1.02rem; }
+.policy-content h3:first-child { margin-top: 0; }
+.policy-content p { margin: 0 0 12px; }
+.policy-content ol { margin: 8px 0 16px; padding-left: 22px; }
+.policy-content li { margin: 7px 0; }
+.policy-note { border: 1px solid #d9e5dd; background: #f4f8f5; border-radius: 12px; padding: 13px 14px; color: #53615a; font-size: .84rem; }
+.inline-policy-link { border: 0; background: none; padding: 0; color: var(--green); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+.contact-choice-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 16px; }
+.contact-choice { border: 1px solid var(--line); border-radius: 13px; padding: 16px; background: #fafcfb; }
+.contact-choice strong { display: block; margin-bottom: 5px; }
+.contact-choice p { margin: 0 0 12px; font-size: .86rem; }
+.contact-placeholder { display: inline-block; background: var(--cream); color: #8b641e; border-radius: 8px; padding: 5px 8px; font-weight: 700; font-size: .78rem; }
+
 @media (max-width: 980px) {
   nav a { display: none; }
   .directory-layout { grid-template-columns: 1fr; }
+  .trust-grid { grid-template-columns: 1fr; }
   .filters { position: static; display: none; padding: 18px; background: white; border: 1px solid var(--line); border-radius: 16px; }
   .filters--open { display: block; }
   .mobile-filter-button { display: inline-flex; }
@@ -208,6 +255,9 @@ footer { padding: 42px 0; background: #f4f7f4; border-top: 1px solid var(--line)
   .form-row { grid-template-columns: 1fr; }
   .how-grid { grid-template-columns: 1fr; }
   .footer-inner { flex-direction: column; }
+  .footer-links { justify-content: flex-start; }
+  .footer-bottom { flex-direction: column; }
+  .contact-choice-grid { grid-template-columns: 1fr; }
   .disclaimer { text-align: left; }
 }
 
@@ -233,7 +283,7 @@ footer { padding: 42px 0; background: #f4f7f4; border-top: 1px solid var(--line)
 </head>
 <body>
 <div class="site-shell">
-<header class="site-header"><div class="container header-inner"><a href="#top" class="brand"><span class="brand-mark">D</span> DemoPerks</a><nav><a href="#offers">Browse Offers</a><a href="#how-it-works">How It Works</a><button class="button button--small button--primary" type="button" id="submitOfferButton">Submit an Offer</button></nav></div></header>
+<header class="site-header"><div class="container header-inner"><a href="#top" class="brand"><span class="brand-mark">D</span> DemoPerks</a><nav><a href="#offers">Browse Offers</a><a href="#how-it-works">How It Works</a><a href="#about">About</a><a href="#faq">FAQ</a><button class="button button--small button--primary" type="button" id="submitOfferButton">Submit an Offer</button></nav></div></header>
 <main id="top">
 <section class="hero"><div class="container hero-inner"><span class="eyebrow">Verified SaaS demo incentives</span><h1>Find software demos that reward your time.</h1><p>Discover gift cards, prepaid cards, and professional audits offered by B2B software companies looking for qualified buyers and evaluators.</p><div class="hero-search"><span>⌕</span><input id="heroSearch" placeholder="Search companies, categories, or rewards" aria-label="Search offers"></div><div class="stats-grid"><div class="stat-card"><strong id="activeCount">0</strong><span>Active offers</span></div><div class="stat-card"><strong id="rewardTotal">$0+</strong><span>Total rewards listed</span></div><div class="stat-card"><strong id="categoryCount">0</strong><span>Software categories</span></div></div></div></section>
 <section class="directory-section" id="offers"><div class="container directory-layout">
@@ -245,12 +295,111 @@ footer { padding: 42px 0; background: #f4f7f4; border-top: 1px solid var(--line)
 <div class="results-column"><div class="results-toolbar"><div><span class="results-count" id="resultsCount"></span><button class="mobile-filter-button" id="mobileFilters">☰ Filters</button></div><div class="toolbar-actions"><div class="view-toggle"><button id="gridView" class="is-selected" aria-label="Grid view">▦</button><button id="listView" aria-label="List view">☷</button></div><select id="sortSelect"><option value="recent">Recently verified</option><option value="highest">Highest reward</option><option value="company">Company name</option></select></div></div><div class="loading-state" id="loadingState"><h2>Loading live offers…</h2><p>Connecting to the DemoPerks database.</p></div><div class="connection-error hidden" id="connectionError"><h2>Database connection needed</h2><p id="connectionErrorText">Open <code>demoperks-config.js</code> and paste your Supabase publishable key.</p></div><div class="offers-grid hidden" id="offersGrid"></div><div class="empty-state hidden" id="emptyState"><h2>No offers match those filters.</h2><p>Try broadening your search or resetting the directory.</p><button class="button button--primary" id="emptyReset">Reset filters</button></div></div>
 </div></section>
 <section class="how-section" id="how-it-works"><div class="container"><span class="eyebrow">How it works</span><h2>Browse. Qualify. Attend. Get rewarded.</h2><div class="how-grid"><div><strong>01</strong><h3>Find a relevant offer</h3><p>Filter by your role, software category, or preferred reward type.</p></div><div><strong>02</strong><h3>Check the requirements</h3><p>Review eligibility details before submitting your information to the vendor.</p></div><div><strong>03</strong><h3>Complete the demo</h3><p>Attend the qualifying session and follow the vendor’s reward terms.</p></div></div></div></section>
+
+<section class="info-section info-section--soft" id="about">
+  <div class="container">
+    <div class="section-heading">
+      <span class="eyebrow">About DemoPerks</span>
+      <h2>An independent directory built around verification.</h2>
+      <p>DemoPerks helps business software buyers find legitimate demo incentives without searching through old ads, unrelated articles, or expired promotions. Listings are gathered from public sources, checked against the vendor's landing page, and supported by community feedback.</p>
+    </div>
+    <div class="trust-grid">
+      <article class="trust-card">
+        <strong>Independent</strong>
+        <h3>Not the reward provider</h3>
+        <p>DemoPerks does not issue gift cards, determine eligibility, schedule demonstrations, or represent the listed vendors.</p>
+      </article>
+      <article class="trust-card">
+        <strong>Verified</strong>
+        <h3>Official pages first</h3>
+        <p>Listings should point to an official vendor page that clearly connects a qualifying demo or appointment with a stated incentive.</p>
+      </article>
+      <article class="trust-card">
+        <strong>Community checked</strong>
+        <h3>Reports trigger review</h3>
+        <p>Visitors can confirm that an offer works or report broken links, missing incentives, and expired promotions for manual review.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="info-section" id="faq">
+  <div class="container">
+    <div class="section-heading">
+      <span class="eyebrow">Frequently asked questions</span>
+      <h2>What to know before booking a demo.</h2>
+      <p>Vendor requirements can differ by role, company size, location, purchase authority, and prior customer status. Always review the official offer terms before submitting your information.</p>
+    </div>
+    <div class="faq-list">
+      <details class="faq-item">
+        <summary>What is DemoPerks?</summary>
+        <div class="faq-answer"><p>DemoPerks is an independent directory of publicly available business software demo incentives. It helps visitors find and compare offers but does not operate the vendor's promotion.</p></div>
+      </details>
+      <details class="faq-item">
+        <summary>Are rewards guaranteed?</summary>
+        <div class="faq-answer"><p>No. The vendor decides whether a participant qualifies and whether all attendance, identity, company, and purchase-role requirements were met. DemoPerks cannot guarantee approval, delivery, timing, or value.</p></div>
+      </details>
+      <details class="faq-item">
+        <summary>Does DemoPerks issue the gift cards?</summary>
+        <div class="faq-answer"><p>No. Rewards are administered by the listed company or its fulfillment provider. Questions about delivery should be directed to the vendor.</p></div>
+      </details>
+      <details class="faq-item">
+        <summary>How are offers verified?</summary>
+        <div class="faq-answer"><p>DemoPerks checks whether the linked page appears to be an official landing page, clearly mentions a qualifying demo or appointment, and clearly states the incentive. Automated checks can make mistakes, so listings also support visitor reports and manual review.</p></div>
+      </details>
+      <details class="faq-item">
+        <summary>What does Active mean?</summary>
+        <div class="faq-answer"><p>Active means the offer passed the most recent available verification check. It does not guarantee that the vendor has not changed, paused, restricted, or ended the promotion since that check.</p></div>
+      </details>
+      <details class="faq-item">
+        <summary>Can existing customers qualify?</summary>
+        <div class="faq-answer"><p>Often they cannot, but rules vary. Many incentives are limited to new prospects, qualified decision-makers, certain company sizes, or specific countries. Review the vendor's terms.</p></div>
+      </details>
+      <details class="faq-item">
+        <summary>What happens when an offer is reported?</summary>
+        <div class="faq-answer"><p>Issue reports are recorded and may send the listing to a manual review queue. Confirmed invalid offers may be marked expired or removed from the active directory.</p></div>
+      </details>
+      <details class="faq-item">
+        <summary>Can I submit an offer?</summary>
+        <div class="faq-answer"><p>Yes. Use the Submit an Offer form. Submissions are reviewed before listing and must follow the Submission Guidelines.</p></div>
+      </details>
+      <details class="faq-item">
+        <summary>Do companies pay to be listed?</summary>
+        <div class="faq-answer"><p>Standard listings are presented as directory information. Any future sponsored placement, paid relationship, or commission-based link should be labeled clearly near the relevant listing.</p></div>
+      </details>
+      <details class="faq-item">
+        <summary>How can I request a correction or removal?</summary>
+        <div class="faq-answer"><p>Use Report an issue on the listing. Companies and rights holders can also use the Contact information in the footer for correction, removal, privacy, or legal requests.</p></div>
+      </details>
+    </div>
+  </div>
+</section>
+
 </main>
-<footer><div class="container footer-inner"><div><a href="#top" class="brand"><span class="brand-mark">D</span> DemoPerks</a><p>An independent directory of software demo incentives.</p></div><p class="disclaimer">DemoPerks does not issue rewards or guarantee eligibility. Offers are subject to vendor terms and may change without notice.</p></div></footer>
+<footer>
+  <div class="container footer-inner">
+    <div class="footer-brand-block">
+      <a href="#top" class="brand"><span class="brand-mark">D</span> DemoPerks</a>
+      <p>An independent directory of software demo incentives.</p>
+    </div>
+    <div class="footer-links" aria-label="Footer links">
+      <a class="footer-link" href="#about">About</a>
+      <a class="footer-link" href="#how-it-works">How It Works</a>
+      <a class="footer-link" href="#faq">FAQ</a>
+      <a class="footer-link" href="submission-guidelines.html">Submission Guidelines</a>
+            <a class="footer-link" href="privacy-policy.html">Privacy Policy</a>
+      <a class="footer-link" href="terms-of-use.html">Terms of Use</a>
+    </div>
+    <div class="footer-bottom">
+      <p class="disclaimer">DemoPerks does not issue rewards, determine eligibility, or guarantee fulfillment. Offers are administered by their respective vendors and may change without notice.</p>
+      <p>© <span id="footerYear"></span> DemoPerks</p>
+    </div>
+  </div>
+</footer>
 <div class="modal-backdrop hidden" id="modal"><div class="modal" role="dialog" aria-modal="true"><button class="icon-button modal-close" id="modalClose" aria-label="Close">×</button><span id="modalStatus" class="status"></span><h2 id="modalCompany"></h2><p class="modal-kicker" id="modalTitle"></p><div class="modal-reward" id="modalReward"></div><p id="modalDescription"></p><div class="modal-section"><h3>Who may qualify</h3><p id="modalEligibility"></p></div><div class="modal-section"><h3>Important</h3><p>Rewards are issued by the vendor and are subject to its qualification rules, attendance requirements, and terms.</p></div><a class="button button--primary button--wide" id="modalLink" href="#">Visit Offer ↗</a></div></div>
 <div class="modal-backdrop hidden" id="reportModal"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="reportTitle"><button class="icon-button modal-close" id="reportClose" aria-label="Close">×</button><span class="eyebrow">Help keep DemoPerks accurate</span><h2 id="reportTitle">Report an issue</h2><p class="modal-kicker" id="reportOfferName"></p><form id="reportForm"><div class="report-options"><label class="report-option"><input type="radio" name="reportType" value="expired"><span><strong>Offer expired</strong><span>The page says the promotion has ended or expired.</span></span></label><label class="report-option"><input type="radio" name="reportType" value="broken_link"><span><strong>Broken link</strong><span>The page does not load or goes to an error page.</span></span></label><label class="report-option"><input type="radio" name="reportType" value="incentive_missing"><span><strong>Incentive no longer mentioned</strong><span>The page loads, but the demo reward is not shown.</span></span></label><label class="report-option"><input type="radio" name="reportType" value="other"><span><strong>Other</strong><span>Something else is wrong with this offer.</span></span></label></div><textarea class="report-details hidden" id="reportDetails" maxlength="500" placeholder="Tell us what you noticed"></textarea><p class="report-error hidden" id="reportError"></p><div class="report-actions"><button class="button button--secondary" type="button" id="reportCancel">Cancel</button><button class="button button--primary" type="submit" id="reportSubmit">Submit report</button></div></form></div></div>
 
-<div class="modal-backdrop hidden" id="submitOfferModal">
+<div class="modal-backdrop hidden" id="submitOfferModal" data-section="submit-offer">
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="submitOfferTitle">
     <button class="icon-button modal-close" id="submitOfferClose" aria-label="Close">×</button>
     <span class="eyebrow">Share a verified opportunity</span>
@@ -266,7 +415,7 @@ footer { padding: 42px 0; background: #f4f7f4; border-top: 1px solid var(--line)
       <div class="form-field">
         <label for="submissionUrl">Offer landing-page URL <span class="required-mark">*</span></label>
         <input id="submissionUrl" name="offerUrl" type="url" maxlength="1000" placeholder="https://example.com/demo-offer" required>
-        <small>The linked page must clearly mention both the demo and the incentive.</small>
+        <small>The linked page must clearly mention both the demo and the incentive. <a class="inline-policy-link" href="submission-guidelines.html">Read the Submission Guidelines</a>.</small>
       </div>
 
       <div class="form-row">
@@ -312,12 +461,23 @@ footer { padding: 42px 0; background: #f4f7f4; border-top: 1px solid var(--line)
       </div>
 
       <p class="form-status hidden" id="submitOfferStatus"></p>
+      <small>By submitting, you acknowledge the <a class="inline-policy-link" href="terms-of-use.html">Terms of Use</a> and <a class="inline-policy-link" href="privacy-policy.html">Privacy Policy</a>.</small>
 
       <div class="form-actions">
         <button class="button button--secondary" type="button" id="submitOfferCancel">Cancel</button>
         <button class="button button--primary" type="submit" id="submitOfferSubmit">Submit for Review</button>
       </div>
     </form>
+  </div>
+</div>
+
+
+<div class="modal-backdrop hidden" id="policyModal">
+  <div class="modal policy-modal" role="dialog" aria-modal="true" aria-labelledby="policyTitle">
+    <button class="icon-button modal-close" id="policyClose" aria-label="Close">×</button>
+    <span class="eyebrow" id="policyEyebrow">DemoPerks information</span>
+    <h2 id="policyTitle"></h2>
+    <div class="policy-content" id="policyContent"></div>
   </div>
 </div>
 
@@ -333,6 +493,24 @@ let submitOfferBusy=false;
 const $=id=>document.getElementById(id);
 function escapeHtml(v){return String(v ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));}
 function safeUrl(value){try{const u=new URL(value);return ['http:','https:'].includes(u.protocol)?u.href:'#';}catch{return '#';}}
+function cleanOfferCopy(value,maxLength){
+  if(!value)return '';
+  let text=String(value)
+    .replace(/ï»¿|Â/g,'')
+    .replace(/â€™|â/g,"'")
+    .replace(/â€œ|â|â€|â/g,'"')
+    .replace(/â€“|â|â€”|â/g,'-')
+    .replace(/\s+/g,' ')
+    .trim();
+  const dumpSignals=['welcome back','jump to tutorials','developer docs services company careers','privacy policy | terms of service','step 1 decide on the offer','buyer\'s guide integrations use cases'];
+  const looksLikeDump=text.length>maxLength || dumpSignals.some(signal=>text.toLowerCase().includes(signal));
+  if(looksLikeDump){
+    const firstSentence=text.match(/^.{40,420}?[.!?](?:\s|$)/);
+    text=firstSentence?firstSentence[0].trim():text.slice(0,Math.min(maxLength,420)).trim();
+    if(text&&!/[.!?]$/.test(text))text+='.';
+  }
+  return text.slice(0,maxLength);
+}
 function normalizeOffer(row){
   const amount=Number(row.reward_amount || 0);
   const rewardType=row.reward_type || 'Reward';
@@ -340,8 +518,8 @@ function normalizeOffer(row){
     id: row.id,
     company: row.company_name || 'Unknown company',
     title: row.offer_title || 'Software demo offer',
-    summary: row.short_description || row.full_description || 'Review the vendor terms for complete offer details.',
-    description: row.full_description || row.short_description || 'Review the vendor terms for complete offer details.',
+    summary: cleanOfferCopy(row.short_description || row.full_description, 320) || 'Review the vendor terms for complete offer details.',
+    description: cleanOfferCopy(row.full_description || row.short_description, 900) || 'Review the vendor terms for complete offer details.',
     rewardAmount: Number.isFinite(amount)?amount:0,
     rewardLabel: amount>0 ? `$${amount.toLocaleString()} ${rewardType}` : rewardType,
     rewardType,
@@ -350,7 +528,7 @@ function normalizeOffer(row){
     status: row.status || 'unverified',
     verifiedAt: row.verified_at || row.last_checked_at || row.created_at,
     claimUrl: safeUrl(row.claim_url),
-    eligibility: row.eligibility_details || 'Eligibility is determined by the vendor.',
+    eligibility: cleanOfferCopy(row.eligibility_details, 500) || 'Eligibility is determined by the vendor.',
     geography: row.geographic_restrictions || '',
     featured: Boolean(row.featured),
   };
@@ -478,6 +656,8 @@ async function handleOfferSubmission(event){
   }
 }
 
+
+
 async function loadOffers(){
   const cfg=window.DEMOPERKS_CONFIG||{};
   if(!cfg.supabaseUrl || !cfg.supabasePublishableKey || cfg.supabasePublishableKey.includes('PASTE_')){
@@ -504,6 +684,16 @@ $('submitOfferClose').onclick=closeSubmitOfferModal;
 $('submitOfferCancel').onclick=closeSubmitOfferModal;
 $('submitOfferModal').onclick=e=>{if(e.target===$('submitOfferModal'))closeSubmitOfferModal();};
 $('submitOfferForm').onsubmit=handleOfferSubmission;
+
+function openSubmitFromHash(){
+  if(location.hash==='#submit-offer')openSubmitOfferModal();
+}
+window.addEventListener('hashchange',openSubmitFromHash);
+openSubmitFromHash();
+
+
+
+$('footerYear').textContent=new Date().getFullYear();
 
 loadOffers().catch(err=>{$('loadingState').classList.add('hidden');$('connectionError').classList.remove('hidden');$('connectionErrorText').innerHTML=`${escapeHtml(err.message)}<br><code>demoperks-config.js</code>`;console.error(err);});
 </script>
