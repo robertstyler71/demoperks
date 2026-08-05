@@ -1,16 +1,11 @@
-DemoPerks pages with matching footer
+DemoPerks pages with corrected How It Works links
 
-Upload all HTML files into the same site directory:
+Upload and overwrite all HTML files in your site directory.
 
-- index.html
-- about.html
-- faq.html
-- privacy-policy.html
-- terms-of-use.html
-- submission-guidelines.html
+The homepage links to:
+#how-it-works
 
-Every standalone page now uses the same footer as the homepage.
+All standalone pages link back to:
+index.html#how-it-works
 
-Keep your existing:
-- demoperks-config.js
-- Cloudflare and deployment configuration files
+Keep demoperks-config.js unchanged.
