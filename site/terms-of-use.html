@@ -386,13 +386,13 @@ nav a[aria-current="page"], .footer-link[aria-current="page"] { color: var(--gre
 <div class="site-shell">
 <header class="site-header">
   <div class="container header-inner">
-    <a href="/index.html#top" class="brand"><span class="brand-mark">D</span> DemoPerks</a>
+    <a href="index.html#top" class="brand"><span class="brand-mark">D</span> DemoPerks</a>
     <nav>
-      <a href="/index.html#offers">Browse Offers</a>
-      <a href="/index.html#how-it-works">How It Works</a>
-      <a href="/about.html">About</a>
-      <a href="/faq.html">FAQ</a>
-      <a class="button button--small button--primary" href="/index.html#submit-offer">Submit an Offer</a>
+      <a href="index.html#offers">Browse Offers</a>
+      <a href="index.html#how-it-works">How It Works</a>
+      <a href="about.html">About</a>
+      <a href="faq.html">FAQ</a>
+      <a class="button button--small button--primary" href="index.html#submit-offer">Submit an Offer</a>
     </nav>
   </div>
 </header>
@@ -446,19 +446,27 @@ nav a[aria-current="page"], .footer-link[aria-current="page"] { color: var(--gre
     </div>
   </section>
 </main>
-<footer class="page-footer">
-  <div class="container">
-    <a href="/index.html#top" class="brand"><span class="brand-mark">D</span> DemoPerks</a>
-    <p class="disclaimer">DemoPerks does not issue rewards, determine eligibility, or guarantee fulfillment. Offers are administered by their respective vendors and may change without notice.</p>
-    <div class="footer-links">
-      <a class="footer-link" href="/about.html">About</a>
-      <a class="footer-link" href="/faq.html">FAQ</a>
-      <a class="footer-link" href="/submission-guidelines.html">Submission Guidelines</a>
-            <a class="footer-link" href="/privacy-policy.html">Privacy Policy</a>
-      <a class="footer-link" href="/terms-of-use.html" aria-current="page">Terms of Use</a>
+<footer>
+  <div class="container footer-inner">
+    <div class="footer-brand-block">
+      <a href="#top" class="brand"><span class="brand-mark">D</span> DemoPerks</a>
+      <p>An independent directory of software demo incentives.</p>
+    </div>
+    <div class="footer-links" aria-label="Footer links">
+      <a class="footer-link" href="about.html">About</a>
+      <a class="footer-link" href="index.html#how-it-works">How It Works</a>
+      <a class="footer-link" href="faq.html">FAQ</a>
+      <a class="footer-link" href="submission-guidelines.html">Submission Guidelines</a>
+            <a class="footer-link" href="privacy-policy.html">Privacy Policy</a>
+      <a class="footer-link" href="terms-of-use.html">Terms of Use</a>
+    </div>
+    <div class="footer-bottom">
+      <p class="disclaimer">DemoPerks does not issue rewards, determine eligibility, or guarantee fulfillment. Offers are administered by their respective vendors and may change without notice.</p>
+      <p>© <span id="footerYear"></span> DemoPerks</p>
     </div>
   </div>
 </footer>
 </div>
+<script>document.getElementById('footerYear').textContent=new Date().getFullYear();</script>
 </body>
 </html>
