@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="How DemoPerks collects, uses, stores, and protects information submitted through the site.">
+<title>Privacy Policy | DemoPerks</title>
+<style>@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  font-family: Inter, system-ui, sans-serif;
+  color: #1a2521;
+  background: #fbfcfa;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --ink: #18231f;
+  --muted: #69736f;
+  --line: #dfe7e1;
+  --green: #2f7a5b;
+  --green-soft: #e9f4ed;
+  --cream: #fff7e9;
+  --pink: #fbeef3;
+  --blue: #edf5fb;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; min-width: 320px; background: #fbfcfa; }
+button, input, select, textarea { font: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
+a { color: inherit; text-decoration: none; }
+button { cursor: pointer; }
+
+.container { width: min(1240px, calc(100% - 36px)); margin: 0 auto; }
+.site-header { position: sticky; top: 0; z-index: 20; background: rgba(251,252,250,.92); backdrop-filter: blur(14px); border-bottom: 1px solid rgba(223,231,225,.8); }
+.header-inner { min-height: 72px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; }
+.brand-mark { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 11px; color: white; background: linear-gradient(135deg, #2f7a5b, #6da886); font-family: 'DM Serif Display', serif; }
+nav { display: flex; align-items: center; gap: 28px; font-size: .93rem; color: var(--muted); }
+
+.button { border: 0; border-radius: 12px; padding: 12px 16px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 7px; }
+.button--primary { color: white; background: linear-gradient(135deg, #2f7a5b, #3f8f6c); box-shadow: 0 8px 22px rgba(47,122,91,.17); }
+.button--secondary { background: white; color: var(--ink); border: 1px solid var(--line); }
+.button--small { padding: 10px 14px; }
+.button--wide { width: 100%; margin-top: 8px; }
+
+.hero { background: radial-gradient(circle at 15% 15%, #e9f6ed 0, transparent 34%), radial-gradient(circle at 85% 20%, #eef5fb 0, transparent 30%), linear-gradient(180deg, #fbfcfa 0%, #f7faf7 100%); border-bottom: 1px solid var(--line); }
+.hero-inner { padding: 92px 0 74px; text-align: center; }
+.eyebrow { display: inline-flex; font-size: .76rem; letter-spacing: .13em; text-transform: uppercase; font-weight: 700; color: var(--green); }
+.hero h1, .how-section h2 { font-family: 'DM Serif Display', serif; font-weight: 400; letter-spacing: -.02em; }
+.hero h1 { font-size: clamp(3rem, 7vw, 5.6rem); line-height: .98; max-width: 920px; margin: 18px auto 20px; }
+.hero p { max-width: 760px; margin: 0 auto; font-size: 1.15rem; color: var(--muted); line-height: 1.7; }
+.hero-search { max-width: 720px; margin: 34px auto 0; display: flex; align-items: center; gap: 12px; background: white; border: 1px solid var(--line); border-radius: 16px; padding: 16px 18px; box-shadow: 0 14px 40px rgba(32,54,44,.08); }
+.hero-search input, .sidebar-search input { flex: 1; border: 0; outline: 0; background: transparent; min-width: 0; }
+.stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; max-width: 760px; margin: 36px auto 0; }
+.stat-card { background: rgba(255,255,255,.78); border: 1px solid var(--line); padding: 22px; border-radius: 16px; display: flex; flex-direction: column; gap: 4px; }
+.stat-card strong { font-size: 1.8rem; }
+.stat-card span { color: var(--muted); font-size: .9rem; }
+
+.directory-section { padding: 64px 0 84px; }
+.directory-layout { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 36px; align-items: start; }
+.filters { position: sticky; top: 98px; }
+.filter-header, .results-toolbar, .company-row, .offer-card__footer, .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.filter-header h2 { margin: 0; font-size: 1.05rem; }
+.text-button { border: 0; background: none; color: var(--green); font-size: .84rem; font-weight: 600; }
+.filter-group { padding: 22px 0; border-bottom: 1px solid var(--line); }
+.filter-group label, .filter-label { display: block; font-size: .78rem; text-transform: uppercase; letter-spacing: .08em; font-weight: 700; margin-bottom: 12px; }
+.sidebar-search { display: flex; gap: 9px; align-items: center; border: 1px solid var(--line); background: white; border-radius: 11px; padding: 11px 12px; }
+.segmented { display: grid; grid-template-columns: repeat(3, 1fr); background: #eef2ef; padding: 4px; border-radius: 10px; }
+.segmented button { border: 0; background: transparent; padding: 7px 4px; border-radius: 7px; text-transform: capitalize; color: var(--muted); font-size: .78rem; }
+.segmented button.is-selected { background: white; color: var(--ink); box-shadow: 0 2px 8px rgba(26,37,33,.08); }
+.filter-option { display: block; width: 100%; text-align: left; border: 0; background: transparent; color: var(--muted); padding: 8px 10px; border-radius: 9px; margin: 2px 0; font-size: .88rem; }
+.filter-option:hover, .filter-option.is-selected { color: var(--ink); background: var(--green-soft); }
+
+.results-toolbar { margin-bottom: 22px; }
+.results-count { font-size: .9rem; color: var(--muted); }
+.toolbar-actions { display: flex; align-items: center; gap: 10px; }
+.view-toggle { display: flex; border: 1px solid var(--line); padding: 3px; border-radius: 10px; background: white; }
+.view-toggle button { border: 0; background: transparent; display: grid; place-items: center; padding: 8px; border-radius: 7px; color: var(--muted); }
+.view-toggle button.is-selected { background: #edf3ef; color: var(--ink); }
+select { border: 1px solid var(--line); background: white; border-radius: 10px; padding: 10px 12px; color: var(--ink); }
+.mobile-filter-button { display: none; border: 0; background: transparent; color: var(--green); align-items: center; gap: 6px; padding: 0; margin-top: 8px; }
+
+.offers-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.offers-grid--list { grid-template-columns: 1fr; }
+.offer-card { background: white; border: 1px solid var(--line); border-left: 4px solid #8fc9a7; border-radius: 16px; padding: 22px; min-height: 310px; display: flex; flex-direction: column; transition: transform .18s ease, box-shadow .18s ease; }
+.offer-card:hover { transform: translateY(-2px); box-shadow: 0 16px 36px rgba(34,52,44,.08); }
+.offer-card.is-expired { border-left-color: #d7d7d7; opacity: .76; }
+.offer-card--list { min-height: 0; }
+.offer-card__top { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 13px; align-items: start; }
+.company-mark { width: 46px; height: 46px; border-radius: 12px; background: linear-gradient(135deg, #edf5fb, #e8f4ec); display: grid; place-items: center; font-weight: 700; color: var(--green); }
+.offer-card h3 { margin: 0; font-size: 1.03rem; }
+.company-row { justify-content: flex-start; }
+.offer-title { margin: 5px 0 0; color: var(--muted); font-size: .88rem; line-height: 1.4; }
+.status { font-size: .69rem; text-transform: capitalize; border-radius: 999px; padding: 4px 8px; font-weight: 700; }
+.status--active { background: var(--green-soft); color: var(--green); }
+.status--expired { background: #f1f1f1; color: #7a7a7a; }
+.reward-block { text-align: right; }
+.reward-block strong { display: block; font-size: 1.15rem; color: #b58031; }
+.reward-block span { font-size: .68rem; color: var(--muted); }
+.offer-summary { color: #66706c; line-height: 1.58; font-size: .92rem; margin: 22px 0 16px; }
+.tag-list { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 18px; }
+.tag { font-size: .7rem; background: #f3f6f4; color: #65706b; border-radius: 999px; padding: 5px 8px; }
+.tag--category { background: #eef6fb; color: #55738a; }
+.offer-card__footer { margin-top: auto; padding-top: 16px; border-top: 1px solid #edf1ee; align-items: flex-end; }
+.verified { display: flex; align-items: center; gap: 6px; font-size: .74rem; color: #8a938f; }
+.card-actions { display: flex; gap: 8px; }
+.card-actions .button { font-size: .78rem; padding: 9px 11px; }
+
+.empty-state { padding: 80px 24px; text-align: center; background: white; border: 1px dashed var(--line); border-radius: 18px; }
+.empty-state h2 { margin-top: 0; }
+.empty-state p { color: var(--muted); }
+
+.how-section { padding: 90px 0; background: #17241f; color: white; }
+.how-section .eyebrow { color: #9fd1b2; }
+.how-section h2 { font-size: clamp(2.4rem, 5vw, 4.5rem); max-width: 780px; line-height: 1.02; margin: 16px 0 44px; }
+.how-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
+.how-grid > div { border-top: 1px solid rgba(255,255,255,.18); padding-top: 22px; }
+.how-grid strong { color: #9fd1b2; }
+.how-grid h3 { margin: 22px 0 8px; }
+.how-grid p { color: #bdc7c2; line-height: 1.6; }
+
+footer { padding: 42px 0; background: #f4f7f4; border-top: 1px solid var(--line); }
+.footer-inner { align-items: flex-start; }
+.footer-inner p { color: var(--muted); font-size: .84rem; }
+.disclaimer { max-width: 600px; text-align: right; }
+
+.modal-backdrop { position: fixed; inset: 0; z-index: 100; background: rgba(12,20,17,.52); display: grid; place-items: center; padding: 20px; }
+.modal { width: min(560px, 100%); max-height: calc(100vh - 40px); overflow: auto; background: white; border-radius: 20px; padding: 30px; position: relative; box-shadow: 0 28px 80px rgba(0,0,0,.2); }
+.modal-close { position: absolute; top: 18px; right: 18px; }
+.icon-button { border: 1px solid var(--line); background: white; width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; }
+.modal h2 { font-family: 'DM Serif Display', serif; font-size: 2.5rem; margin: 12px 0 4px; }
+.modal-kicker { color: var(--muted); margin-top: 0; }
+.modal-reward { display: inline-flex; margin: 12px 0 20px; background: var(--cream); color: #92691f; border-radius: 10px; padding: 9px 12px; font-weight: 700; }
+.modal p { line-height: 1.65; color: #59635f; }
+.modal-section { border-top: 1px solid var(--line); margin-top: 20px; padding-top: 16px; }
+.modal-section h3 { margin: 0 0 6px; font-size: .96rem; }
+
+.feedback-box { margin-top: 10px; padding-top: 10px; border-top: 1px solid #edf1ee; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.feedback-label { margin: 0; font-size: .69rem; color: #98a19d; white-space: nowrap; }
+.feedback-actions { display: flex; align-items: center; gap: 6px; }
+.feedback-button { border: 1px solid #e5ebe7; background: transparent; color: #7d8883; border-radius: 999px; padding: 5px 8px; font-size: .67rem; font-weight: 500; line-height: 1.2; }
+.feedback-button:hover { background: #f4f8f5; color: var(--green); border-color: #d5e3da; }
+.feedback-button--issue:hover { background: #fff7f3; color: #9a5d48; border-color: #ead9d0; }
+.feedback-message { width: 100%; margin: 2px 0 0; font-size: .68rem; color: var(--green); }
+.report-options { display: grid; gap: 10px; margin: 18px 0; }
+.report-option { display: flex; align-items: flex-start; gap: 10px; padding: 12px 13px; border: 1px solid var(--line); border-radius: 12px; cursor: pointer; }
+.report-option:hover { background: #f8faf8; }
+.report-option input { margin-top: 3px; }
+.report-option strong { display: block; font-size: .9rem; }
+.report-option span { display: block; margin-top: 3px; color: var(--muted); font-size: .78rem; line-height: 1.4; }
+.report-details { width: 100%; min-height: 90px; resize: vertical; border: 1px solid var(--line); border-radius: 12px; padding: 12px; font: inherit; }
+.report-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px; }
+.report-error { margin: 10px 0 0; color: #a33f2f; font-size: .78rem; }
+
+
+.submit-form { display: grid; gap: 14px; margin-top: 20px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-field { display: grid; gap: 7px; }
+.form-field label { font-size: .78rem; font-weight: 700; color: var(--ink); }
+.form-field small { color: var(--muted); font-size: .72rem; line-height: 1.4; }
+.form-field input,
+.form-field select,
+.form-field textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  background: white;
+  color: var(--ink);
+  border-radius: 11px;
+  padding: 11px 12px;
+  outline: none;
+}
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  border-color: #8ab69f;
+  box-shadow: 0 0 0 3px rgba(47,122,91,.09);
+}
+.form-field textarea { min-height: 92px; resize: vertical; }
+.form-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 4px; }
+.form-status { margin: 2px 0 0; font-size: .8rem; line-height: 1.5; }
+.form-status--error { color: #a33f2f; }
+.form-status--success { color: var(--green); }
+.required-mark { color: #a33f2f; }
+
+
+.info-section { padding: 88px 0; border-top: 1px solid var(--line); }
+.info-section--soft { background: #f4f7f4; }
+.section-heading { max-width: 760px; margin-bottom: 38px; }
+.section-heading h2 { font-family: 'DM Serif Display', serif; font-size: clamp(2.35rem, 5vw, 4rem); font-weight: 400; letter-spacing: -.02em; line-height: 1.05; margin: 12px 0 14px; }
+.section-heading p { color: var(--muted); line-height: 1.75; margin: 0; }
+.trust-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.trust-card { background: white; border: 1px solid var(--line); border-radius: 16px; padding: 24px; }
+.trust-card strong { display: block; color: var(--green); font-size: .76rem; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 13px; }
+.trust-card h3 { margin: 0 0 9px; font-size: 1.05rem; }
+.trust-card p { margin: 0; color: var(--muted); line-height: 1.65; font-size: .9rem; }
+
+.faq-list { max-width: 900px; display: grid; gap: 11px; }
+.faq-item { background: white; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+.faq-item summary { list-style: none; cursor: pointer; padding: 18px 52px 18px 20px; font-weight: 700; position: relative; }
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after { content: "+"; position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: var(--green); font-size: 1.25rem; }
+.faq-item[open] summary::after { content: "−"; }
+.faq-answer { padding: 0 20px 20px; color: var(--muted); line-height: 1.7; font-size: .92rem; }
+.faq-answer p { margin: 0; }
+
+.footer-inner { flex-wrap: wrap; }
+.footer-brand-block { max-width: 310px; }
+.footer-links { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px 18px; max-width: 620px; }
+.footer-link { border: 0; background: none; padding: 0; color: var(--muted); font-size: .82rem; }
+.footer-link:hover, .footer-link:focus-visible { color: var(--green); }
+.footer-bottom { width: 100%; border-top: 1px solid var(--line); padding-top: 20px; margin-top: 18px; display: flex; justify-content: space-between; gap: 20px; }
+.footer-bottom p { margin: 0; }
+.disclaimer { max-width: 760px; text-align: left; }
+
+.policy-modal { width: min(760px, 100%); }
+.policy-modal h2 { padding-right: 48px; }
+.policy-content { margin-top: 24px; color: #4f5a55; line-height: 1.72; }
+.policy-content h3 { color: var(--ink); margin: 26px 0 7px; font-size: 1.02rem; }
+.policy-content h3:first-child { margin-top: 0; }
+.policy-content p { margin: 0 0 12px; }
+.policy-content ol { margin: 8px 0 16px; padding-left: 22px; }
+.policy-content li { margin: 7px 0; }
+.policy-note { border: 1px solid #d9e5dd; background: #f4f8f5; border-radius: 12px; padding: 13px 14px; color: #53615a; font-size: .84rem; }
+.inline-policy-link { border: 0; background: none; padding: 0; color: var(--green); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+.contact-choice-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 16px; }
+.contact-choice { border: 1px solid var(--line); border-radius: 13px; padding: 16px; background: #fafcfb; }
+.contact-choice strong { display: block; margin-bottom: 5px; }
+.contact-choice p { margin: 0 0 12px; font-size: .86rem; }
+.contact-placeholder { display: inline-block; background: var(--cream); color: #8b641e; border-radius: 8px; padding: 5px 8px; font-weight: 700; font-size: .78rem; }
+
+@media (max-width: 980px) {
+  nav a { display: none; }
+  .directory-layout { grid-template-columns: 1fr; }
+  .trust-grid { grid-template-columns: 1fr; }
+  .filters { position: static; display: none; padding: 18px; background: white; border: 1px solid var(--line); border-radius: 16px; }
+  .filters--open { display: block; }
+  .mobile-filter-button { display: inline-flex; }
+}
+
+@media (max-width: 760px) {
+  .container { width: min(100% - 24px, 1240px); }
+  .hero-inner { padding: 64px 0 48px; }
+  .hero h1 { font-size: 3.2rem; }
+  .stats-grid { grid-template-columns: 1fr; }
+  .offers-grid { grid-template-columns: 1fr; }
+  .results-toolbar { align-items: flex-start; }
+  .toolbar-actions { flex-wrap: wrap; justify-content: flex-end; }
+  .offer-card__footer { align-items: flex-start; flex-direction: column; }
+  .card-actions { width: 100%; }
+  .card-actions .button { flex: 1; }
+  .feedback-box { align-items: flex-start; }
+  .feedback-label { white-space: normal; }
+  .feedback-actions { flex-wrap: wrap; }
+  .form-row { grid-template-columns: 1fr; }
+  .how-grid { grid-template-columns: 1fr; }
+  .footer-inner { flex-direction: column; }
+  .footer-links { justify-content: flex-start; }
+  .footer-bottom { flex-direction: column; }
+  .contact-choice-grid { grid-template-columns: 1fr; }
+  .disclaimer { text-align: left; }
+}
+
+@media (max-width: 520px) {
+  .header-inner { min-height: 64px; }
+  nav .button { display: none; }
+  .hero h1 { font-size: 2.7rem; }
+  .hero p { font-size: 1rem; }
+  .hero-search { padding: 14px; }
+  .offer-card__top { grid-template-columns: auto 1fr; }
+  .reward-block { grid-column: 2; text-align: left; margin-top: 8px; }
+  .toolbar-actions select { max-width: 164px; }
+}
+
+/* Live database helpers */
+.loading-state, .connection-error { padding: 54px 24px; text-align: center; background: white; border: 1px solid var(--line); border-radius: 18px; }
+.loading-state p, .connection-error p { color: var(--muted); line-height: 1.6; }
+.connection-error code { display: inline-block; margin-top: 8px; padding: 4px 8px; background: #f4f6f4; border-radius: 7px; }
+.status--unverified { background: #fff4d9; color: #9a6a17; }
+.status--hidden { background: #f1f1f1; color: #777; }
+.hidden{display:none!important} .modal-close{font-size:24px;line-height:1} .icon{font-style:normal}
+
+
+.page-hero {
+  padding: 86px 0 46px;
+  background:
+    radial-gradient(circle at 15% 15%, #e9f6ed 0, transparent 34%),
+    radial-gradient(circle at 85% 20%, #eef5fb 0, transparent 30%),
+    linear-gradient(180deg, #fbfcfa 0%, #f7faf7 100%);
+  border-bottom: 1px solid var(--line);
+}
+.page-hero h1 {
+  font-family: 'DM Serif Display', serif;
+  font-weight: 400;
+  letter-spacing: -.02em;
+  font-size: clamp(2.8rem, 6vw, 5rem);
+  line-height: 1;
+  margin: 14px 0 16px;
+}
+.page-hero p {
+  max-width: 760px;
+  color: var(--muted);
+  line-height: 1.75;
+  font-size: 1.05rem;
+}
+.page-content {
+  padding: 64px 0 88px;
+}
+.content-card {
+  max-width: 900px;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: clamp(24px, 4vw, 44px);
+  box-shadow: 0 12px 35px rgba(32,54,44,.05);
+}
+.content-card h2 {
+  font-family: 'DM Serif Display', serif;
+  font-weight: 400;
+  font-size: 2rem;
+  margin: 34px 0 10px;
+}
+.content-card h2:first-child { margin-top: 0; }
+.content-card h3 {
+  font-size: 1.05rem;
+  margin: 28px 0 8px;
+}
+.content-card p,
+.content-card li {
+  color: #55615b;
+  line-height: 1.75;
+}
+.content-card ol {
+  padding-left: 22px;
+}
+.content-card li {
+  margin: 8px 0;
+}
+.notice-box {
+  border: 1px solid #d9e5dd;
+  background: #f4f8f5;
+  border-radius: 12px;
+  padding: 14px 16px;
+  color: #53615a;
+  font-size: .88rem;
+  margin-bottom: 26px;
+}
+.page-footer {
+  padding: 38px 0;
+  background: #f4f7f4;
+  border-top: 1px solid var(--line);
+}
+.page-footer .footer-links {
+  justify-content: flex-start;
+  margin-top: 16px;
+}
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+.contact-card {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 18px;
+  background: #fafcfb;
+}
+.contact-card h3 { margin-top: 0; }
+.placeholder-email {
+  display: inline-block;
+  background: var(--cream);
+  color: #8b641e;
+  border-radius: 8px;
+  padding: 6px 9px;
+  font-weight: 700;
+  font-size: .8rem;
+}
+@media (max-width: 760px) {
+  .page-hero { padding: 62px 0 36px; }
+  .contact-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="site-shell">
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="index.html#top" class="brand"><span class="brand-mark">D</span> DemoPerks</a>
+    <nav>
+      <a href="index.html#offers">Browse Offers</a>
+      <a href="index.html#how-it-works">How It Works</a>
+      <a href="about.html">About</a>
+      <a href="faq.html">FAQ</a>
+      <a class="button button--small button--primary" href="index.html#submit-offer">Submit an Offer</a>
+    </nav>
+  </div>
+</header>
+<main>
+  <section class="page-hero">
+    <div class="container">
+      <span class="eyebrow">Your information</span>
+      <h1>Privacy Policy</h1>
+      <p>How DemoPerks collects, uses, stores, and protects information submitted through the site.</p>
+    </div>
+  </section>
+  <section class="page-content">
+    <div class="container">
+      <article class="content-card">
+        
+<div class="notice-box"><strong>Effective August 5, 2026.</strong> This is a practical website policy template and should be reviewed by qualified legal counsel for your business, jurisdiction, and actual data practices.</div>
+
+<h2>Information DemoPerks collects</h2>
+<p>DemoPerks may collect information you choose to provide through the Submit an Offer form, including company information, an offer URL, reward details, notes, and your email address. When you submit offer feedback, DemoPerks stores the selected feedback type and any details you provide.</p>
+<p>The site creates a random visitor identifier in your browser's local storage so one browser can maintain one feedback response per offer. DemoPerks does not use that identifier to determine your real-world identity.</p>
+
+<h2>Technical information</h2>
+<p>Hosting and database providers may process routine technical information such as IP address, browser type, device information, request logs, timestamps, and security events. The site currently uses Cloudflare for hosting, Supabase for database services, and Google Fonts for web typography.</p>
+
+<h2>How information is used</h2>
+<ol>
+  <li>Review and verify submitted offers.</li>
+  <li>Contact a submitter when clarification is needed.</li>
+  <li>Record confirmations and issue reports.</li>
+  <li>Protect the site from abuse, fraud, and technical problems.</li>
+  <li>Maintain, troubleshoot, and improve the directory.</li>
+</ol>
+
+<h2>Sharing</h2>
+<p>DemoPerks does not sell personal information to advertisers. Information may be processed by service providers that support hosting, databases, security, and site delivery. Information may also be disclosed when reasonably necessary to comply with law, protect rights, investigate abuse, or respond to a valid legal request.</p>
+
+<h2>Retention</h2>
+<p>Submission and feedback records may be retained while they are useful for verification, moderation, security, and recordkeeping. Records may be deleted or anonymized when no longer reasonably needed.</p>
+
+<h2>Your choices</h2>
+<p>You can clear the DemoPerks visitor identifier through your browser's site-data or local-storage controls. You may request correction or deletion through the applicable offer-reporting tools available on the site. Some records may be retained when reasonably required for security, legal compliance, or fraud prevention.</p>
+
+<h2>Children</h2>
+<p>DemoPerks is intended for business professionals and is not directed to children under 13.</p>
+
+<h2>Changes</h2>
+<p>This policy may be updated as the site, providers, and data practices change. The effective date will be updated when material revisions are made.</p>
+
+      </article>
+    </div>
+  </section>
+</main>
+<footer class="page-footer">
+  <div class="container">
+    <a href="index.html#top" class="brand"><span class="brand-mark">D</span> DemoPerks</a>
+    <p class="disclaimer">DemoPerks does not issue rewards, determine eligibility, or guarantee fulfillment. Offers are administered by their respective vendors and may change without notice.</p>
+    <div class="footer-links">
+      <a class="footer-link" href="about.html">About</a>
+      <a class="footer-link" href="faq.html">FAQ</a>
+      <a class="footer-link" href="submission-guidelines.html">Submission Guidelines</a>
+            <a class="footer-link" href="privacy-policy.html">Privacy Policy</a>
+      <a class="footer-link" href="terms-of-use.html">Terms of Use</a>
+    </div>
+  </div>
+</footer>
+</div>
+</body>
+</html>
